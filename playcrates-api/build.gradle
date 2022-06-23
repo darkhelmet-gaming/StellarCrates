@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'checkstyle'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    // Spigot
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
+group = "network.darkhelmet"
+version = project.property("version")
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT'
+    compileOnly 'org.jetbrains:annotations:21.0.1'
+    compileOnly 'net.kyori:adventure-api:4.11.0'
+}

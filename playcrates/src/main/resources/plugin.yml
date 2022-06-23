@@ -1,0 +1,7 @@
+name: PlayCrates
+version: @version@
+description: A crates to plugin to placate us.
+authors: [viveleroi]
+website:
+api-version: @apiversion@
+main: network.darkhelmet.playcrates.PlayCrates
