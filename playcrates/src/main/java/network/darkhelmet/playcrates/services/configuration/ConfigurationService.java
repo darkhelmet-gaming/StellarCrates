@@ -47,6 +47,11 @@ public class ConfigurationService {
     private PlayCratesConfiguration playCratesConfiguration;
 
     /**
+     * The rewards configuration.
+     */
+    private RewardsConfiguration rewardsConfiguration;
+
+    /**
      * Construct the configuration service.
      *
      * @param dataPath The plugin datapath
@@ -68,12 +73,36 @@ public class ConfigurationService {
     }
 
     /**
+     * Get the rewards configuration.
+     *
+     * @return The rewards configuration
+     */
+    public RewardsConfiguration rewardsConfiguration() {
+        return rewardsConfiguration;
+    }
+
+    /**
      * Load the configurations.
      */
     public void loadConfigurations() {
-        // Load the main config
         File configFile = new File(dataPath.toFile(), "playcrates.conf");
         playCratesConfiguration = getOrWriteConfiguration(PlayCratesConfiguration.class, configFile);
+
+        File rewardsConfigFile = new File(dataPath.toFile(), "rewards.conf");
+        rewardsConfiguration = getOrWriteConfiguration(RewardsConfiguration.class, rewardsConfigFile);
+    }
+
+    /**
+     * Save all configurations.
+     */
+    public void saveAll() {
+        File configFile = new File(dataPath.toFile(), "playcrates.conf");
+        playCratesConfiguration = getOrWriteConfiguration(
+            PlayCratesConfiguration.class, configFile, playCratesConfiguration);
+
+        File rewardsConfigFile = new File(dataPath.toFile(), "rewards.conf");
+        rewardsConfiguration = getOrWriteConfiguration(
+            RewardsConfiguration.class, rewardsConfigFile, rewardsConfiguration);
     }
 
     /**

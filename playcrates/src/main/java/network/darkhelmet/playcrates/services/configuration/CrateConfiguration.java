@@ -20,49 +20,29 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
-public class PlayCratesConfiguration {
-    @Comment("All crates.")
-    private List<CrateConfiguration> crates = new ArrayList<>();
-
-    @Comment("Enable plugin debug mode. Produces extra logging to help diagnose issues.")
-    private boolean debug = false;
-
-    @Comment("""
-        The default locale for plugin messages. Messages given to players
-        will use their client locale settings.
-        """)
-    private Locale defaultLocale = Locale.US;
+public class CrateConfiguration {
+    @Comment("A key is a one-word name for a create, to be used in commands etc.")
+    private String key;
 
     /**
-     * Get all crate configs.
+     * Construct a crate config.
      *
-     * @return All crate configs.
+     * @param key The key
      */
-    public List<CrateConfiguration> crates() {
-        return crates;
+    public CrateConfiguration(String key) {
+        this.key = key;
     }
 
     /**
-     * Get the debug setting.
+     * Get the key.
      *
-     * @return True if debug enabled.
+     * @return The key
      */
-    public boolean debug() {
-        return debug;
-    }
-
-    /**
-     * Get the default locale.
-     */
-    public Locale defaultLocale() {
-        return defaultLocale;
+    public String key() {
+        return key;
     }
 }

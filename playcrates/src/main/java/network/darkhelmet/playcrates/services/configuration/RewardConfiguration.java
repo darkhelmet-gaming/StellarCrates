@@ -20,49 +20,38 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import de.tr7zw.nbtapi.NBTItem;
 
+import network.darkhelmet.playcrates.PlayCrates;
+
+import org.bukkit.inventory.ItemStack;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
-public class PlayCratesConfiguration {
-    @Comment("All crates.")
-    private List<CrateConfiguration> crates = new ArrayList<>();
+public class RewardConfiguration {
+    @Comment("NBT string")
+    private String nbtString;
 
-    @Comment("Enable plugin debug mode. Produces extra logging to help diagnose issues.")
-    private boolean debug = false;
-
-    @Comment("""
-        The default locale for plugin messages. Messages given to players
-        will use their client locale settings.
-        """)
-    private Locale defaultLocale = Locale.US;
+    @Comment("The version of the serializer")
+    private short serializerVersion;
 
     /**
-     * Get all crate configs.
+     * Construct a new reward configuration from an item stack.
      *
-     * @return All crate configs.
+     * @param itemStack The item stack
      */
-    public List<CrateConfiguration> crates() {
-        return crates;
+    public RewardConfiguration(ItemStack itemStack) {
+        nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
+        serializerVersion = PlayCrates.getInstance().serializerVersion();
     }
 
     /**
-     * Get the debug setting.
+     * Get the NBT string.
      *
-     * @return True if debug enabled.
+     * @return The NBT string
      */
-    public boolean debug() {
-        return debug;
-    }
-
-    /**
-     * Get the default locale.
-     */
-    public Locale defaultLocale() {
-        return defaultLocale;
+    public String nbtString() {
+        return nbtString;
     }
 }
