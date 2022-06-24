@@ -37,6 +37,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 public class PlayerInteractListener extends AbstractListener implements Listener {
     /**
@@ -87,11 +88,23 @@ public class PlayerInteractListener extends AbstractListener implements Listener
             return;
         }
 
-        // @todo is holding key?
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        // @todo is holding any crate key?
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
             crateOptional.ifPresent(crate -> {
+                if (!crate.keyMatches(itemStack)) {
+                    // @todo message support
+                    player.sendMessage("Invalid key for this crate");
+                    return;
+                }
+
+                // Deduct item
+                itemStack.setAmount(itemStack.getAmount() - 1);
+
+                // Open crate and reward player
                 crate.open(player);
 
                 event.setCancelled(true);
