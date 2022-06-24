@@ -38,7 +38,7 @@ public class KeyConfiguration {
     private String nbtString;
 
     /**
-     * Empty constructor, needed for deserialization.
+     * Argument-less constructor, needed for deserialization.
      */
     public KeyConfiguration() {}
 

@@ -41,7 +41,7 @@ public class RewardConfiguration {
     private short weight = 100;
 
     /**
-     * Empty constructor, needed for deserialization.
+     * Argument-less constructor, needed for deserialization.
      */
     public RewardConfiguration() {}
 

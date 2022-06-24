@@ -25,8 +25,10 @@ import java.util.List;
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
+import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public record Crate(CrateConfiguration config, List<Reward> rewards) {
@@ -104,5 +106,22 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
         }
 
         return rewards.get(idx);
+    }
+
+    /**
+     * Open the crate for a given player.
+     *
+     * @param player The player
+     */
+    public void open(Player player) {
+        Reward reward = chooseWeightedRandomReward();
+        reward.deliverTo(player);
+
+        for (SoundConfiguration onRewardSound : config.onRewardSounds()) {
+            if (onRewardSound != null) {
+                player.playSound(
+                    player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
+            }
+        }
     }
 }

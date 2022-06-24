@@ -36,7 +36,6 @@ import network.darkhelmet.playcrates.services.configuration.ConfigurationService
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
-import network.darkhelmet.playcrates.services.crates.Reward;
 import network.darkhelmet.playcrates.services.gui.GuiService;
 import network.darkhelmet.playcrates.services.messages.MessageService;
 
@@ -218,8 +217,7 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        Reward reward = crate.chooseWeightedRandomReward();
-        reward.deliverTo(player);
+        crate.open(player);
 
         player.sendMessage("Opening crate!");
     }

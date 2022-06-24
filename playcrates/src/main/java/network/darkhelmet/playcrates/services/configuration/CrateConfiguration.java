@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -38,6 +39,9 @@ public class CrateConfiguration {
     @Comment("A list of all crate instance locations.")
     private List<Location> locations = new ArrayList<>();
 
+    @Comment("Sounds to play when an award is given. Set to null for no sound.")
+    private List<SoundConfiguration> onRewardSounds = new ArrayList<>();
+
     @Comment("A list of rewards in this crate.")
     private List<RewardConfiguration> rewards = new ArrayList<>();
 
@@ -45,9 +49,12 @@ public class CrateConfiguration {
     private String title;
 
     /**
-     * Empty constructor, needed for deserialization.
+     * Argument-less constructor, needed for deserialization.
      */
-    public CrateConfiguration() {}
+    public CrateConfiguration() {
+        onRewardSounds.add(new SoundConfiguration(Sound.BLOCK_AMETHYST_BLOCK_CHIME));
+        onRewardSounds.add(new SoundConfiguration(Sound.ITEM_GOAT_HORN_SOUND_1));
+    }
 
     /**
      * Construct a crate config.
@@ -92,6 +99,15 @@ public class CrateConfiguration {
      */
     public List<Location> locations() {
         return locations;
+    }
+
+    /**
+     * Get the on reward sounds.
+     *
+     * @return The on reward sounds
+     */
+    public List<SoundConfiguration> onRewardSounds() {
+        return onRewardSounds;
     }
 
     /**

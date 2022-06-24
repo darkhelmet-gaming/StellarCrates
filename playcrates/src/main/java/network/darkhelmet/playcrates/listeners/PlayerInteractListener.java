@@ -27,7 +27,6 @@ import java.util.Optional;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
-import network.darkhelmet.playcrates.services.crates.Reward;
 import network.darkhelmet.playcrates.services.gui.GuiService;
 
 import org.bukkit.block.Block;
@@ -93,8 +92,7 @@ public class PlayerInteractListener extends AbstractListener implements Listener
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
             crateOptional.ifPresent(crate -> {
-                Reward reward = crate.chooseWeightedRandomReward();
-                reward.deliverTo(player);
+                crate.open(player);
 
                 event.setCancelled(true);
             });
