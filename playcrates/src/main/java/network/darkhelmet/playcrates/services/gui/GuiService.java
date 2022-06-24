@@ -39,8 +39,8 @@ public class GuiService {
      */
     public void open(Crate crate, Player player) {
         Gui gui = Gui.gui()
-            .title(Component.text(crate.key()))
-            .rows(6)
+            .title(Component.text(crate.config().title()))
+            .rows(3)
             .create();
 
         for (Reward reward : crate.rewards()) {

@@ -22,4 +22,6 @@ package network.darkhelmet.playcrates.services.crates;
 
 import java.util.List;
 
-public record Crate(String key, List<Reward> rewards) {}
+import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
+
+public record Crate(CrateConfiguration config, List<Reward> rewards) {}

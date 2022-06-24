@@ -34,15 +34,20 @@ public class CrateConfiguration {
     @Comment("A list of rewards in this crate.")
     private List<RewardConfiguration> rewards = new ArrayList<>();
 
+    @Comment("Title shown in the UI and any holograms.")
+    private String title;
+
     public CrateConfiguration() {}
 
     /**
      * Construct a crate config.
      *
      * @param key The key
+     * @param title The title
      */
-    public CrateConfiguration(String key) {
+    public CrateConfiguration(String key, String title) {
         this.key = key;
+        this.title = title;
     }
 
     /**
@@ -61,5 +66,14 @@ public class CrateConfiguration {
      */
     public List<RewardConfiguration> rewards() {
         return rewards;
+    }
+
+    /**
+     * Get the title.
+     *
+     * @return The title
+     */
+    public String title() {
+        return title;
     }
 }

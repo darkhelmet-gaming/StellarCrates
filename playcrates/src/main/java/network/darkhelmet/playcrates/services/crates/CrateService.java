@@ -58,7 +58,7 @@ public class CrateService {
                 rewards.add(rewardConfiguration.toReward());
             }
 
-            Crate crate = new Crate(crateConfiguration.key(), rewards);
+            Crate crate = new Crate(crateConfiguration, rewards);
             crates.put(crateConfiguration.key(), crate);
         }
     }

@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
+import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 
 import java.util.HashSet;
@@ -100,10 +101,11 @@ public class CrateCommand extends BaseCommand {
      *
      * @param player The command sender
      * @param key The crate key
+     * @param title The crate title
      */
     @SubCommand("addcrate")
     @Permission("playcrates.admin")
-    public void onAddCrate(final Player player, String key) {
+    public void onAddCrate(final Player player, String key, @Join(" ") String title) {
         Block target = player.getTargetBlock(transparent, 3);
 
         if (target.getType().equals(Material.AIR)) {
@@ -111,7 +113,7 @@ public class CrateCommand extends BaseCommand {
             player.sendMessage("Invalid block");
         }
 
-        CrateConfiguration crateConfig = new CrateConfiguration(key);
+        CrateConfiguration crateConfig = new CrateConfiguration(key, title);
         configurationService.cratesConfiguration().crates().add(crateConfig);
         configurationService.saveAll();
 
