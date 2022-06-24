@@ -27,6 +27,7 @@ import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -94,12 +95,12 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
     public Reward chooseWeightedRandomReward() {
         double totalWeight = 0.0;
         for (Reward reward : rewards) {
-            totalWeight += reward.weight();
+            totalWeight += reward.config().weight();
         }
 
         int idx = 0;
         for (double r = Math.random() * totalWeight; idx < rewards.size() - 1; ++idx) {
-            r -= rewards.get(idx).weight();
+            r -= rewards.get(idx).config().weight();
             if (r <= 0.0) {
                 break;
             }
@@ -116,6 +117,10 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
     public void open(Player player) {
         Reward reward = chooseWeightedRandomReward();
         reward.deliverTo(player);
+
+        for (String command : reward.config().commands()) {
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+        }
 
         for (SoundConfiguration onRewardSound : config.onRewardSounds()) {
             if (onRewardSound != null) {

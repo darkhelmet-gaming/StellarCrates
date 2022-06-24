@@ -23,6 +23,9 @@ package network.darkhelmet.playcrates.services.configuration;
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import network.darkhelmet.playcrates.services.crates.Reward;
 
 import org.bukkit.inventory.ItemStack;
@@ -31,6 +34,9 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class RewardConfiguration {
+    @Comment("Commands to run when the award is given.")
+    private List<String> commands = new ArrayList<>();
+
     @Comment("NBT string")
     private String nbtString;
 
@@ -63,8 +69,22 @@ public class RewardConfiguration {
         return NBTItem.convertNBTtoItem(new NBTContainer(nbtString));
     }
 
+    /**
+     * Create a Reward object from this config.
+     *
+     * @return The reward
+     */
     public Reward toReward() {
-        return new Reward(toItemStack(), weight);
+        return new Reward(this, toItemStack());
+    }
+
+    /**
+     * Get the commands.
+     *
+     * @return The commands
+     */
+    public List<String> commands() {
+        return commands;
     }
 
     /**

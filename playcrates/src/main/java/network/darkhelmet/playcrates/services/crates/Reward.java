@@ -20,10 +20,12 @@
 
 package network.darkhelmet.playcrates.services.crates;
 
+import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public record Reward(ItemStack itemStack, short weight) {
+public record Reward(RewardConfiguration config, ItemStack itemStack) {
     /**
      * Deliver the reward contents to the player.
      *
