@@ -23,5 +23,22 @@ package network.darkhelmet.playcrates.services.crates;
 import java.util.List;
 
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
+import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
 
-public record Crate(CrateConfiguration config, List<Reward> rewards) {}
+import org.bukkit.inventory.ItemStack;
+
+public record Crate(CrateConfiguration config, List<Reward> rewards) {
+    /**
+     * Crate a new key configuration for this crate.
+     *
+     * @param itemStack The item stack
+     * @return The key configuration
+     */
+    public KeyConfiguration createKey(ItemStack itemStack) {
+        KeyConfiguration keyConfiguration = new KeyConfiguration(config.identifier(), itemStack);
+
+        config.key(keyConfiguration);
+
+        return keyConfiguration;
+    }
+}

@@ -20,58 +20,40 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
 import network.darkhelmet.playcrates.PlayCrates;
-import network.darkhelmet.playcrates.services.crates.Reward;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
-public class RewardConfiguration {
+public class KeyConfiguration {
     @Comment("NBT string")
     private String nbtString;
-
-    @Comment("The version of the serializer")
-    private short serializerVersion;
 
     /**
      * Empty constructor, needed for deserialization.
      */
-    public RewardConfiguration() {}
+    public KeyConfiguration() {}
 
     /**
-     * Construct a new reward configuration from an item stack.
+     * Construct a new key configuration from an item stack.
      *
+     * @param identifier The identifier
      * @param itemStack The item stack
      */
-    public RewardConfiguration(ItemStack itemStack) {
+    public KeyConfiguration(String identifier, ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+
+        NamespacedKey usesKey = new NamespacedKey(PlayCrates.getInstance(), "cratekey");
+        meta.getPersistentDataContainer().set(usesKey, PersistentDataType.STRING, identifier);
+        itemStack.setItemMeta(meta);
+
         nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
-        serializerVersion = PlayCrates.getInstance().serializerVersion();
-    }
-
-    /**
-     * Generate an item from the reward configuration.
-     *
-     * @return The item stack
-     */
-    public ItemStack toItemStack() {
-        return NBTItem.convertNBTtoItem(new NBTContainer(nbtString));
-    }
-
-    public Reward toReward() {
-        return new Reward(toItemStack());
-    }
-
-    /**
-     * Get the NBT string.
-     *
-     * @return The NBT string
-     */
-    public String nbtString() {
-        return nbtString;
     }
 }

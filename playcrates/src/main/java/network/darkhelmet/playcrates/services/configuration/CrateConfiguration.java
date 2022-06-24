@@ -28,8 +28,11 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class CrateConfiguration {
-    @Comment("An identifier is a one-word name for a create, to be used in commands etc.")
+    @Comment("An identifier is a one-word name for a crate, to be used in commands etc.")
     private String identifier;
+
+    @Comment("The crate key configuration")
+    private KeyConfiguration key;
 
     @Comment("A list of rewards in this crate.")
     private List<RewardConfiguration> rewards = new ArrayList<>();
@@ -37,6 +40,9 @@ public class CrateConfiguration {
     @Comment("Title shown in the UI and any holograms.")
     private String title;
 
+    /**
+     * Empty constructor, needed for deserialization.
+     */
     public CrateConfiguration() {}
 
     /**
@@ -57,6 +63,22 @@ public class CrateConfiguration {
      */
     public String identifier() {
         return identifier;
+    }
+
+    /**
+     * Set the crate key configuration.
+     */
+    public void key(KeyConfiguration key) {
+        this.key = key;
+    }
+
+    /**
+     * The crate key configuration.
+     *
+     * @return The key configuration
+     */
+    public KeyConfiguration key() {
+        return key;
     }
 
     /**

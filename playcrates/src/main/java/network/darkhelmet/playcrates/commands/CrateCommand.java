@@ -99,7 +99,7 @@ public class CrateCommand extends BaseCommand {
     /**
      * Run the create command.
      *
-     * @param player The command sender
+     * @param player The player
      * @param identifier The crate identifier
      * @param title The crate title
      */
@@ -116,6 +116,7 @@ public class CrateCommand extends BaseCommand {
         CrateConfiguration crateConfig = new CrateConfiguration(identifier, title);
         configurationService.cratesConfiguration().crates().add(crateConfig);
         configurationService.saveAll();
+        crateService.addCrate(crateConfig);
 
         // @todo use messages
         player.sendMessage("Crate created!");
@@ -124,7 +125,7 @@ public class CrateCommand extends BaseCommand {
     /**
      * Run the addreward command.
      *
-     * @param player The command sender
+     * @param player The player
      */
     @SubCommand("addreward")
     @Permission("playcrates.admin")
@@ -150,7 +151,7 @@ public class CrateCommand extends BaseCommand {
     /**
      * Run the preview command.
      *
-     * @param player The command sender
+     * @param player The player
      */
     @SubCommand("preview")
     @Permission("playcrates.preview")
@@ -162,8 +163,29 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        crateOptional.get();
-
         guiService.open(crateOptional.get(), player);
+    }
+
+    /**
+     * Run the setkey command.
+     *
+     * @param player The player
+     */
+    @SubCommand("setkey")
+    @Permission("playcrates.preview")
+    public void onSetKey(final Player player, final String identifier) {
+        Optional<Crate> crateOptional = crateService.crate(identifier);
+        if (crateOptional.isEmpty()) {
+            // @todo use messages
+            player.sendMessage("Invalid crate identifier");
+            return;
+        }
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        crateOptional.get().createKey(itemStack);
+        configurationService.saveAll();
+
+        // @todo use messages
+        player.sendMessage("Key created & set");
     }
 }

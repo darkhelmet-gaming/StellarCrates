@@ -53,14 +53,23 @@ public class CrateService {
         this.configurationService = configurationService;
 
         for (CrateConfiguration crateConfiguration : configurationService.cratesConfiguration().crates()) {
-            List<Reward> rewards = new ArrayList<>();
-            for (RewardConfiguration rewardConfiguration : crateConfiguration.rewards()) {
-                rewards.add(rewardConfiguration.toReward());
-            }
-
-            Crate crate = new Crate(crateConfiguration, rewards);
-            crates.put(crateConfiguration.identifier(), crate);
+            addCrate(crateConfiguration);
         }
+    }
+
+    /**
+     * Add a new crate from a crate configuration.
+     *
+     * @param crateConfiguration The crate configuration
+     */
+    public void addCrate(CrateConfiguration crateConfiguration) {
+        List<Reward> rewards = new ArrayList<>();
+        for (RewardConfiguration rewardConfiguration : crateConfiguration.rewards()) {
+            rewards.add(rewardConfiguration.toReward());
+        }
+
+        Crate crate = new Crate(crateConfiguration, rewards);
+        crates.put(crateConfiguration.identifier(), crate);
     }
 
     /**
