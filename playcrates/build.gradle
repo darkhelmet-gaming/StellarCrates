@@ -53,6 +53,7 @@ dependencies {
     implementation 'net.kyori.moonshine:moonshine-standard:2.0.4'
     implementation 'org.spongepowered:configurate-hocon:4.1.2'
     implementation 'dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT'
+    implementation 'dev.triumphteam:triumph-gui:3.1.2'
     implementation 'de.tr7zw:item-nbt-api-plugin:2.10.0'
     implementation project(':playcrates-api')
 }
@@ -74,6 +75,8 @@ shadowJar {
     relocate 'net.kyori', 'network.darkhelmet.playcrates.kyori'
     relocate 'org.spongepowered', 'network.darkhelmet.playcrates.spongepowered'
     relocate 'de.tr7zw', 'network.darkhelmet.playcrates.tr7zw'
+    relocate 'dev.triumphteam.cmd', 'network.darkhelmet.playcrates.cmd'
+    relocate 'dev.triumphteam.gui', 'network.darkhelmet.playcrates.gui'
 
     minimize()
 }

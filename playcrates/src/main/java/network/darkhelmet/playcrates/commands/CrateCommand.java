@@ -34,6 +34,9 @@ import java.util.Set;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
+import network.darkhelmet.playcrates.services.crates.Crate;
+import network.darkhelmet.playcrates.services.crates.CrateService;
+import network.darkhelmet.playcrates.services.gui.GuiService;
 import network.darkhelmet.playcrates.services.messages.MessageService;
 
 import org.bukkit.Material;
@@ -49,6 +52,16 @@ public class CrateCommand extends BaseCommand {
     private final ConfigurationService configurationService;
 
     /**
+     * The crate service.
+     */
+    private final CrateService crateService;
+
+    /**
+     * The GUI service.
+     */
+    private final GuiService guiService;
+
+    /**
      * The message service.
      */
     private final MessageService messageService;
@@ -61,13 +74,20 @@ public class CrateCommand extends BaseCommand {
     /**
      * Construct the crate command.
      *
+     * @param configurationService The configuration service
+     * @param crateService The crate service
+     * @param guiService The GUI service
      * @param messageService The message service
      */
     @Inject
     public CrateCommand(
             ConfigurationService configurationService,
+            CrateService crateService,
+            GuiService guiService,
             MessageService messageService) {
         this.configurationService = configurationService;
+        this.crateService = crateService;
+        this.guiService = guiService;
         this.messageService = messageService;
 
         transparent.add(Material.AIR);
@@ -123,5 +143,25 @@ public class CrateCommand extends BaseCommand {
 
         // @todo use messages
         player.sendMessage("Reward added!");
+    }
+
+    /**
+     * Run the preview command.
+     *
+     * @param player The command sender
+     */
+    @SubCommand("preview")
+    @Permission("playcrates.preview")
+    public void onPreview(final Player player, final String crateKey) {
+        Optional<Crate> crateOptional = crateService.crate(crateKey);
+        if (crateOptional.isEmpty()) {
+            // @todo use messages
+            player.sendMessage("Invalid crate key");
+            return;
+        }
+
+        crateOptional.get();
+
+        guiService.open(crateOptional.get(), player);
     }
 }

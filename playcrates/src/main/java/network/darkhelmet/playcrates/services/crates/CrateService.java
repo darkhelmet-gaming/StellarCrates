@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
@@ -60,5 +61,15 @@ public class CrateService {
             Crate crate = new Crate(crateConfiguration.key(), rewards);
             crates.put(crateConfiguration.key(), crate);
         }
+    }
+
+    /**
+     * Get a crate by key.
+     *
+     * @param crateKey The crate key
+     * @return The crate, if any
+     */
+    public Optional<Crate> crate(String crateKey) {
+        return Optional.ofNullable(crates.get(crateKey));
     }
 }

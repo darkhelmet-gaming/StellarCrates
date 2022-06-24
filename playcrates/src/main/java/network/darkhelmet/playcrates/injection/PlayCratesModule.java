@@ -39,6 +39,7 @@ import net.kyori.moonshine.strategy.supertype.StandardSupertypeThenInterfaceSupe
 import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.CrateService;
+import network.darkhelmet.playcrates.services.gui.GuiService;
 import network.darkhelmet.playcrates.services.messages.MessageRenderer;
 import network.darkhelmet.playcrates.services.messages.MessageSender;
 import network.darkhelmet.playcrates.services.messages.MessageService;
@@ -140,7 +141,12 @@ public class PlayCratesModule extends AbstractModule {
 
         // Service - Configuration
         bind(ConfigurationService.class).in(Singleton.class);
+
+        // Service - Crate
         bind(CrateService.class).in(Singleton.class);
+
+        // Service - Gui
+        bind(GuiService.class).in(Singleton.class);
 
         // Service - Messages
         bind(MessageRenderer.class).in(Singleton.class);
