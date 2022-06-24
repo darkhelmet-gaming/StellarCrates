@@ -37,6 +37,7 @@ import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
+import network.darkhelmet.playcrates.services.crates.Reward;
 import network.darkhelmet.playcrates.services.gui.GuiService;
 import network.darkhelmet.playcrates.services.messages.MessageService;
 
@@ -197,6 +198,9 @@ public class CrateCommand extends BaseCommand {
             player.sendMessage("You don't have a valid crate key");
             return;
         }
+
+        Reward reward = crate.chooseWeightedRandomReward();
+        reward.deliverTo(player);
 
         player.sendMessage("Opening crate!");
     }

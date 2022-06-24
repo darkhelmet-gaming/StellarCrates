@@ -44,7 +44,7 @@ public class GuiService {
             .create();
 
         for (Reward reward : crate.rewards()) {
-            gui.addItem(ItemBuilder.from(reward.item()).asGuiItem());
+            gui.addItem(ItemBuilder.from(reward.itemStack()).asGuiItem());
         }
 
         gui.setDefaultClickAction(event -> {

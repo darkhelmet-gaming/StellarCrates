@@ -20,6 +20,18 @@
 
 package network.darkhelmet.playcrates.services.crates;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public record Reward(ItemStack item) {}
+public record Reward(ItemStack itemStack, short weight) {
+    /**
+     * Deliver the reward contents to the player.
+     *
+     * <p>If an item stack, delivers to their inventory.</p>
+     *
+     * @param player The player
+     */
+    public void deliverTo(Player player) {
+        player.getInventory().addItem(itemStack);
+    }
+}

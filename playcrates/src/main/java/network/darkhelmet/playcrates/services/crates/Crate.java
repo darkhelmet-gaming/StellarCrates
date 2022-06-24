@@ -51,4 +51,26 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
     public boolean keyMatches(ItemStack itemStack) {
         return config.key().toItemStack().isSimilar(itemStack);
     }
+
+    /**
+     * Choose a random weighted reward.
+     *
+     * @return The reward
+     */
+    public Reward chooseWeightedRandomReward() {
+        double totalWeight = 0.0;
+        for (Reward reward : rewards) {
+            totalWeight += reward.weight();
+        }
+
+        int idx = 0;
+        for (double r = Math.random() * totalWeight; idx < rewards.size() - 1; ++idx) {
+            r -= rewards.get(idx).weight();
+            if (r <= 0.0) {
+                break;
+            }
+        }
+
+        return rewards.get(idx);
+    }
 }

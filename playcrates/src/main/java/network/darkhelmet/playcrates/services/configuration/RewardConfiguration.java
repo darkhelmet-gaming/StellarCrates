@@ -64,7 +64,7 @@ public class RewardConfiguration {
     }
 
     public Reward toReward() {
-        return new Reward(toItemStack());
+        return new Reward(toItemStack(), weight);
     }
 
     /**
