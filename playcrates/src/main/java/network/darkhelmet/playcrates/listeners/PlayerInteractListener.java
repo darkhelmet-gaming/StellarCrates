@@ -81,9 +81,11 @@ public class PlayerInteractListener extends AbstractListener implements Listener
 
         if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
-            crateOptional.ifPresent(crate -> guiService.open(crate, player));
+            crateOptional.ifPresent(crate -> {
+                guiService.open(crate, player);
 
-            event.setCancelled(true);
+                event.setCancelled(true);
+            });
 
             return;
         }
