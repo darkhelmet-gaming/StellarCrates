@@ -126,6 +126,7 @@ public class CrateCommand extends BaseCommand {
      * Run the addreward command.
      *
      * @param player The player
+     * @param identifier The crate identifier
      */
     @SubCommand("addreward")
     @Permission("playcrates.admin")
@@ -149,9 +150,34 @@ public class CrateCommand extends BaseCommand {
     }
 
     /**
+     * Run the givekey command.
+     *
+     * @param player The player
+     * @param identifier The crate identifier
+     */
+    @SubCommand("givekey")
+    @Permission("playcrates.admin")
+    public void onGiveKey(final Player player, final String identifier) {
+        Optional<Crate> crateOptional = crateService.crate(identifier);
+        if (crateOptional.isEmpty()) {
+            // @todo use messages
+            player.sendMessage("Invalid crate identifier");
+            return;
+        }
+
+        Crate crate = crateOptional.get();
+        ItemStack crateKey = crate.config().key().toItemStack();
+
+        player.getInventory().addItem(crateKey);
+
+        player.sendMessage("Giving you a crate key");
+    }
+
+    /**
      * Run the open command.
      *
      * @param player The player
+     * @param identifier The crate identifier
      */
     @SubCommand("open")
     @Permission("playcrates.open")
@@ -179,6 +205,7 @@ public class CrateCommand extends BaseCommand {
      * Run the preview command.
      *
      * @param player The player
+     * @param identifier The crate identifier
      */
     @SubCommand("preview")
     @Permission("playcrates.preview")
@@ -197,6 +224,7 @@ public class CrateCommand extends BaseCommand {
      * Run the setkey command.
      *
      * @param player The player
+     * @param identifier The crate identifier
      */
     @SubCommand("setkey")
     @Permission("playcrates.preview")
