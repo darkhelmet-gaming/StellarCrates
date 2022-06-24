@@ -22,19 +22,30 @@ package network.darkhelmet.playcrates.services.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-public class RewardsConfiguration {
-    private List<RewardConfiguration> rewards = new ArrayList<>();
+public class CratesConfiguration {
+    private List<CrateConfiguration> crates = new ArrayList<>();
 
     /**
-     * Get all rewards.
+     * Get a crate configuration by its key.
      *
-     * @return The rewards
+     * @param crateKey The crate key
+     * @return The crate configuration, if any
      */
-    public List<RewardConfiguration> rewards() {
-        return rewards;
+    public Optional<CrateConfiguration> crate(final String crateKey) {
+        return crates.stream().filter(c -> c.key().equalsIgnoreCase(crateKey)).findFirst();
+    }
+
+    /**
+     * Get all crates.
+     *
+     * @return The crates
+     */
+    public List<CrateConfiguration> crates() {
+        return crates;
     }
 }

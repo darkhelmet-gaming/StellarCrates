@@ -20,8 +20,6 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -29,9 +27,6 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class PlayCratesConfiguration {
-    @Comment("All crates.")
-    private List<CrateConfiguration> crates = new ArrayList<>();
-
     @Comment("Enable plugin debug mode. Produces extra logging to help diagnose issues.")
     private boolean debug = false;
 
@@ -40,15 +35,6 @@ public class PlayCratesConfiguration {
         will use their client locale settings.
         """)
     private Locale defaultLocale = Locale.US;
-
-    /**
-     * Get all crate configs.
-     *
-     * @return All crate configs.
-     */
-    public List<CrateConfiguration> crates() {
-        return crates;
-    }
 
     /**
      * Get the debug setting.

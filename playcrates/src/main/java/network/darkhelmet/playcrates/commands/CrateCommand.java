@@ -27,6 +27,7 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
@@ -89,7 +90,7 @@ public class CrateCommand extends BaseCommand {
         }
 
         CrateConfiguration crateConfig = new CrateConfiguration(key);
-        configurationService.playCratesConfig().crates().add(crateConfig);
+        configurationService.cratesConfiguration().crates().add(crateConfig);
         configurationService.saveAll();
 
         // @todo use messages
@@ -102,11 +103,19 @@ public class CrateCommand extends BaseCommand {
      * @param player The command sender
      */
     @SubCommand("addreward")
-    public void onAddReward(final Player player) {
+    public void onAddReward(final Player player, final String crateKey) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
         RewardConfiguration reward = new RewardConfiguration(itemStack);
-        configurationService.rewardsConfiguration().rewards().add(reward);
+        Optional<CrateConfiguration> crateConfigurationOptional = configurationService
+            .cratesConfiguration().crate(crateKey);
+        if (crateConfigurationOptional.isEmpty()) {
+            // @todo use messages
+            player.sendMessage("Invalid crate key");
+            return;
+        }
+
+        crateConfigurationOptional.get().rewards().add(reward);
         configurationService.saveAll();
 
         // @todo use messages

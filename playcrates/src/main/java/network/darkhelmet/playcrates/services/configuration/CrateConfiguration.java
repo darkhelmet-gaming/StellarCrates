@@ -20,6 +20,9 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -27,6 +30,9 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 public class CrateConfiguration {
     @Comment("A key is a one-word name for a create, to be used in commands etc.")
     private String key;
+
+    @Comment("A list of rewards in this crate.")
+    private List<RewardConfiguration> rewards = new ArrayList<>();
 
     /**
      * Construct a crate config.
@@ -44,5 +50,14 @@ public class CrateConfiguration {
      */
     public String key() {
         return key;
+    }
+
+    /**
+     * Get all rewards.
+     *
+     * @return The rewards
+     */
+    public List<RewardConfiguration> rewards() {
+        return rewards;
     }
 }

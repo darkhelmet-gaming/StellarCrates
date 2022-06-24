@@ -47,9 +47,9 @@ public class ConfigurationService {
     private PlayCratesConfiguration playCratesConfiguration;
 
     /**
-     * The rewards configuration.
+     * The crates configuration.
      */
-    private RewardsConfiguration rewardsConfiguration;
+    private CratesConfiguration cratesConfiguration;
 
     /**
      * Construct the configuration service.
@@ -77,8 +77,8 @@ public class ConfigurationService {
      *
      * @return The rewards configuration
      */
-    public RewardsConfiguration rewardsConfiguration() {
-        return rewardsConfiguration;
+    public CratesConfiguration cratesConfiguration() {
+        return cratesConfiguration;
     }
 
     /**
@@ -88,8 +88,8 @@ public class ConfigurationService {
         File configFile = new File(dataPath.toFile(), "playcrates.conf");
         playCratesConfiguration = getOrWriteConfiguration(PlayCratesConfiguration.class, configFile);
 
-        File rewardsConfigFile = new File(dataPath.toFile(), "rewards.conf");
-        rewardsConfiguration = getOrWriteConfiguration(RewardsConfiguration.class, rewardsConfigFile);
+        File cratesConfigFile = new File(dataPath.toFile(), "crates.conf");
+        cratesConfiguration = getOrWriteConfiguration(CratesConfiguration.class, cratesConfigFile);
     }
 
     /**
@@ -100,9 +100,9 @@ public class ConfigurationService {
         playCratesConfiguration = getOrWriteConfiguration(
             PlayCratesConfiguration.class, configFile, playCratesConfiguration);
 
-        File rewardsConfigFile = new File(dataPath.toFile(), "rewards.conf");
-        rewardsConfiguration = getOrWriteConfiguration(
-            RewardsConfiguration.class, rewardsConfigFile, rewardsConfiguration);
+        File cratesConfigFile = new File(dataPath.toFile(), "crates.conf");
+        cratesConfiguration = getOrWriteConfiguration(
+            CratesConfiguration.class, cratesConfigFile, cratesConfiguration);
     }
 
     /**
