@@ -30,6 +30,9 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class CrateConfiguration {
+    @Comment("A hologram is in-world text displayed around the crate. Set to null for no hologram.")
+    private HologramConfiguration hologram = new HologramConfiguration();
+
     @Comment("An identifier is a one-word name for a crate, to be used in commands etc.")
     private String identifier;
 
@@ -64,6 +67,15 @@ public class CrateConfiguration {
     public CrateConfiguration(String identifier, String title) {
         this.identifier = identifier;
         this.title = title;
+    }
+
+    /**
+     * Get the hologram config.
+     *
+     * @return The hologram config
+     */
+    public HologramConfiguration hologram() {
+        return hologram;
     }
 
     /**

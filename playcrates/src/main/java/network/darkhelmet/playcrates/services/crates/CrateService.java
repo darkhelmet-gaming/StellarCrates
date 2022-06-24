@@ -61,6 +61,8 @@ public class CrateService {
      * Reloads all crate items from their configs.
      */
     public void reload() {
+        crates.values().forEach(Crate::onReload);
+
         crates.clear();
 
         for (CrateConfiguration crateConfiguration : configurationService.cratesConfiguration().crates()) {

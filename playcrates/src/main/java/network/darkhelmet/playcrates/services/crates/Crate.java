@@ -21,18 +21,55 @@
 package network.darkhelmet.playcrates.services.crates;
 
 import java.util.List;
+import java.util.Objects;
 
+import network.darkhelmet.playcrates.PlayCrates;
+import network.darkhelmet.playcrates.api.services.holograms.HologramProvider;
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
+import network.darkhelmet.playcrates.services.configuration.HologramConfiguration;
 import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
+import network.darkhelmet.playcrates.services.holograms.providers.DecentHologramsProvider;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public record Crate(CrateConfiguration config, List<Reward> rewards) {
+public final class Crate {
+    /**
+     * The crate configuration.
+     */
+    private final CrateConfiguration config;
+
+    /**
+     * The rewards.
+     */
+    private final List<Reward> rewards;
+
+    /**
+     * The hologram provider.
+     */
+    private HologramProvider hologramProvider;
+
+    /**
+     * Construct a new crate.
+     *
+     * @param config The crate configuration
+     * @param rewards The rewards
+     */
+    public Crate(CrateConfiguration config, List<Reward> rewards) {
+        this.config = config;
+        this.rewards = rewards;
+
+        config.locations().forEach(loc -> {
+            String msg = String.format("Placing crate `%s` at %s", config.identifier(), loc.toString());
+            PlayCrates.getInstance().debug(msg);
+            createHologram(loc.clone());
+        });
+    }
+
     /**
      * Add a location.
      *
@@ -40,6 +77,7 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
      */
     public void addLocation(Location location) {
         config.locations().add(location);
+        createHologram(location.clone());
     }
 
     /**
@@ -56,6 +94,36 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
         rewards.add(reward);
 
         return reward;
+    }
+
+    /**
+     * Creates a hologram.
+     *
+     * @param location The base location
+     */
+    private void createHologram(Location location) {
+        HologramConfiguration hologramConfiguration = config.hologram();
+        if (hologramConfiguration == null) {
+            return;
+        }
+
+        List<String> lines = hologramConfiguration.lines();
+        if (lines.isEmpty()) {
+            lines.add(config.title());
+        }
+
+        // Center location inside block
+        location = location.add(0.5d, 0.5d, 0.5d);
+
+        // Apply offset
+        location = location.add(hologramConfiguration.positionOffset());
+
+        String identifier = config.identifier() + "crate";
+
+        // Note: we only support one hologram provider
+        // so for now, this is just hard-coded
+        this.hologramProvider = new DecentHologramsProvider();
+        this.hologramProvider.create(identifier, location, lines);
     }
 
     /**
@@ -115,6 +183,13 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
     }
 
     /**
+     * Handle reloads.
+     */
+    public void onReload() {
+        hologramProvider.destroy();
+    }
+
+    /**
      * Open the crate for a given player.
      *
      * @param player The player
@@ -130,8 +205,43 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
         for (SoundConfiguration onRewardSound : config.onRewardSounds()) {
             if (onRewardSound != null) {
                 player.playSound(
-                    player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
+                        player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
             }
         }
+    }
+
+    /**
+     * Get the crate configuration.
+     *
+     * @return The crate configuration
+     */
+    public CrateConfiguration config() {
+        return config;
+    }
+
+    /**
+     * Get the rewards.
+     *
+     * @return The rewards
+     */
+    public List<Reward> rewards() {
+        return rewards;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        var that = (Crate) obj;
+        return Objects.equals(this.config, that.config) && Objects.equals(this.rewards, that.rewards);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(config, rewards);
     }
 }

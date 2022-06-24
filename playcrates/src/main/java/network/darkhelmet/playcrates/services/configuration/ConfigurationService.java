@@ -31,8 +31,10 @@ import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerialize
 import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.services.configuration.serializers.BlockLocationSerializerConfigurate;
 import network.darkhelmet.playcrates.services.configuration.serializers.LocaleSerializerConfigurate;
+import network.darkhelmet.playcrates.services.configuration.serializers.VectorSerializerConfigurate;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -133,6 +135,7 @@ public class ConfigurationService {
                     serializerBuilder.registerAll(serializer.serializers())
                         .register(Locale.class, new LocaleSerializerConfigurate())
                         .register(Location.class, new BlockLocationSerializerConfigurate())
+                        .register(Vector.class, new VectorSerializerConfigurate())
                 );
             })
             .path(file)
