@@ -22,6 +22,7 @@ package network.darkhelmet.playcrates.commands;
 
 import com.google.inject.Inject;
 
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
@@ -81,6 +82,7 @@ public class CrateCommand extends BaseCommand {
      * @param key The crate key
      */
     @SubCommand("addcrate")
+    @Permission("playcrates.admin")
     public void onAddCrate(final Player player, String key) {
         Block target = player.getTargetBlock(transparent, 3);
 
@@ -103,6 +105,7 @@ public class CrateCommand extends BaseCommand {
      * @param player The command sender
      */
     @SubCommand("addreward")
+    @Permission("playcrates.admin")
     public void onAddReward(final Player player, final String crateKey) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 

@@ -22,6 +22,7 @@ package network.darkhelmet.playcrates.commands;
 
 import com.google.inject.Inject;
 
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
@@ -73,6 +74,7 @@ public class ReloadCommand extends BaseCommand {
      * @param sender The command sender
      */
     @SubCommand("reloadconfig")
+    @Permission("playcrates.admin")
     public void onReloadConfig(final CommandSender sender) {
         configurationService.loadConfigurations();
 
@@ -85,6 +87,7 @@ public class ReloadCommand extends BaseCommand {
      * @param sender The command sender
      */
     @SubCommand("reloadlocales")
+    @Permission("playcrates.admin")
     public void onReloadLocales(final CommandSender sender) {
         try {
             translationService.reloadTranslations();
