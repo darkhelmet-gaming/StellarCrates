@@ -100,12 +100,12 @@ public class CrateCommand extends BaseCommand {
      * Run the create command.
      *
      * @param player The command sender
-     * @param key The crate key
+     * @param identifier The crate identifier
      * @param title The crate title
      */
     @SubCommand("addcrate")
     @Permission("playcrates.admin")
-    public void onAddCrate(final Player player, String key, @Join(" ") String title) {
+    public void onAddCrate(final Player player, String identifier, @Join(" ") String title) {
         Block target = player.getTargetBlock(transparent, 3);
 
         if (target.getType().equals(Material.AIR)) {
@@ -113,7 +113,7 @@ public class CrateCommand extends BaseCommand {
             player.sendMessage("Invalid block");
         }
 
-        CrateConfiguration crateConfig = new CrateConfiguration(key, title);
+        CrateConfiguration crateConfig = new CrateConfiguration(identifier, title);
         configurationService.cratesConfiguration().crates().add(crateConfig);
         configurationService.saveAll();
 
@@ -128,15 +128,15 @@ public class CrateCommand extends BaseCommand {
      */
     @SubCommand("addreward")
     @Permission("playcrates.admin")
-    public void onAddReward(final Player player, final String crateKey) {
+    public void onAddReward(final Player player, final String identifier) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
         RewardConfiguration reward = new RewardConfiguration(itemStack);
         Optional<CrateConfiguration> crateConfigurationOptional = configurationService
-            .cratesConfiguration().crate(crateKey);
+            .cratesConfiguration().crate(identifier);
         if (crateConfigurationOptional.isEmpty()) {
             // @todo use messages
-            player.sendMessage("Invalid crate key");
+            player.sendMessage("Invalid crate identifier");
             return;
         }
 
@@ -154,11 +154,11 @@ public class CrateCommand extends BaseCommand {
      */
     @SubCommand("preview")
     @Permission("playcrates.preview")
-    public void onPreview(final Player player, final String crateKey) {
-        Optional<Crate> crateOptional = crateService.crate(crateKey);
+    public void onPreview(final Player player, final String identifier) {
+        Optional<Crate> crateOptional = crateService.crate(identifier);
         if (crateOptional.isEmpty()) {
             // @todo use messages
-            player.sendMessage("Invalid crate key");
+            player.sendMessage("Invalid crate identifier");
             return;
         }
 

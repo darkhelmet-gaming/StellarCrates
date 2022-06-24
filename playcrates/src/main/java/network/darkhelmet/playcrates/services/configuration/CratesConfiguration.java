@@ -31,13 +31,13 @@ public class CratesConfiguration {
     private List<CrateConfiguration> crates = new ArrayList<>();
 
     /**
-     * Get a crate configuration by its key.
+     * Get a crate configuration by its identifier.
      *
-     * @param crateKey The crate key
+     * @param identifier The crate identifier
      * @return The crate configuration, if any
      */
-    public Optional<CrateConfiguration> crate(final String crateKey) {
-        return crates.stream().filter(c -> c.key().equalsIgnoreCase(crateKey)).findFirst();
+    public Optional<CrateConfiguration> crate(final String identifier) {
+        return crates.stream().filter(c -> c.identifier().equalsIgnoreCase(identifier)).findFirst();
     }
 
     /**

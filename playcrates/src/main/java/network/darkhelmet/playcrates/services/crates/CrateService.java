@@ -59,17 +59,17 @@ public class CrateService {
             }
 
             Crate crate = new Crate(crateConfiguration, rewards);
-            crates.put(crateConfiguration.key(), crate);
+            crates.put(crateConfiguration.identifier(), crate);
         }
     }
 
     /**
-     * Get a crate by key.
+     * Get a crate by identifier.
      *
-     * @param crateKey The crate key
+     * @param identifier The crate identifier
      * @return The crate, if any
      */
-    public Optional<Crate> crate(String crateKey) {
-        return Optional.ofNullable(crates.get(crateKey));
+    public Optional<Crate> crate(String identifier) {
+        return Optional.ofNullable(crates.get(identifier));
     }
 }

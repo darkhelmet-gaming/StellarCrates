@@ -28,8 +28,8 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class CrateConfiguration {
-    @Comment("A key is a one-word name for a create, to be used in commands etc.")
-    private String key;
+    @Comment("An identifier is a one-word name for a create, to be used in commands etc.")
+    private String identifier;
 
     @Comment("A list of rewards in this crate.")
     private List<RewardConfiguration> rewards = new ArrayList<>();
@@ -42,21 +42,21 @@ public class CrateConfiguration {
     /**
      * Construct a crate config.
      *
-     * @param key The key
+     * @param identifier The identifier
      * @param title The title
      */
-    public CrateConfiguration(String key, String title) {
-        this.key = key;
+    public CrateConfiguration(String identifier, String title) {
+        this.identifier = identifier;
         this.title = title;
     }
 
     /**
-     * Get the key.
+     * Get the identifier.
      *
-     * @return The key
+     * @return The identifier
      */
-    public String key() {
-        return key;
+    public String identifier() {
+        return identifier;
     }
 
     /**
