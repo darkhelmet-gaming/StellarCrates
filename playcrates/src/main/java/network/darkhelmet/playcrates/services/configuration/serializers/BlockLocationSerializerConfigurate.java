@@ -33,7 +33,7 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
-public class LocationSerializerConfigurate implements TypeSerializer<Location> {
+public class BlockLocationSerializerConfigurate implements TypeSerializer<Location> {
     private static final String WORLD_UUID = "worldUUID";
     private static final String X = "x";
     private static final String Y = "y";
@@ -59,9 +59,9 @@ public class LocationSerializerConfigurate implements TypeSerializer<Location> {
             throw new SerializationException("Failed to find world for uuid " + worldUuid);
         }
 
-        final double x = nonVirtualNode(source, X).getDouble();
-        final double y = nonVirtualNode(source, Y).getDouble();
-        final double z = nonVirtualNode(source, Z).getDouble();
+        final int x = nonVirtualNode(source, X).getInt();
+        final int y = nonVirtualNode(source, Y).getInt();
+        final int z = nonVirtualNode(source, Z).getInt();
 
         return new Location(world, x, y, z);
     }
@@ -75,8 +75,8 @@ public class LocationSerializerConfigurate implements TypeSerializer<Location> {
         }
 
         target.node(WORLD_UUID).set(loc.getWorld().getUID());
-        target.node(X).set(loc.getX());
-        target.node(Y).set(loc.getY());
-        target.node(Z).set(loc.getZ());
+        target.node(X).set(loc.getBlockX());
+        target.node(Y).set(loc.getBlockY());
+        target.node(Z).set(loc.getBlockZ());
     }
 }
