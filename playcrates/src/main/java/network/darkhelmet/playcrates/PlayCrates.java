@@ -90,9 +90,6 @@ public class PlayCrates extends JavaPlugin {
     @Override
     public void onLoad() {
         this.injector = Guice.createInjector(new PlayCratesModule(this, logger));
-
-        // Load the configuration service (and files)
-        configurationService = injector.getInstance(ConfigurationService.class);
     }
 
     /**
@@ -106,6 +103,9 @@ public class PlayCrates extends JavaPlugin {
 
         serializerVersion = mcVersion();
         logger.info("Serializer version: {}", serializerVersion);
+
+        // Load the configuration service (and files)
+        configurationService = injector.getInstance(ConfigurationService.class);
 
         if (isEnabled()) {
             // Register listeners

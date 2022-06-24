@@ -22,28 +22,43 @@ package network.darkhelmet.playcrates.listeners;
 
 import com.google.inject.Inject;
 
+import java.util.Optional;
+
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
+import network.darkhelmet.playcrates.services.gui.GuiService;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 public class PlayerInteractListener extends AbstractListener implements Listener {
     /**
+     * The GUI service.
+     */
+    private final GuiService guiService;
+
+    /**
      * Construct the listener.
      *
      * @param configurationService The configuration service
+     * @param crateService The crate service
+     * @param guiService The GUI service
      */
     @Inject
     public PlayerInteractListener(
             ConfigurationService configurationService,
-            CrateService crateService) {
+            CrateService crateService,
+            GuiService guiService) {
         super(configurationService, crateService);
+
+        this.guiService = guiService;
     }
 
     /**
@@ -61,6 +76,13 @@ public class PlayerInteractListener extends AbstractListener implements Listener
         // (Block will be null when clicking air)
         if (block == null || (event.getHand() != null && !event.getHand().equals(EquipmentSlot.HAND))) {
             return;
+        }
+
+        // @todo is holding key?
+
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            Optional<Crate> crateOptional = crateService.crate(block.getLocation());
+            crateOptional.ifPresent(crate -> guiService.open(crate, player));
         }
     }
 }

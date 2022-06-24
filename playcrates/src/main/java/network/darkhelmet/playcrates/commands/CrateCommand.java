@@ -92,8 +92,9 @@ public class CrateCommand extends BaseCommand {
         this.messageService = messageService;
 
         transparent.add(Material.AIR);
-        transparent.add(Material.WATER);
         transparent.add(Material.LAVA);
+        transparent.add(Material.SNOW);
+        transparent.add(Material.WATER);
     }
 
     /**
@@ -106,13 +107,6 @@ public class CrateCommand extends BaseCommand {
     @SubCommand("addcrate")
     @Permission("playcrates.admin")
     public void onCreate(final Player player, String identifier, @Join(" ") String title) {
-        Block target = player.getTargetBlock(transparent, 3);
-
-        if (target.getType().equals(Material.AIR)) {
-            // @todo use messages
-            player.sendMessage("Invalid block");
-        }
-
         CrateConfiguration crateConfig = new CrateConfiguration(identifier, title);
         configurationService.cratesConfiguration().crates().add(crateConfig);
         configurationService.saveAll();
@@ -144,6 +138,35 @@ public class CrateCommand extends BaseCommand {
 
         // @todo use messages
         player.sendMessage("Reward added!");
+    }
+
+    /**
+     * Run the addloc command.
+     *
+     * @param player The player
+     * @param identifier The crate identifier
+     */
+    @SubCommand("addloc")
+    @Permission("playcrates.admin")
+    public void onAddLocation(final Player player, final String identifier) {
+        Block block = player.getTargetBlock(transparent, 5);
+        if (block.getType().equals(Material.AIR)) {
+            // @todo use messages
+            player.sendMessage("Invalid block");
+        }
+
+        Optional<Crate> crateOptional = crateService.crate(identifier);
+        if (crateOptional.isEmpty()) {
+            // @todo use messages
+            player.sendMessage("Invalid crate identifier");
+            return;
+        }
+
+        crateOptional.get().addLocation(block.getLocation());
+        configurationService.saveAll();
+
+        // @todo use messages
+        player.sendMessage("Location added!");
     }
 
     /**

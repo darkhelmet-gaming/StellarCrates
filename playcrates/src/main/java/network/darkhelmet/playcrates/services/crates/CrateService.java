@@ -32,6 +32,8 @@ import network.darkhelmet.playcrates.services.configuration.ConfigurationService
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 
+import org.bukkit.Location;
+
 public class CrateService {
     /**
      * The configuration service.
@@ -89,5 +91,15 @@ public class CrateService {
      */
     public Optional<Crate> crate(String identifier) {
         return Optional.ofNullable(crates.get(identifier));
+    }
+
+    /**
+     * Get a crate by location.
+     *
+     * @param location The location
+     * @return The crate, if any
+     */
+    public Optional<Crate> crate(Location location) {
+        return crates.values().stream().filter(c -> c.hasLocation(location)).findFirst();
     }
 }

@@ -29,7 +29,9 @@ import java.util.Locale;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 
 import network.darkhelmet.playcrates.services.configuration.serializers.LocaleSerializerConfigurate;
+import network.darkhelmet.playcrates.services.configuration.serializers.LocationSerializerConfigurate;
 
+import org.bukkit.Location;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -121,6 +123,7 @@ public class ConfigurationService {
                 return opts.shouldCopyDefaults(true).serializers(serializerBuilder ->
                     serializerBuilder.registerAll(serializer.serializers())
                         .register(Locale.class, new LocaleSerializerConfigurate())
+                        .register(Location.class, new LocationSerializerConfigurate())
                 );
             })
             .path(file)

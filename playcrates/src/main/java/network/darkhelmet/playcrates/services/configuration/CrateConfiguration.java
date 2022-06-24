@@ -23,6 +23,7 @@ package network.darkhelmet.playcrates.services.configuration;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -31,8 +32,11 @@ public class CrateConfiguration {
     @Comment("An identifier is a one-word name for a crate, to be used in commands etc.")
     private String identifier;
 
-    @Comment("The crate key configuration")
+    @Comment("The crate key configuration.")
     private KeyConfiguration key;
+
+    @Comment("A list of all crate instance locations.")
+    private List<Location> locations = new ArrayList<>();
 
     @Comment("A list of rewards in this crate.")
     private List<RewardConfiguration> rewards = new ArrayList<>();
@@ -79,6 +83,15 @@ public class CrateConfiguration {
      */
     public KeyConfiguration key() {
         return key;
+    }
+
+    /**
+     * The crate instance locations.
+     *
+     * @return The locations
+     */
+    public List<Location> locations() {
+        return locations;
     }
 
     /**

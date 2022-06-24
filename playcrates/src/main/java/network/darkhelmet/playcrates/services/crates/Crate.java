@@ -26,11 +26,21 @@ import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 
+import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 public record Crate(CrateConfiguration config, List<Reward> rewards) {
     /**
-     * Add am itemstack as a reward.
+     * Add a location.
+     *
+     * @param location The location
+     */
+    public void addLocation(Location location) {
+        config.locations().add(location);
+    }
+
+    /**
+     * Add an itemstack as a reward.
      *
      * @param itemStack The item stack
      */
@@ -52,6 +62,19 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
         config.key(keyConfiguration);
 
         return keyConfiguration;
+    }
+
+    /**
+     * Check if crate instance exists a given location.
+     *
+     * @param location The location
+     * @return True if crate instance exists at location
+     */
+    public boolean hasLocation(Location location) {
+        for (Location l : config.locations()) {
+            System.out.println(l);
+        }
+        return config.locations().contains(location);
     }
 
     /**
