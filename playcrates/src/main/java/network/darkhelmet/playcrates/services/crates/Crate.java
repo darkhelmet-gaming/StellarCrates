@@ -46,11 +46,16 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
      * Add an itemstack as a reward.
      *
      * @param itemStack The item stack
+     * @return The reward
      */
-    public void addReward(ItemStack itemStack) {
+    public Reward addReward(ItemStack itemStack) {
         RewardConfiguration rewardConfiguration = new RewardConfiguration(itemStack);
         config.rewards().add(rewardConfiguration);
-        rewards.add(rewardConfiguration.toReward());
+
+        Reward reward = rewardConfiguration.toReward();
+        rewards.add(reward);
+
+        return reward;
     }
 
     /**

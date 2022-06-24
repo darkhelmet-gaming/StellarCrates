@@ -33,7 +33,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
-import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.gui.GuiService;
@@ -106,10 +105,8 @@ public class CrateCommand extends BaseCommand {
     @SubCommand("addcrate")
     @Permission("playcrates.admin")
     public void onCreate(final Player player, String identifier, @Join(" ") String title) {
-        CrateConfiguration crateConfig = new CrateConfiguration(identifier, title);
-        configurationService.cratesConfiguration().crates().add(crateConfig);
+        crateService.createCrate(identifier, title);
         configurationService.saveAll();
-        crateService.addCrate(crateConfig);
 
         // @todo use messages
         player.sendMessage("Crate created!");

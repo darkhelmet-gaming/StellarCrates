@@ -5,3 +5,4 @@ authors: [viveleroi]
 website:
 api-version: @apiversion@
 main: network.darkhelmet.playcrates.PlayCrates
+softdepend: [SpecializedCrates]

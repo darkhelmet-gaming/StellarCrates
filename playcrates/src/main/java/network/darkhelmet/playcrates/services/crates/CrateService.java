@@ -73,7 +73,7 @@ public class CrateService {
      *
      * @param crateConfiguration The crate configuration
      */
-    public void addCrate(CrateConfiguration crateConfiguration) {
+    public Crate addCrate(CrateConfiguration crateConfiguration) {
         List<Reward> rewards = new ArrayList<>();
         for (RewardConfiguration rewardConfiguration : crateConfiguration.rewards()) {
             rewards.add(rewardConfiguration.toReward());
@@ -81,6 +81,8 @@ public class CrateService {
 
         Crate crate = new Crate(crateConfiguration, rewards);
         crates.put(crateConfiguration.identifier(), crate);
+
+        return crate;
     }
 
     /**
@@ -101,5 +103,20 @@ public class CrateService {
      */
     public Optional<Crate> crate(Location location) {
         return crates.values().stream().filter(c -> c.hasLocation(location)).findFirst();
+    }
+
+    /**
+     * Crate a new crate.
+     *
+     * @param identifier The identifier
+     * @param title The title
+     * @return The crate
+     */
+    public Crate createCrate(String identifier, String title) {
+        // Create the crate and register it
+        CrateConfiguration crateConfig = new CrateConfiguration(identifier, title);
+        configurationService.cratesConfiguration().crates().add(crateConfig);
+
+        return addCrate(crateConfig);
     }
 }

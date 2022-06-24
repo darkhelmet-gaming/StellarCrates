@@ -53,7 +53,6 @@ public class CrateConfiguration {
      */
     public CrateConfiguration() {
         onRewardSounds.add(new SoundConfiguration(Sound.BLOCK_AMETHYST_BLOCK_CHIME));
-        onRewardSounds.add(new SoundConfiguration(Sound.ITEM_GOAT_HORN_SOUND_1));
     }
 
     /**

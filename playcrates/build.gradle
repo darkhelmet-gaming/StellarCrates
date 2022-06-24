@@ -41,8 +41,9 @@ version = project.property("version")
 targetCompatibility = sourceCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
     compileOnly 'org.apache.logging.log4j:log4j-api:2.17.2'
+    compileOnly fileTree('../lib')
     implementation 'com.google.inject:guice:5.1.0'
     implementation 'net.kyori:adventure-api:4.11.0'
     implementation 'net.kyori:adventure-serializer-configurate4:4.11.0'
@@ -85,5 +86,5 @@ runServer {
     // Configure the Minecraft version for our task.
     // This is the only required configuration besides applying the plugin.
     // Your plugin's jar (or shadowJar if present) will be used automatically.
-    minecraftVersion("1.19")
+    minecraftVersion("1.18.2")
 }

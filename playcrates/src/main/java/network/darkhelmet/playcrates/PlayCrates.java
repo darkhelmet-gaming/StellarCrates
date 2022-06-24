@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 import network.darkhelmet.playcrates.commands.AboutCommand;
 import network.darkhelmet.playcrates.commands.CrateCommand;
+import network.darkhelmet.playcrates.commands.ImportCommand;
 import network.darkhelmet.playcrates.commands.ReloadCommand;
 import network.darkhelmet.playcrates.injection.PlayCratesModule;
 import network.darkhelmet.playcrates.listeners.PlayerInteractListener;
@@ -126,6 +127,7 @@ public class PlayCrates extends JavaPlugin {
 
             commandManager.registerCommand(injector.getInstance(AboutCommand.class));
             commandManager.registerCommand(injector.getInstance(CrateCommand.class));
+            commandManager.registerCommand(injector.getInstance(ImportCommand.class));
             commandManager.registerCommand(injector.getInstance(ReloadCommand.class));
         }
     }
