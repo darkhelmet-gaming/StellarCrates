@@ -27,6 +27,7 @@ import java.util.Optional;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
+import network.darkhelmet.playcrates.services.crates.Reward;
 import network.darkhelmet.playcrates.services.gui.GuiService;
 
 import org.bukkit.block.Block;
@@ -78,11 +79,25 @@ public class PlayerInteractListener extends AbstractListener implements Listener
             return;
         }
 
+        if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+            Optional<Crate> crateOptional = crateService.crate(block.getLocation());
+            crateOptional.ifPresent(crate -> guiService.open(crate, player));
+
+            event.setCancelled(true);
+
+            return;
+        }
+
         // @todo is holding key?
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
-            crateOptional.ifPresent(crate -> guiService.open(crate, player));
+            crateOptional.ifPresent(crate -> {
+                Reward reward = crate.chooseWeightedRandomReward();
+                reward.deliverTo(player);
+
+                event.setCancelled(true);
+            });
         }
     }
 }

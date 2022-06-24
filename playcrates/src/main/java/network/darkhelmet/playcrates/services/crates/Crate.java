@@ -71,9 +71,6 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
      * @return True if crate instance exists at location
      */
     public boolean hasLocation(Location location) {
-        for (Location l : config.locations()) {
-            System.out.println(l);
-        }
         return config.locations().contains(location);
     }
 
