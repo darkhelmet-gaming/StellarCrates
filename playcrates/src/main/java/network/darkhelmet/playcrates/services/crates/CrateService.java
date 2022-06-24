@@ -41,7 +41,7 @@ public class CrateService {
     /**
      * Cache of crates.
      */
-    private Map<String, Crate> crates = new HashMap<>();
+    private final Map<String, Crate> crates = new HashMap<>();
 
     /**
      * Construct the crate service.
@@ -51,6 +51,15 @@ public class CrateService {
     @Inject
     public CrateService(ConfigurationService configurationService) {
         this.configurationService = configurationService;
+
+        reload();
+    }
+
+    /**
+     * Reloads all crate items from their configs.
+     */
+    public void reload() {
+        crates.clear();
 
         for (CrateConfiguration crateConfiguration : configurationService.cratesConfiguration().crates()) {
             addCrate(crateConfiguration);

@@ -30,6 +30,7 @@ import dev.triumphteam.cmd.core.annotation.SubCommand;
 import java.io.IOException;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.messages.MessageService;
 import network.darkhelmet.playcrates.services.translation.TranslationKey;
 import network.darkhelmet.playcrates.services.translation.TranslationService;
@@ -38,6 +39,11 @@ import org.bukkit.command.CommandSender;
 
 @Command(value = "playcrates", alias = {"pc", "crates"})
 public class ReloadCommand extends BaseCommand {
+    /**
+     * The crate service.
+     */
+    private final CrateService crateService;
+
     /**
      * The message service.
      */
@@ -56,13 +62,18 @@ public class ReloadCommand extends BaseCommand {
     /**
      * Construct the reload command.
      *
+     * @param crateService The crate service
      * @param messageService The message service
+     * @param translationService The translation service
+     * @param configurationService The configuration service
      */
     @Inject
     public ReloadCommand(
+            CrateService crateService,
             MessageService messageService,
             TranslationService translationService,
             ConfigurationService configurationService) {
+        this.crateService = crateService;
         this.messageService = messageService;
         this.translationService = translationService;
         this.configurationService = configurationService;
@@ -77,6 +88,8 @@ public class ReloadCommand extends BaseCommand {
     @Permission("playcrates.admin")
     public void onReloadConfig(final CommandSender sender) {
         configurationService.loadConfigurations();
+
+        crateService.reload();
 
         messageService.reloadedConfig(sender);
     }
