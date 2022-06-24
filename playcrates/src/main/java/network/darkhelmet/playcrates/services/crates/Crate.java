@@ -41,4 +41,14 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
 
         return keyConfiguration;
     }
+
+    /**
+     * Check an item stack against a crate key.
+     *
+     * @param itemStack The item stack
+     * @return True if key matches
+     */
+    public boolean keyMatches(ItemStack itemStack) {
+        return config.key().toItemStack().isSimilar(itemStack);
+    }
 }

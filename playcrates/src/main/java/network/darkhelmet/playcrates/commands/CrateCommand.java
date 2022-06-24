@@ -149,6 +149,33 @@ public class CrateCommand extends BaseCommand {
     }
 
     /**
+     * Run the open command.
+     *
+     * @param player The player
+     */
+    @SubCommand("open")
+    @Permission("playcrates.open")
+    public void onOpen(final Player player, final String identifier) {
+        Optional<Crate> crateOptional = crateService.crate(identifier);
+        if (crateOptional.isEmpty()) {
+            // @todo use messages
+            player.sendMessage("Invalid crate identifier");
+            return;
+        }
+
+        Crate crate = crateOptional.get();
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (!crate.keyMatches(itemStack)) {
+            // @todo use messages
+            player.sendMessage("You don't have a valid crate key");
+            return;
+        }
+
+        player.sendMessage("Opening crate!");
+    }
+
+    /**
      * Run the preview command.
      *
      * @param player The player

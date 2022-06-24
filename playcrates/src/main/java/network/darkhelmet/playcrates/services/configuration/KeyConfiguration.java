@@ -20,6 +20,7 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
+import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
 import network.darkhelmet.playcrates.PlayCrates;
@@ -55,5 +56,14 @@ public class KeyConfiguration {
         itemStack.setItemMeta(meta);
 
         nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
+    }
+
+    /**
+     * Create an item stack from the config.
+     *
+     * @return The item stack
+     */
+    public ItemStack toItemStack() {
+        return NBTItem.convertNBTtoItem(new NBTContainer(nbtString));
     }
 }

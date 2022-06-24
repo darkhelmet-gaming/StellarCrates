@@ -23,7 +23,6 @@ package network.darkhelmet.playcrates.services.configuration;
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
-import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.services.crates.Reward;
 
 import org.bukkit.inventory.ItemStack;
@@ -35,8 +34,11 @@ public class RewardConfiguration {
     @Comment("NBT string")
     private String nbtString;
 
-    @Comment("The version of the serializer")
-    private short serializerVersion;
+    @Comment("""
+            The weight to use in random calculations. Higher weights make the item more common.
+            However, the final chance percentage is reliant on how many items are in the crate.
+            """)
+    private short weight = 100;
 
     /**
      * Empty constructor, needed for deserialization.
@@ -50,7 +52,6 @@ public class RewardConfiguration {
      */
     public RewardConfiguration(ItemStack itemStack) {
         nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
-        serializerVersion = PlayCrates.getInstance().serializerVersion();
     }
 
     /**
@@ -73,5 +74,14 @@ public class RewardConfiguration {
      */
     public String nbtString() {
         return nbtString;
+    }
+
+    /**
+     * Get the weight.
+     *
+     * @return The weight
+     */
+    public short weight() {
+        return weight;
     }
 }

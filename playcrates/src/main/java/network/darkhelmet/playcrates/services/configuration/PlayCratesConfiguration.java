@@ -22,6 +22,8 @@ package network.darkhelmet.playcrates.services.configuration;
 
 import java.util.Locale;
 
+import network.darkhelmet.playcrates.PlayCrates;
+
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -35,6 +37,9 @@ public class PlayCratesConfiguration {
         will use their client locale settings.
         """)
     private Locale defaultLocale = Locale.US;
+
+    @Comment("The version of the serializer")
+    private short serializerVersion = PlayCrates.getInstance().serializerVersion();
 
     /**
      * Get the debug setting.
