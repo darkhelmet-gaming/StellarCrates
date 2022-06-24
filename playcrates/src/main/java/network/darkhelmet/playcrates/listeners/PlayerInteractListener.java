@@ -23,6 +23,7 @@ package network.darkhelmet.playcrates.listeners;
 import com.google.inject.Inject;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.crates.CrateService;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -39,8 +40,10 @@ public class PlayerInteractListener extends AbstractListener implements Listener
      * @param configurationService The configuration service
      */
     @Inject
-    public PlayerInteractListener(ConfigurationService configurationService) {
-        super(configurationService);
+    public PlayerInteractListener(
+            ConfigurationService configurationService,
+            CrateService crateService) {
+        super(configurationService, crateService);
     }
 
     /**

@@ -89,8 +89,10 @@ public class PlayCrates extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        this.injector = Guice.createInjector(
-            new PlayCratesModule(this, logger));
+        this.injector = Guice.createInjector(new PlayCratesModule(this, logger));
+
+        // Load the configuration service (and files)
+        configurationService = injector.getInstance(ConfigurationService.class);
     }
 
     /**

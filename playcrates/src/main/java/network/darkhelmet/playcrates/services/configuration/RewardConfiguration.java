@@ -20,9 +20,11 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
+import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
 import network.darkhelmet.playcrates.PlayCrates;
+import network.darkhelmet.playcrates.services.crates.Reward;
 
 import org.bukkit.inventory.ItemStack;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -36,6 +38,8 @@ public class RewardConfiguration {
     @Comment("The version of the serializer")
     private short serializerVersion;
 
+    public RewardConfiguration() {}
+
     /**
      * Construct a new reward configuration from an item stack.
      *
@@ -44,6 +48,19 @@ public class RewardConfiguration {
     public RewardConfiguration(ItemStack itemStack) {
         nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
         serializerVersion = PlayCrates.getInstance().serializerVersion();
+    }
+
+    /**
+     * Generate an item from the reward configuration.
+     *
+     * @return The item stack
+     */
+    public ItemStack toItemStack() {
+        return NBTItem.convertNBTtoItem(new NBTContainer(nbtString));
+    }
+
+    public Reward toReward() {
+        return new Reward(toItemStack());
     }
 
     /**

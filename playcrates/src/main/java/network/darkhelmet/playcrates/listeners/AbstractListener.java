@@ -21,6 +21,7 @@
 package network.darkhelmet.playcrates.listeners;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.crates.CrateService;
 
 public class AbstractListener {
     /**
@@ -29,11 +30,19 @@ public class AbstractListener {
     protected final ConfigurationService configurationService;
 
     /**
+     * The crate service.
+     */
+    protected final CrateService crateService;
+
+    /**
      * Construct the listener.
      *
      * @param configurationService The configuration service
      */
-    public AbstractListener(ConfigurationService configurationService) {
+    public AbstractListener(
+            ConfigurationService configurationService,
+            CrateService crateService) {
         this.configurationService = configurationService;
+        this.crateService = crateService;
     }
 }

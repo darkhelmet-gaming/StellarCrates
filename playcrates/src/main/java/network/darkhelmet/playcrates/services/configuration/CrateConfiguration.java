@@ -34,6 +34,8 @@ public class CrateConfiguration {
     @Comment("A list of rewards in this crate.")
     private List<RewardConfiguration> rewards = new ArrayList<>();
 
+    public CrateConfiguration() {}
+
     /**
      * Construct a crate config.
      *
