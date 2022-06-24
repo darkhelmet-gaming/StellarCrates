@@ -34,7 +34,6 @@ import java.util.Set;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
-import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.crates.Reward;
@@ -46,7 +45,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-@Command(value = "playcrates", alias = {"pc"})
+@Command(value = "playcrates", alias = {"pc", "crates"})
 public class CrateCommand extends BaseCommand {
     /**
      * The message service.
@@ -106,7 +105,7 @@ public class CrateCommand extends BaseCommand {
      */
     @SubCommand("addcrate")
     @Permission("playcrates.admin")
-    public void onAddCrate(final Player player, String identifier, @Join(" ") String title) {
+    public void onCreate(final Player player, String identifier, @Join(" ") String title) {
         Block target = player.getTargetBlock(transparent, 3);
 
         if (target.getType().equals(Material.AIR)) {
@@ -132,18 +131,15 @@ public class CrateCommand extends BaseCommand {
     @SubCommand("addreward")
     @Permission("playcrates.admin")
     public void onAddReward(final Player player, final String identifier) {
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-
-        RewardConfiguration reward = new RewardConfiguration(itemStack);
-        Optional<CrateConfiguration> crateConfigurationOptional = configurationService
-            .cratesConfiguration().crate(identifier);
-        if (crateConfigurationOptional.isEmpty()) {
+        Optional<Crate> crateOptional = crateService.crate(identifier);
+        if (crateOptional.isEmpty()) {
             // @todo use messages
             player.sendMessage("Invalid crate identifier");
             return;
         }
 
-        crateConfigurationOptional.get().rewards().add(reward);
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        crateOptional.get().addReward(itemStack);
         configurationService.saveAll();
 
         // @todo use messages

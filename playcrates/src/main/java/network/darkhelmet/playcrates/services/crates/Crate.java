@@ -24,10 +24,22 @@ import java.util.List;
 
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
+import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 
 import org.bukkit.inventory.ItemStack;
 
 public record Crate(CrateConfiguration config, List<Reward> rewards) {
+    /**
+     * Add am itemstack as a reward.
+     *
+     * @param itemStack The item stack
+     */
+    public void addReward(ItemStack itemStack) {
+        RewardConfiguration rewardConfiguration = new RewardConfiguration(itemStack);
+        config.rewards().add(rewardConfiguration);
+        rewards.add(rewardConfiguration.toReward());
+    }
+
     /**
      * Crate a new key configuration for this crate.
      *
@@ -49,7 +61,7 @@ public record Crate(CrateConfiguration config, List<Reward> rewards) {
      * @return True if key matches
      */
     public boolean keyMatches(ItemStack itemStack) {
-        return config.key().toItemStack().isSimilar(itemStack);
+        return config.key() == null || config.key().toItemStack().isSimilar(itemStack);
     }
 
     /**

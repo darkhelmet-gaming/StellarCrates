@@ -32,7 +32,7 @@ import network.darkhelmet.playcrates.services.messages.MessageService;
 
 import org.bukkit.command.CommandSender;
 
-@Command(value = "playcrates", alias = {"pc"})
+@Command(value = "playcrates", alias = {"pc", "crates"})
 public class AboutCommand extends BaseCommand {
     /**
      * The message service.

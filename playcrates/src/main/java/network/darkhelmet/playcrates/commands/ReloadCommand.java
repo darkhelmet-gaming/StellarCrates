@@ -36,7 +36,7 @@ import network.darkhelmet.playcrates.services.translation.TranslationService;
 
 import org.bukkit.command.CommandSender;
 
-@Command(value = "playcrates", alias = {"pc"})
+@Command(value = "playcrates", alias = {"pc", "crates"})
 public class ReloadCommand extends BaseCommand {
     /**
      * The message service.
