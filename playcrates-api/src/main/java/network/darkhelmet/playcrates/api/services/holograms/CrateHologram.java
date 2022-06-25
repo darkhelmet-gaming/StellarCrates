@@ -20,18 +20,9 @@
 
 package network.darkhelmet.playcrates.api.services.holograms;
 
-import java.util.List;
-
-import org.bukkit.Location;
-
-public interface HologramProvider {
+public interface CrateHologram {
     /**
-     * Create the hologram.
-     *
-     * @param identifier String crate/hologram identifier
-     * @param location The location
-     * @param lines The lines
-     * @return The hologram
+     * Destroy the hologram. Useful for reloads.
      */
-    CrateHologram create(String identifier, Location location, List<String> lines);
+    void destroy();
 }

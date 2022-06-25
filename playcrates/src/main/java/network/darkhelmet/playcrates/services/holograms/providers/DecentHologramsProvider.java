@@ -25,23 +25,15 @@ import eu.decentsoftware.holograms.api.holograms.Hologram;
 
 import java.util.List;
 
+import network.darkhelmet.playcrates.api.services.holograms.CrateHologram;
 import network.darkhelmet.playcrates.api.services.holograms.HologramProvider;
 
 import org.bukkit.Location;
 
 public class DecentHologramsProvider implements HologramProvider {
-    /**
-     * The hologram.
-     */
-    private Hologram hologram;
-
     @Override
-    public void create(String identifier, Location location, List<String> lines) {
-        this.hologram = DHAPI.createHologram(identifier, location, lines);
-    }
-
-    @Override
-    public void destroy() {
-        this.hologram.destroy();
+    public CrateHologram create(String identifier, Location location, List<String> lines) {
+        Hologram hologram = DHAPI.createHologram(identifier, location, lines);
+        return new DecentHologram(hologram);
     }
 }

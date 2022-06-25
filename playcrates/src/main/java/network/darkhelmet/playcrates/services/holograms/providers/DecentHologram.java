@@ -18,20 +18,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.playcrates.api.services.holograms;
+package network.darkhelmet.playcrates.services.holograms.providers;
 
-import java.util.List;
+import eu.decentsoftware.holograms.api.holograms.Hologram;
 
-import org.bukkit.Location;
+import network.darkhelmet.playcrates.api.services.holograms.CrateHologram;
 
-public interface HologramProvider {
+public class DecentHologram implements CrateHologram {
     /**
-     * Create the hologram.
-     *
-     * @param identifier String crate/hologram identifier
-     * @param location The location
-     * @param lines The lines
-     * @return The hologram
+     * The hologram.
      */
-    CrateHologram create(String identifier, Location location, List<String> lines);
+    private final Hologram hologram;
+
+    /**
+     * Construct a new hologram.
+     *
+     * @param hologram The hologram
+     */
+    public DecentHologram(Hologram hologram) {
+        this.hologram = hologram;
+    }
+
+    @Override
+    public void destroy() {
+        this.hologram.destroy();
+    }
 }

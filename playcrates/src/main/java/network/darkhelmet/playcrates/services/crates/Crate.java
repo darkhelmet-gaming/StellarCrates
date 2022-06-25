@@ -20,13 +20,14 @@
 
 package network.darkhelmet.playcrates.services.crates;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
 import network.darkhelmet.playcrates.PlayCrates;
-import network.darkhelmet.playcrates.api.services.holograms.HologramProvider;
+import network.darkhelmet.playcrates.api.services.holograms.CrateHologram;
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.playcrates.services.configuration.HologramConfiguration;
 import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
@@ -52,8 +53,16 @@ public final class Crate {
 
     /**
      * The hologram provider.
+     *
+     * <p>Note: we only support one hologram provider
+     * so for now, this is just hard-coded.</p>
      */
-    private HologramProvider hologramProvider;
+    private final DecentHologramsProvider hologramProvider = new DecentHologramsProvider();
+
+    /**
+     * The holograms.
+     */
+    private final List<CrateHologram> holograms = new ArrayList<>();
 
     /**
      * Construct a new crate.
@@ -123,10 +132,7 @@ public final class Crate {
         String identifier = String.format("%scrate%d%d%d",
             config.identifier(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-        // Note: we only support one hologram provider
-        // so for now, this is just hard-coded
-        this.hologramProvider = new DecentHologramsProvider();
-        this.hologramProvider.create(identifier, location, lines);
+        holograms.add(hologramProvider.create(identifier, location, lines));
     }
 
     /**
@@ -189,7 +195,7 @@ public final class Crate {
      * Handle reloads.
      */
     public void onReload() {
-        hologramProvider.destroy();
+        holograms.forEach(CrateHologram::destroy);
     }
 
     /**
