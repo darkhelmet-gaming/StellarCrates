@@ -97,9 +97,6 @@ public class PlayerInteractListener extends AbstractListener implements Listener
         }
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack.getType().equals(Material.AIR)) {
-            return;
-        }
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
