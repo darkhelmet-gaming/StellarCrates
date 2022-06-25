@@ -48,6 +48,19 @@ public class SoundConfiguration {
     }
 
     /**
+     * Construct a sound configuration.
+     *
+     * @param sound The sound
+     * @param pitch The pitch
+     * @param volume The volume
+     */
+    public SoundConfiguration(Sound sound, float pitch, float volume) {
+        this.sound = sound;
+        this.pitch = pitch;
+        this.volume = volume;
+    }
+
+    /**
      * Get the sound.
      *
      * @return The sound

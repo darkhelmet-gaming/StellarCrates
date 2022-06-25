@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import me.PM2.customcrates.crates.PlacedCrate;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.crates.Reward;
 
+import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -69,11 +71,28 @@ public class ImportsService {
             String identifier = scCrate.getName();
             String title = scCrate.getDisplayName();
 
+            // Create the crate
             Crate crate = crateService.createCrate(identifier, title);
 
+            // Key item
             ItemStack keyItem = scCrate.getSettings().getKeyItemHandler().getItem(1);
             crate.createKey(keyItem);
 
+            // Open sounds
+            scCrate.getSettings().getSound().getSounds().forEach((key, value) -> {
+                if (key.equalsIgnoreCase("OPEN")) {
+                    value.forEach(soundData -> {
+                        Sound sound = soundData.getSound().parseSound();
+                        float pitch = soundData.getPitch();
+                        float volume = soundData.getVolume();
+
+                        SoundConfiguration soundConfiguration = new SoundConfiguration(sound, pitch, volume);
+                        crate.config().onRewardSounds().add(soundConfiguration);
+                    });
+                }
+            });
+
+            // Rewards
             for (me.PM2.customcrates.crates.options.rewards.Reward scReward :
                 scCrate.getSettings().getReward().getCrateRewards()) {
                 ItemStack rewardItem = scReward.getDisplayBuilder().getStack();
@@ -105,6 +124,7 @@ public class ImportsService {
             }
         });
 
+        // Placement locations
         PlacedCrate.getPlacedCrates().values().forEach(placedCrate -> {
             String identifier = placedCrate.getCrate().getName();
 
