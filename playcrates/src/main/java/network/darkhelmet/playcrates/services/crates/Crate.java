@@ -23,6 +23,8 @@ package network.darkhelmet.playcrates.services.crates;
 import java.util.List;
 import java.util.Objects;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+
 import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.api.services.holograms.HologramProvider;
 import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
@@ -118,7 +120,8 @@ public final class Crate {
         // Apply offset
         location = location.add(hologramConfiguration.positionOffset());
 
-        String identifier = config.identifier() + "crate";
+        String identifier = String.format("%scrate%d%d%d",
+            config.identifier(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
         // Note: we only support one hologram provider
         // so for now, this is just hard-coded
@@ -199,7 +202,8 @@ public final class Crate {
         reward.deliverTo(player);
 
         for (String command : reward.config().commands()) {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+            String parsed = PlaceholderAPI.setPlaceholders(player, command);
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), parsed);
         }
 
         for (SoundConfiguration onRewardSound : config.onRewardSounds()) {

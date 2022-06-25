@@ -102,7 +102,11 @@ public class SpecializedCratesImporter extends AbstractImporter {
 
                 Reward reward = crate.addReward(rewardItem);
 
-                reward.config().commands().addAll(scReward.getCommands());
+                scReward.getCommands().forEach(scCommand -> {
+                    // Convert placeholders to PAPI
+                    String cmd = scCommand.replace("%player%", "%player_name%");
+                    reward.config().commands().add(cmd);
+                });
             }
         });
 

@@ -5,6 +5,6 @@ authors: [viveleroi]
 website:
 api-version: @apiversion@
 main: network.darkhelmet.playcrates.PlayCrates
-depend: [DecentHolograms]
+depend: [DecentHolograms,PlaceholderAPI]
 softdepend: [SpecializedCrates]
 

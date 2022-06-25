@@ -37,6 +37,9 @@ repositories {
 
     // DecentHolograms
     maven { url 'https://jitpack.io' }
+
+    // Placeholder API
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
 }
 
 group = project.property("group")
@@ -47,6 +50,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
     compileOnly 'org.apache.logging.log4j:log4j-api:2.17.2'
     compileOnly 'com.github.decentsoftware-eu:decentholograms:2.4.2'
+    compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly fileTree('../lib')
     implementation 'com.google.inject:guice:5.1.0'
     implementation 'net.kyori:adventure-api:4.11.0'
