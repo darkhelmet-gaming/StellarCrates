@@ -22,6 +22,8 @@ package network.darkhelmet.playcrates.services.imports;
 
 import com.google.inject.Inject;
 
+import java.util.ArrayList;
+
 import me.PM2.customcrates.crates.PlacedCrate;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
@@ -30,6 +32,7 @@ import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.crates.Reward;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ImportsService {
     /**
@@ -73,7 +76,30 @@ public class ImportsService {
 
             for (me.PM2.customcrates.crates.options.rewards.Reward scReward :
                 scCrate.getSettings().getReward().getCrateRewards()) {
-                Reward reward = crate.addReward(scReward.getDisplayBuilder().getStack());
+                ItemStack rewardItem = scReward.getDisplayBuilder().getStack();
+
+                // SC had a silly way of showing "chances" as lore
+                // but only for items that didn't already have lore.
+                // This is an attempt strip the crap out of the items,
+                // that should never be hard-coded.
+                ItemMeta meta = rewardItem.getItemMeta();
+                if (meta != null && meta.hasLore()) {
+                    boolean shouldWipeLore = false;
+                    for (String lore : meta.getLore()) {
+                        if (lore.contains("Chance")) {
+                            shouldWipeLore = true;
+
+                            break;
+                        }
+                    }
+
+                    if (shouldWipeLore) {
+                        meta.setLore(new ArrayList<>());
+                        rewardItem.setItemMeta(meta);
+                    }
+                }
+
+                Reward reward = crate.addReward(rewardItem);
 
                 reward.config().commands().addAll(scReward.getCommands());
             }
