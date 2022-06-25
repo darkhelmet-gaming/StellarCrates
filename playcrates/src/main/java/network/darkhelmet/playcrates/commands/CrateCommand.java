@@ -127,13 +127,18 @@ public class CrateCommand extends BaseCommand {
      * Run the create command.
      *
      * @param player The player
-     * @param identifier The crate identifier
+     * @param crateId The crate identifier
      * @param title The crate title
      */
     @SubCommand("addcrate")
     @Permission("playcrates.admin")
-    public void onCreate(final Player player, String identifier, @Join(" ") String title) {
-        crateService.createCrate(identifier, title);
+    public void onCreate(final Player player, String crateId, @Join(" ") String title) {
+        if (crateService.crate(crateId).isPresent()) {
+            messageService.error(player, new TranslationKey("error-crate-exists"));
+            return;
+        }
+
+        crateService.createCrate(crateId, title);
         configurationService.saveAll();
 
         messageService.crateCreated(player);
