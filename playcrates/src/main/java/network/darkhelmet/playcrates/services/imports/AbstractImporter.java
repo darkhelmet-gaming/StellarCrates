@@ -20,30 +20,27 @@
 
 package network.darkhelmet.playcrates.services.imports;
 
-import com.google.inject.Inject;
-
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 
-public class ImportsService {
+public abstract class AbstractImporter {
     /**
      * The configuration service.
      */
-    private final ConfigurationService configurationService;
+    protected final ConfigurationService configurationService;
 
     /**
      * The crate service.
      */
-    private final CrateService crateService;
+    protected final CrateService crateService;
 
     /**
-     * Construct the import service.
+     * Construct the importer.
      *
      * @param configurationService The configuration service
      * @param crateService The crate service
      */
-    @Inject
-    public ImportsService(
+    public AbstractImporter(
             ConfigurationService configurationService,
             CrateService crateService) {
         this.configurationService = configurationService;
@@ -51,14 +48,7 @@ public class ImportsService {
     }
 
     /**
-     * Import from specialized crates.
-     *
-     * <p>Note, we can easily refactor this to expand which plugins we support.</p>
+     * Import the data.
      */
-    public void importData(String pluginName) {
-        if (pluginName.equalsIgnoreCase("SpecializedCrates")) {
-            SpecializedCratesImporter importer = new SpecializedCratesImporter(configurationService, crateService);
-            importer.importData();
-        }
-    }
+    public void importData() {}
 }

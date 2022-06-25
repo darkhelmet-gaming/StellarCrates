@@ -66,7 +66,7 @@ public class ImportCommand extends BaseCommand {
     @SubCommand("import")
     @Permission("playcrates.admin")
     public void onImport(final CommandSender sender) {
-        importsService.importFromSpecializedCrates();
+        importsService.importData("SpecializedCrates");
 
         // @todo use messages
         sender.sendMessage("Import complete");
