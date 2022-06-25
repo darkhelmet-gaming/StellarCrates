@@ -101,6 +101,7 @@ public class SpecializedCratesImporter extends AbstractImporter {
                 }
 
                 Reward reward = crate.addReward(rewardItem);
+                reward.config().givesDisplayItem(scReward.isGiveDisplayItem());
 
                 scReward.getCommands().forEach(scCommand -> {
                     // Convert placeholders to PAPI

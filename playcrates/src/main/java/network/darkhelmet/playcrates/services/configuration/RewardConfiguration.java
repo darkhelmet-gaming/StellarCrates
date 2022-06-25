@@ -41,6 +41,12 @@ public class RewardConfiguration {
     private String nbtString;
 
     @Comment("""
+            True if the item is what we give to players.
+            If you use commands to give items, set this to false.
+            """)
+    private boolean givesDisplayItem = true;
+
+    @Comment("""
             The weight to use in random calculations. Higher weights make the item more common.
             However, the final chance percentage is reliant on how many items are in the crate.
             """)
@@ -85,6 +91,24 @@ public class RewardConfiguration {
      */
     public List<String> commands() {
         return commands;
+    }
+
+    /**
+     * Whether to give the display item.
+     *
+     * @return The give display item toggle
+     */
+    public boolean givesDisplayItem() {
+        return givesDisplayItem;
+    }
+
+    /**
+     * Sets the give display item toggle.
+     *
+     * @param givesDisplayItem Whether to give display item
+     */
+    public void givesDisplayItem(boolean givesDisplayItem) {
+        this.givesDisplayItem = givesDisplayItem;
     }
 
     /**

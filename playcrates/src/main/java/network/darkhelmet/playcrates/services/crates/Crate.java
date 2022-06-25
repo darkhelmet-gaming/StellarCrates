@@ -214,13 +214,20 @@ public final class Crate {
             return;
         }
 
-        rewardOptional.get().deliverTo(player);
+        Reward reward = rewardOptional.get();
 
-        for (String command : rewardOptional.get().config().commands()) {
+        // Give the item
+        if (reward.config().givesDisplayItem()) {
+            reward.deliverTo(player);
+        }
+
+        // Execute commands
+        for (String command : reward.config().commands()) {
             String parsed = PlaceholderAPI.setPlaceholders(player, command);
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), parsed);
         }
 
+        // Play sounds
         for (SoundConfiguration onRewardSound : config.onRewardSounds()) {
             if (onRewardSound != null) {
                 player.playSound(

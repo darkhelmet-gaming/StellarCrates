@@ -24,7 +24,10 @@ In development.
 ## Requirements
 
 - [DecentHolograms][dh] 2.4.2+
-- [PlaceholderAPI][papi] 2.11
+- [PlaceholderAPI][papi] 2.11 
+- Player extension:
+  - `/papi ecloud download Player`
+  - `/papi reload`
 
 [discord]: https://discord.gg/7FxZScH4EJ
 [dh]: https://www.spigotmc.org/resources/decent-holograms-1-8-1-19-papi-support-no-dependencies.96927/
