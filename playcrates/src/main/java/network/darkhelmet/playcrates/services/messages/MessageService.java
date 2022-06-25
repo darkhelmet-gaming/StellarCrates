@@ -31,12 +31,30 @@ public interface MessageService {
     @Message("about")
     void about(CommandSender receiver, @Placeholder String version);
 
+    @Message("crate-created")
+    void crateCreated(CommandSender receiver);
+
+    @Message("crate-key-created")
+    void crateKeyCreated(CommandSender receiver);
+
+    @Message("crate-key-given-self")
+    void crateKeyGivenSelf(CommandSender receiver);
+
     @Message("error")
     void error(CommandSender receiver, @Placeholder TranslationKey message);
+
+    @Message("import-complete")
+    void importComplete(CommandSender receiver);
+
+    @Message("location-added")
+    void locationAdded(CommandSender receiver);
 
     @Message("reloaded-config")
     void reloadedConfig(CommandSender receiver);
 
     @Message("reloaded-locales")
     void reloadedLocales(CommandSender receiver);
+
+    @Message("reward-added")
+    void rewardAdded(CommandSender receiver);
 }

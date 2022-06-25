@@ -68,7 +68,6 @@ public class ImportCommand extends BaseCommand {
     public void onImport(final CommandSender sender) {
         importsService.importData("SpecializedCrates");
 
-        // @todo use messages
-        sender.sendMessage("Import complete");
+        messageService.importComplete(sender);
     }
 }
