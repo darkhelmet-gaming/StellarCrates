@@ -72,12 +72,19 @@ jar {
 }
 
 shadowJar {
-    relocate 'com.google.inject', 'network.darkhelmet.playcrates.inject'
+    relocate 'com.google', 'network.darkhelmet.playcrates.google'
     relocate 'net.kyori', 'network.darkhelmet.playcrates.kyori'
     relocate 'org.spongepowered', 'network.darkhelmet.playcrates.spongepowered'
     relocate 'de.tr7zw', 'network.darkhelmet.playcrates.tr7zw'
     relocate 'dev.triumphteam.cmd', 'network.darkhelmet.playcrates.cmd'
     relocate 'dev.triumphteam.gui', 'network.darkhelmet.playcrates.gui'
+
+    // Relocate transitive deps for now
+    relocate 'javax', 'network.darkhelmet.playcrates.javax'
+    relocate 'com.typesafe', 'network.darkhelmet.playcrates.typesafe'
+    relocate 'io.leangen', 'network.darkhelmet.playcrates.leangen'
+    relocate 'org.aopalliance', 'network.darkhelmet.playcrates.aopalliance'
+    relocate 'oorg.checkerframework', 'network.darkhelmet.playcrates.checkerframework'
 
     minimize()
 }
@@ -86,5 +93,5 @@ runServer {
     // Configure the Minecraft version for our task.
     // This is the only required configuration besides applying the plugin.
     // Your plugin's jar (or shadowJar if present) will be used automatically.
-    minecraftVersion("1.18.2")
+    minecraftVersion("1.19")
 }
