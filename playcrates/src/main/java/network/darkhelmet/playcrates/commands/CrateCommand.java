@@ -217,7 +217,7 @@ public class CrateCommand extends BaseCommand {
      * @param player The player
      * @param crateId The crate identifier
      */
-    @SubCommand("givekey")
+    @SubCommand("givecrate")
     @Permission("playcrates.admin")
     public void onGiveCrate(final Player player,
           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
