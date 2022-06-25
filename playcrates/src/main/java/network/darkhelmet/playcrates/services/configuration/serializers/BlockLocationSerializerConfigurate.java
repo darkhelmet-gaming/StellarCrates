@@ -20,11 +20,8 @@
 
 package network.darkhelmet.playcrates.services.configuration.serializers;
 
-import io.leangen.geantyref.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,7 +31,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 public class BlockLocationSerializerConfigurate implements TypeSerializer<Location> {
-    private static final String WORLD_UUID = "worldUUID";
+    private static final String WORLD_NAME = "worldName";
     private static final String X = "x";
     private static final String Y = "y";
     private static final String Z = "z";
@@ -49,14 +46,14 @@ public class BlockLocationSerializerConfigurate implements TypeSerializer<Locati
 
     @Override
     public Location deserialize(final Type type, final ConfigurationNode source) throws SerializationException {
-        final UUID worldUuid = nonVirtualNode(source, WORLD_UUID).get(TypeToken.get(UUID.class));
-        if (worldUuid == null) {
-            throw new SerializationException("World UUID was null");
+        String worldName = nonVirtualNode(source, WORLD_NAME).getString();
+        if (worldName == null) {
+            throw new SerializationException("World name was null.");
         }
 
-        World world = Bukkit.getServer().getWorld(worldUuid);
+        World world = Bukkit.getServer().getWorld(worldName);
         if (world == null) {
-            throw new SerializationException("Failed to find world for uuid " + worldUuid);
+            throw new SerializationException("Failed to find world for name " + worldName);
         }
 
         final int x = nonVirtualNode(source, X).getInt();
@@ -74,7 +71,7 @@ public class BlockLocationSerializerConfigurate implements TypeSerializer<Locati
             return;
         }
 
-        target.node(WORLD_UUID).set(loc.getWorld().getUID());
+        target.node(WORLD_NAME).set(loc.getWorld().getName());
         target.node(X).set(loc.getBlockX());
         target.node(Y).set(loc.getBlockY());
         target.node(Z).set(loc.getBlockZ());
