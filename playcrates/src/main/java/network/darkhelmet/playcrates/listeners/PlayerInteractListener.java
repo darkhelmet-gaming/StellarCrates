@@ -28,8 +28,11 @@ import network.darkhelmet.playcrates.services.configuration.ConfigurationService
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.gui.GuiService;
+import network.darkhelmet.playcrates.services.messages.MessageService;
+import network.darkhelmet.playcrates.services.translation.TranslationKey;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,13 +55,15 @@ public class PlayerInteractListener extends AbstractListener implements Listener
      * @param configurationService The configuration service
      * @param crateService The crate service
      * @param guiService The GUI service
+     * @param messageService The message service
      */
     @Inject
     public PlayerInteractListener(
             ConfigurationService configurationService,
             CrateService crateService,
-            GuiService guiService) {
-        super(configurationService, crateService);
+            GuiService guiService,
+            MessageService messageService) {
+        super(configurationService, crateService, messageService);
 
         this.guiService = guiService;
     }
@@ -68,7 +73,7 @@ public class PlayerInteractListener extends AbstractListener implements Listener
      *
      * @param event Tne event
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerInteract(final PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final Block block = event.getClickedBlock();
@@ -92,15 +97,15 @@ public class PlayerInteractListener extends AbstractListener implements Listener
         }
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-
-        // @todo is holding any crate key?
+        if (itemStack.getType().equals(Material.AIR)) {
+            return;
+        }
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
             crateOptional.ifPresent(crate -> {
                 if (!crate.keyMatches(itemStack)) {
-                    // @todo message support
-                    player.sendMessage("Invalid key for this crate");
+                    messageService.error(player, new TranslationKey("error-invalid-crate-key"));
                     return;
                 }
 

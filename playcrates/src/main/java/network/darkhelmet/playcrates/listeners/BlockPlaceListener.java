@@ -20,26 +20,21 @@
 
 package network.darkhelmet.playcrates.listeners;
 
+import com.google.inject.Inject;
+
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.messages.MessageService;
 
-public class AbstractListener {
-    /**
-     * The configuration service.
-     */
-    protected final ConfigurationService configurationService;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 
-    /**
-     * The crate service.
-     */
-    protected final CrateService crateService;
-
-    /**
-     * The message service.
-     */
-    protected final MessageService messageService;
-
+public class BlockPlaceListener extends AbstractListener implements Listener {
     /**
      * Construct the listener.
      *
@@ -47,12 +42,26 @@ public class AbstractListener {
      * @param crateService The crate service
      * @param messageService The message service
      */
-    public AbstractListener(
+    @Inject
+    public BlockPlaceListener(
             ConfigurationService configurationService,
             CrateService crateService,
             MessageService messageService) {
-        this.configurationService = configurationService;
-        this.crateService = crateService;
-        this.messageService = messageService;
+        super(configurationService, crateService, messageService);
+    }
+
+    /**
+     * Listen to block place events.
+     *
+     * @param event Tne event
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        final Player player = event.getPlayer();
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack.getType().equals(Material.AIR)) {
+            return;
+        }
     }
 }

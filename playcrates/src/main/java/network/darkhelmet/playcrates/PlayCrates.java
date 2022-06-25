@@ -36,6 +36,7 @@ import network.darkhelmet.playcrates.commands.CrateCommand;
 import network.darkhelmet.playcrates.commands.ImportCommand;
 import network.darkhelmet.playcrates.commands.ReloadCommand;
 import network.darkhelmet.playcrates.injection.PlayCratesModule;
+import network.darkhelmet.playcrates.listeners.BlockPlaceListener;
 import network.darkhelmet.playcrates.listeners.PlayerInteractListener;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.CrateService;
@@ -113,6 +114,7 @@ public class PlayCrates extends JavaPlugin {
 
         if (isEnabled()) {
             // Register listeners
+            getServer().getPluginManager().registerEvents(injector.getInstance(BlockPlaceListener.class), this);
             getServer().getPluginManager().registerEvents(injector.getInstance(PlayerInteractListener.class), this);
 
             // Register commands

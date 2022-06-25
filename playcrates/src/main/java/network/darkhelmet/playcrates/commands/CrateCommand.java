@@ -243,8 +243,6 @@ public class CrateCommand extends BaseCommand {
         }
 
         crate.open(player);
-
-        player.sendMessage("Opening crate!");
     }
 
     /**
