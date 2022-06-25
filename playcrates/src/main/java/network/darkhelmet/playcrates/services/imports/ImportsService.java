@@ -86,7 +86,7 @@ public class ImportsService {
                 if (meta != null && meta.hasLore()) {
                     boolean shouldWipeLore = false;
                     for (String lore : meta.getLore()) {
-                        if (lore.contains("Chance")) {
+                        if (lore.contains("Chance:")) {
                             shouldWipeLore = true;
 
                             break;
