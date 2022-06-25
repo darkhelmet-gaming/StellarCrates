@@ -22,17 +22,26 @@ package network.darkhelmet.playcrates.listeners;
 
 import com.google.inject.Inject;
 
+import java.util.Optional;
+
+import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.messages.MessageService;
+import network.darkhelmet.playcrates.services.translation.TranslationKey;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 public class BlockPlaceListener extends AbstractListener implements Listener {
     /**
@@ -62,6 +71,26 @@ public class BlockPlaceListener extends AbstractListener implements Listener {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (itemStack.getType().equals(Material.AIR)) {
             return;
+        }
+
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta == null) {
+            return;
+        }
+
+        NamespacedKey pdcKey = new NamespacedKey(PlayCrates.getInstance(), "crateitem");
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        if (pdc.has(pdcKey, PersistentDataType.STRING)) {
+            String crateId = pdc.get(pdcKey, PersistentDataType.STRING);
+
+            Optional<Crate> crateOptional = crateService.crate(crateId);
+            if (crateOptional.isEmpty()) {
+                messageService.error(player, new TranslationKey("error-invalid-crate"));
+                return;
+            }
+
+            crateOptional.get().addLocation(event.getBlock().getLocation());
+            configurationService.saveAll();
         }
     }
 }
