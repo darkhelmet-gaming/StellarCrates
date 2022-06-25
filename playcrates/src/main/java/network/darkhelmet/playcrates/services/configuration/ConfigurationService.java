@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 
+import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.services.configuration.serializers.BlockLocationSerializerConfigurate;
 import network.darkhelmet.playcrates.services.configuration.serializers.LocaleSerializerConfigurate;
 
@@ -180,9 +181,7 @@ public class ConfigurationService {
 
             return config;
         } catch (final ConfigurateException e) {
-            if (e.getCause() != null) {
-                e.getCause().printStackTrace();
-            }
+            PlayCrates.getInstance().handleException(e);
         }
 
         return null;
