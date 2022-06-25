@@ -29,6 +29,7 @@ import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.gui.GuiService;
 
+import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -104,7 +105,9 @@ public class PlayerInteractListener extends AbstractListener implements Listener
                 }
 
                 // Deduct item
-                itemStack.setAmount(itemStack.getAmount() - 1);
+                if (!player.getGameMode().equals(GameMode.CREATIVE)) {
+                    itemStack.setAmount(itemStack.getAmount() - 1);
+                }
 
                 // Open crate and reward player
                 crate.open(player);
