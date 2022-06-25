@@ -23,6 +23,7 @@ package network.darkhelmet.playcrates.services.crates;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
@@ -174,7 +175,11 @@ public final class Crate {
      *
      * @return The reward
      */
-    public Reward chooseWeightedRandomReward() {
+    public Optional<Reward> chooseWeightedRandomReward() {
+        if (rewards.isEmpty()) {
+            return Optional.empty();
+        }
+
         double totalWeight = 0.0;
         for (Reward reward : rewards) {
             totalWeight += reward.config().weight();
@@ -188,7 +193,7 @@ public final class Crate {
             }
         }
 
-        return rewards.get(idx);
+        return Optional.of(rewards.get(idx));
     }
 
     /**
@@ -204,10 +209,14 @@ public final class Crate {
      * @param player The player
      */
     public void open(Player player) {
-        Reward reward = chooseWeightedRandomReward();
-        reward.deliverTo(player);
+        Optional<Reward> rewardOptional = chooseWeightedRandomReward();
+        if (rewardOptional.isEmpty()) {
+            return;
+        }
 
-        for (String command : reward.config().commands()) {
+        rewardOptional.get().deliverTo(player);
+
+        for (String command : rewardOptional.get().config().commands()) {
             String parsed = PlaceholderAPI.setPlaceholders(player, command);
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), parsed);
         }
@@ -215,7 +224,7 @@ public final class Crate {
         for (SoundConfiguration onRewardSound : config.onRewardSounds()) {
             if (onRewardSound != null) {
                 player.playSound(
-                        player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
+                    player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
             }
         }
     }
