@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import me.PM2.customcrates.crates.PlacedCrate;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.configuration.CrateItemConfiguration;
 import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
@@ -55,6 +56,10 @@ public class SpecializedCratesImporter extends AbstractImporter {
 
             // Create the crate
             Crate crate = crateService.createCrate(identifier, title);
+
+            // Crate item
+            ItemStack crateItem = scCrate.getSettings().getCrateItemHandler().getItem(1);
+            crate.config().crateItem(new CrateItemConfiguration(crateItem));
 
             // Key item
             ItemStack keyItem = scCrate.getSettings().getKeyItemHandler().getItem(1);

@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.configuration.CrateItemConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.gui.GuiService;
@@ -138,7 +139,21 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        crateService.createCrate(crateId, title);
+        // Create the crate
+        Crate crate = crateService.createCrate(crateId, title);
+
+        // Set the crate item
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (!itemStack.getType().equals(Material.AIR)) {
+            if (!Crate.isValidCrateItem(itemStack)) {
+                messageService.error(player, new TranslationKey("error-invalid-crate-item"));
+                return;
+            }
+
+            crate.config().crateItem(new CrateItemConfiguration(crateId, itemStack));
+        }
+
+        // Save
         configurationService.saveAll();
 
         messageService.crateCreated(player);
@@ -195,6 +210,27 @@ public class CrateCommand extends BaseCommand {
     }
 
     /**
+     * Run the givecrate command.
+     *
+     * @param player The player
+     * @param crateId The crate identifier
+     */
+    @SubCommand("givekey")
+    @Permission("playcrates.admin")
+    public void onGiveCrate(final Player player,
+          @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        if (crateOptional.isEmpty()) {
+            messageService.error(player, new TranslationKey("error-invalid-crate"));
+            return;
+        }
+
+        player.getInventory().addItem(crateOptional.get().crateItem());
+
+        messageService.crateGivenSelf(player);
+    }
+
+    /**
      * Run the givekey command.
      *
      * @param player The player
@@ -210,10 +246,7 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        Crate crate = crateOptional.get();
-        ItemStack crateKey = crate.config().key().toItemStack();
-
-        player.getInventory().addItem(crateKey);
+        player.getInventory().addItem(crateOptional.get().crateKey());
 
         messageService.crateKeyGivenSelf(player);
     }

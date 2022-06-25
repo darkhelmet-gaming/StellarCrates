@@ -30,6 +30,9 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class CrateConfiguration {
+    @Comment("The crate item used to place this crate.")
+    private CrateItemConfiguration crateItem;
+
     @Comment("A hologram is in-world text displayed around the crate. Set to null for no hologram.")
     private HologramConfiguration hologram = new HologramConfiguration();
 
@@ -67,6 +70,24 @@ public class CrateConfiguration {
     public CrateConfiguration(String identifier, String title) {
         this.identifier = identifier;
         this.title = title;
+    }
+
+    /**
+     * Set the crate item configuration.
+     *
+     * @param crateItem The crate item configuration
+     */
+    public void crateItem(CrateItemConfiguration crateItem) {
+        this.crateItem = crateItem;
+    }
+
+    /**
+     * Get the crate item configuration.
+     *
+     * @return The crate item configuration
+     */
+    public CrateItemConfiguration crateItem() {
+        return crateItem;
     }
 
     /**

@@ -137,6 +137,24 @@ public final class Crate {
     }
 
     /**
+     * Get the crate item.
+     *
+     * @return The crate item
+     */
+    public ItemStack crateItem() {
+        return config.crateItem().toItemStack(config().identifier());
+    }
+
+    /**
+     * Get the crate key.
+     *
+     * @return The crate key
+     */
+    public ItemStack crateKey() {
+        return config.key().toItemStack();
+    }
+
+    /**
      * Crate a new key configuration for this crate.
      *
      * @param itemStack The item stack
@@ -252,6 +270,16 @@ public final class Crate {
      */
     public List<Reward> rewards() {
         return rewards;
+    }
+
+    /**
+     * Whether an item is a valid, place-able crate.
+     *
+     * @param itemStack The item stack
+     * @return True if item can become a crate
+     */
+    public static boolean isValidCrateItem(ItemStack itemStack) {
+        return itemStack.getType().isBlock();
     }
 
     @Override

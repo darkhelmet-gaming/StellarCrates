@@ -34,6 +34,9 @@ public interface MessageService {
     @Message("crate-created")
     void crateCreated(CommandSender receiver);
 
+    @Message("crate-given-self")
+    void crateGivenSelf(CommandSender receiver);
+
     @Message("crate-key-created")
     void crateKeyCreated(CommandSender receiver);
 
