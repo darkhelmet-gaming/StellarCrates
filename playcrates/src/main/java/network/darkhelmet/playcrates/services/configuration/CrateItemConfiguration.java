@@ -50,38 +50,26 @@ public class CrateItemConfiguration {
     }
 
     /**
-     * Construct a new crate item configuration from an item stack.
-     *
-     * @param crateId The crate id
-     * @param itemStack The item stack
-     */
-    public CrateItemConfiguration(String crateId, ItemStack itemStack) {
-        setPdc(crateId, itemStack);
-
-        this.material = itemStack.getType();
-    }
-
-    /**
      * Create an item stack from the config.
      *
+     * @param crateConfig The crate config
      * @return The item stack
      */
-    public ItemStack toItemStack(String crateId) {
-        return setPdc(crateId, new ItemStack(material));
-    }
+    public ItemStack toItemStack(CrateConfiguration crateConfig) {
+        ItemStack itemStack = new ItemStack(material);
 
-    /**
-     * Set the persistent data container flag indicating this is a crate item.
-     *
-     * @param crateId The crate id
-     * @param itemStack The item stack
-     * @return The item stack
-     */
-    private ItemStack setPdc(String crateId, ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
-        NamespacedKey usesKey = new NamespacedKey(PlayCrates.getInstance(), "crateitem");
-        meta.getPersistentDataContainer().set(usesKey, PersistentDataType.STRING, crateId);
-        itemStack.setItemMeta(meta);
+        if (meta != null) {
+            // Set PDC
+            NamespacedKey usesKey = new NamespacedKey(PlayCrates.getInstance(), "crateitem");
+            meta.getPersistentDataContainer().set(usesKey, PersistentDataType.STRING, crateConfig.identifier());
+
+            // Set display name
+            meta.setDisplayName(crateConfig.title());
+
+            // Set meta
+            itemStack.setItemMeta(meta);
+        }
 
         return itemStack;
     }

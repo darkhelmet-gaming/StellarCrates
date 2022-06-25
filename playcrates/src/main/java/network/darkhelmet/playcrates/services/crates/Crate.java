@@ -142,7 +142,7 @@ public final class Crate {
      * @return The crate item
      */
     public ItemStack crateItem() {
-        return config.crateItem().toItemStack(config().identifier());
+        return config.crateItem().toItemStack(config);
     }
 
     /**

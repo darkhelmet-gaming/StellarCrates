@@ -150,7 +150,9 @@ public class CrateCommand extends BaseCommand {
                 return;
             }
 
-            crate.config().crateItem(new CrateItemConfiguration(crateId, itemStack));
+            crate.config().crateItem(new CrateItemConfiguration(itemStack));
+
+            player.getInventory().addItem(crate.crateItem());
         }
 
         // Save
