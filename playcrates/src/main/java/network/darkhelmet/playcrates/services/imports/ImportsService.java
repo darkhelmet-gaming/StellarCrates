@@ -22,6 +22,8 @@ package network.darkhelmet.playcrates.services.imports;
 
 import com.google.inject.Inject;
 
+import me.PM2.customcrates.crates.PlacedCrate;
+
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
@@ -75,6 +77,12 @@ public class ImportsService {
 
                 reward.config().commands().addAll(scReward.getCommands());
             }
+        });
+
+        PlacedCrate.getPlacedCrates().values().forEach(placedCrate -> {
+            String identifier = placedCrate.getCrate().getName();
+
+            crateService.crate(identifier).ifPresent(crate -> crate.addLocation(placedCrate.getLocation()));
         });
 
         configurationService.saveAll();
