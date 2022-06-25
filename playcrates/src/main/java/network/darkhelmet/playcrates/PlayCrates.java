@@ -38,6 +38,7 @@ import network.darkhelmet.playcrates.commands.ReloadCommand;
 import network.darkhelmet.playcrates.injection.PlayCratesModule;
 import network.darkhelmet.playcrates.listeners.PlayerInteractListener;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.crates.CrateService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -108,6 +109,8 @@ public class PlayCrates extends JavaPlugin {
         // Load the configuration service (and files)
         configurationService = injector.getInstance(ConfigurationService.class);
 
+        CrateService crateService = injector.getInstance(CrateService.class);
+
         if (isEnabled()) {
             // Register listeners
             getServer().getPluginManager().registerEvents(injector.getInstance(PlayerInteractListener.class), this);
@@ -115,7 +118,7 @@ public class PlayCrates extends JavaPlugin {
             // Register commands
             BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(this);
 
-            // Register online player auto-suggest
+            // Register online player command suggestions
             commandManager.registerSuggestion(SuggestionKey.of("players"), (sender, context) -> {
                 List<String> players = new ArrayList<>();
                 for (Player player : getServer().getOnlinePlayers()) {
@@ -124,6 +127,10 @@ public class PlayCrates extends JavaPlugin {
 
                 return players;
             });
+
+            // Register crate command suggestions
+            commandManager.registerSuggestion(SuggestionKey.of("crates"), (sender, context) ->
+                crateService.crates().keySet().stream().toList());
 
             commandManager.registerCommand(injector.getInstance(AboutCommand.class));
             commandManager.registerCommand(injector.getInstance(CrateCommand.class));

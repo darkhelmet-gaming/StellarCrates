@@ -58,19 +58,6 @@ public class CrateService {
     }
 
     /**
-     * Reloads all crate items from their configs.
-     */
-    public void reload() {
-        crates.values().forEach(Crate::onReload);
-
-        crates.clear();
-
-        for (CrateConfiguration crateConfiguration : configurationService.cratesConfiguration().crates()) {
-            addCrate(crateConfiguration);
-        }
-    }
-
-    /**
      * Add a new crate from a crate configuration.
      *
      * @param crateConfiguration The crate configuration
@@ -120,5 +107,25 @@ public class CrateService {
         configurationService.cratesConfiguration().crates().add(crateConfig);
 
         return addCrate(crateConfig);
+    }
+
+    /**
+     * Get all loaded crates.
+     */
+    public Map<String, Crate> crates() {
+        return crates;
+    }
+
+    /**
+     * Reloads all crate items from their configs.
+     */
+    public void reload() {
+        crates.values().forEach(Crate::onReload);
+
+        crates.clear();
+
+        for (CrateConfiguration crateConfiguration : configurationService.cratesConfiguration().crates()) {
+            addCrate(crateConfiguration);
+        }
     }
 }

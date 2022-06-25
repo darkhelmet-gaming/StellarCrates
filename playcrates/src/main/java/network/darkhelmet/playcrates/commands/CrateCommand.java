@@ -27,6 +27,7 @@ import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -96,6 +97,32 @@ public class CrateCommand extends BaseCommand {
     }
 
     /**
+     * Lookup a crate using either an identifier (via command) or a block (player look).
+     *
+     * @param player The player
+     * @param crateId The identifier
+     * @return The crate, if any
+     */
+    private Optional<Crate> crateFromIdOrTarget(Player player, String crateId) {
+        Crate crate = null;
+
+        if (crateId != null) {
+            Optional<Crate> crateOptional = crateService.crate(crateId);
+            if (crateOptional.isPresent()) {
+                crate = crateOptional.get();
+            }
+        } else {
+            Block block = player.getTargetBlock(transparent, 5);
+            Optional<Crate> crateOptional = crateService.crate(block.getLocation());
+            if (crateOptional.isPresent()) {
+                crate = crateOptional.get();
+            }
+        }
+
+        return Optional.ofNullable(crate);
+    }
+
+    /**
      * Run the create command.
      *
      * @param player The player
@@ -116,15 +143,16 @@ public class CrateCommand extends BaseCommand {
      * Run the addreward command.
      *
      * @param player The player
-     * @param identifier The crate identifier
+     * @param crateId The crate identifier
      */
     @SubCommand("addreward")
     @Permission("playcrates.admin")
-    public void onAddReward(final Player player, final String identifier) {
-        Optional<Crate> crateOptional = crateService.crate(identifier);
+    public void onAddReward(final Player player,
+            @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             // @todo use messages
-            player.sendMessage("Invalid crate identifier");
+            player.sendMessage("Invalid crate.");
             return;
         }
 
@@ -140,18 +168,18 @@ public class CrateCommand extends BaseCommand {
      * Run the addloc command.
      *
      * @param player The player
-     * @param identifier The crate identifier
+     * @param crateId The crate identifier
      */
     @SubCommand("addloc")
     @Permission("playcrates.admin")
-    public void onAddLocation(final Player player, final String identifier) {
+    public void onAddLocation(final Player player, final String crateId) {
         Block block = player.getTargetBlock(transparent, 5);
         if (block.getType().equals(Material.AIR)) {
             // @todo use messages
             player.sendMessage("Invalid block");
         }
 
-        Optional<Crate> crateOptional = crateService.crate(identifier);
+        Optional<Crate> crateOptional = crateService.crate(crateId);
         if (crateOptional.isEmpty()) {
             // @todo use messages
             player.sendMessage("Invalid crate identifier");
@@ -169,15 +197,16 @@ public class CrateCommand extends BaseCommand {
      * Run the givekey command.
      *
      * @param player The player
-     * @param identifier The crate identifier
+     * @param crateId The crate identifier
      */
     @SubCommand("givekey")
     @Permission("playcrates.admin")
-    public void onGiveKey(final Player player, final String identifier) {
-        Optional<Crate> crateOptional = crateService.crate(identifier);
+    public void onGiveKey(final Player player,
+          @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             // @todo use messages
-            player.sendMessage("Invalid crate identifier");
+            player.sendMessage("Invalid crate.");
             return;
         }
 
@@ -193,15 +222,16 @@ public class CrateCommand extends BaseCommand {
      * Run the open command.
      *
      * @param player The player
-     * @param identifier The crate identifier
+     * @param crateId The crate identifier
      */
     @SubCommand("open")
     @Permission("playcrates.open")
-    public void onOpen(final Player player, final String identifier) {
-        Optional<Crate> crateOptional = crateService.crate(identifier);
+    public void onOpen(final Player player,
+           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             // @todo use messages
-            player.sendMessage("Invalid crate identifier");
+            player.sendMessage("Invalid crate.");
             return;
         }
 
@@ -223,15 +253,16 @@ public class CrateCommand extends BaseCommand {
      * Run the preview command.
      *
      * @param player The player
-     * @param identifier The crate identifier
+     * @param crateId The crate identifier
      */
     @SubCommand("preview")
     @Permission("playcrates.preview")
-    public void onPreview(final Player player, final String identifier) {
-        Optional<Crate> crateOptional = crateService.crate(identifier);
+    public void onPreview(final Player player,
+          @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             // @todo use messages
-            player.sendMessage("Invalid crate identifier");
+            player.sendMessage("Invalid crate.");
             return;
         }
 
@@ -242,15 +273,16 @@ public class CrateCommand extends BaseCommand {
      * Run the setkey command.
      *
      * @param player The player
-     * @param identifier The crate identifier
+     * @param crateId The crate identifier
      */
     @SubCommand("setkey")
     @Permission("playcrates.preview")
-    public void onSetKey(final Player player, final String identifier) {
-        Optional<Crate> crateOptional = crateService.crate(identifier);
+    public void onSetKey(final Player player,
+             @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             // @todo use messages
-            player.sendMessage("Invalid crate identifier");
+            player.sendMessage("Invalid crate.");
             return;
         }
 
