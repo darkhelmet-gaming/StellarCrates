@@ -131,6 +131,6 @@ public class ImportsService {
             crateService.crate(identifier).ifPresent(crate -> crate.addLocation(placedCrate.getLocation()));
         });
 
-        configurationService.saveAll();
+        configurationService.saveAll(false);
     }
 }

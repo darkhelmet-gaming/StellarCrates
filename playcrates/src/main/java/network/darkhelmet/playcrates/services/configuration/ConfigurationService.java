@@ -98,13 +98,20 @@ public class ConfigurationService {
      * Save all configurations.
      */
     public void saveAll() {
+        saveAll(true);
+    }
+
+    /**
+     * Save all configurations.
+     */
+    public void saveAll(boolean emitCrateComments) {
         File configFile = new File(dataPath.toFile(), "playcrates.conf");
         playCratesConfiguration = getOrWriteConfiguration(
-            PlayCratesConfiguration.class, configFile, playCratesConfiguration);
+            PlayCratesConfiguration.class, configFile, playCratesConfiguration, true);
 
         File cratesConfigFile = new File(dataPath.toFile(), "crates.conf");
         cratesConfiguration = getOrWriteConfiguration(
-            CratesConfiguration.class, cratesConfigFile, cratesConfiguration);
+            CratesConfiguration.class, cratesConfigFile, cratesConfiguration, emitCrateComments);
     }
 
     /**
@@ -113,9 +120,10 @@ public class ConfigurationService {
      * @param file The config file
      * @return The config loader
      */
-    public ConfigurationLoader<?> configurationLoader(final Path file) {
+    public ConfigurationLoader<?> configurationLoader(final Path file, boolean emitComments) {
         return HoconConfigurationLoader.builder()
             .prettyPrinting(true)
+            .emitComments(emitComments)
             .defaultOptions(opts -> {
                 final ConfigurateComponentSerializer serializer =
                     ConfigurateComponentSerializer.configurate();
@@ -139,7 +147,7 @@ public class ConfigurationService {
      * @return The configuration class instance
      */
     public <T> T getOrWriteConfiguration(Class<T> clz, File file) {
-        return getOrWriteConfiguration(clz, file, null);
+        return getOrWriteConfiguration(clz, file, null, true);
     }
 
     /**
@@ -149,14 +157,15 @@ public class ConfigurationService {
      * @param file The file path we'll read/write to
      * @param config The existing config object to write
      * @param <T> The configuration class type
+     * @param emitComments Whether to emit comments
      * @return The configuration class instance
      */
-    public <T> T getOrWriteConfiguration(Class<T> clz, File file, T config) {
+    public <T> T getOrWriteConfiguration(Class<T> clz, File file, T config, boolean emitComments) {
         if (!file.exists()) {
             file.getParentFile().mkdirs();
         }
 
-        final var loader = configurationLoader(file.toPath());
+        final var loader = configurationLoader(file.toPath(), emitComments);
 
         try {
             final ConfigurationNode root = loader.load();
