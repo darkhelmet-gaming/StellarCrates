@@ -32,7 +32,6 @@ import network.darkhelmet.playcrates.services.messages.MessageService;
 import network.darkhelmet.playcrates.services.translation.TranslationKey;
 
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

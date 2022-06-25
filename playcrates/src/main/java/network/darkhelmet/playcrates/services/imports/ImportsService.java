@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.crates.CrateService;
+import network.darkhelmet.playcrates.services.imports.importers.SpecializedCratesImporter;
 
 public class ImportsService {
     /**

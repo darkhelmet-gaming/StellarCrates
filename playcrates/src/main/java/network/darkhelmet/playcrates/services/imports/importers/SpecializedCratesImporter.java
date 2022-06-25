@@ -18,7 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.playcrates.services.imports;
+package network.darkhelmet.playcrates.services.imports.importers;
 
 import java.util.ArrayList;
 
@@ -30,6 +30,7 @@ import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 import network.darkhelmet.playcrates.services.crates.Reward;
+import network.darkhelmet.playcrates.services.imports.AbstractImporter;
 
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
