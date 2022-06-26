@@ -280,15 +280,7 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        Crate crate = crateOptional.get();
-
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (!crate.keyMatches(itemStack)) {
-            messageService.error(player, new TranslationKey("error-invalid-crate-key"));
-            return;
-        }
-
-        crate.open(player);
+        crateService.openCrate(crateOptional.get(), player);
     }
 
     /**

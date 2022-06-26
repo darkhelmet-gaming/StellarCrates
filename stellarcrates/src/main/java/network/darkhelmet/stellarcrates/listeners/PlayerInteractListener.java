@@ -29,9 +29,7 @@ import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.gui.GuiService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
-import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
 
-import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,7 +38,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
 public class PlayerInteractListener extends AbstractListener implements Listener {
     /**
@@ -95,25 +92,13 @@ public class PlayerInteractListener extends AbstractListener implements Listener
             return;
         }
 
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
             crateOptional.ifPresent(crate -> {
                 event.setCancelled(true);
 
-                if (!crate.keyMatches(itemStack)) {
-                    messageService.error(player, new TranslationKey("error-invalid-crate-key"));
-                    return;
-                }
-
-                // Deduct item
-                if (!player.getGameMode().equals(GameMode.CREATIVE)) {
-                    itemStack.setAmount(itemStack.getAmount() - 1);
-                }
-
-                // Open crate and reward player
-                crate.open(player);
+                // Attempt to open the crate and reward player
+                crateService.openCrate(crate, player);
             });
         }
     }

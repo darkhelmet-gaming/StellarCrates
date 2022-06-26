@@ -28,17 +28,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.stellarcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
+import network.darkhelmet.stellarcrates.services.configuration.SoundConfiguration;
+import network.darkhelmet.stellarcrates.services.messages.MessageService;
+import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
+import network.darkhelmet.stellarcrates.utils.InventoryUtil;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class CrateService {
     /**
      * The configuration service.
      */
     private final ConfigurationService configurationService;
+
+    /**
+     * The message service.
+     */
+    private final MessageService messageService;
 
     /**
      * Cache of crates.
@@ -48,11 +63,15 @@ public class CrateService {
     /**
      * Construct the crate service.
      *
-     * @param configurationService The configuration service.
+     * @param configurationService The configuration service
+     * @param messageService The message service
      */
     @Inject
-    public CrateService(ConfigurationService configurationService) {
+    public CrateService(
+            ConfigurationService configurationService,
+            MessageService messageService) {
         this.configurationService = configurationService;
+        this.messageService = messageService;
 
         reload();
     }
@@ -114,6 +133,59 @@ public class CrateService {
      */
     public Map<String, Crate> crates() {
         return crates;
+    }
+
+    /**
+     * Attempt to open a crate for the given player.
+     *
+     * @param crate The crate
+     * @param player The player
+     */
+    public void openCrate(Crate crate, Player player) {
+        Optional<Reward> rewardOptional = crate.chooseWeightedRandomReward();
+        if (rewardOptional.isEmpty()) {
+            return;
+        }
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        // Match key
+        if (!crate.keyMatches(itemStack)) {
+            messageService.error(player, new TranslationKey("error-invalid-crate-key"));
+            return;
+        }
+
+        // Ensure inventory has room
+        if (InventoryUtil.isInventoryFull(player.getInventory())) {
+            messageService.error(player, new TranslationKey("error-inventory-full"));
+            return;
+        }
+
+        // Deduct key
+        if (!player.getGameMode().equals(GameMode.CREATIVE)) {
+            itemStack.setAmount(itemStack.getAmount() - 1);
+        }
+
+        Reward reward = rewardOptional.get();
+
+        // Give the reward item
+        if (reward.config().givesDisplayItem()) {
+            reward.deliverTo(player);
+        }
+
+        // Execute commands
+        for (String command : reward.config().commands()) {
+            String parsed = PlaceholderAPI.setPlaceholders(player, command);
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), parsed);
+        }
+
+        // Play sounds
+        for (SoundConfiguration onRewardSound : crate.config().onRewardSounds()) {
+            if (onRewardSound != null) {
+                player.playSound(
+                    player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
+            }
+        }
     }
 
     /**

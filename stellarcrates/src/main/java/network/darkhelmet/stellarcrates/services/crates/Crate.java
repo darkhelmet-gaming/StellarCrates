@@ -26,17 +26,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import me.clip.placeholderapi.PlaceholderAPI;
-
 import network.darkhelmet.stellarcrates.StellarCrates;
 import network.darkhelmet.stellarcrates.services.configuration.CrateConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.KeyConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.SoundConfiguration;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public final class Crate {
@@ -226,39 +221,6 @@ public final class Crate {
      */
     public void onReload() {
         crateInstances.values().forEach(CrateInstance::destroy);
-    }
-
-    /**
-     * Open the crate for a given player.
-     *
-     * @param player The player
-     */
-    public void open(Player player) {
-        Optional<Reward> rewardOptional = chooseWeightedRandomReward();
-        if (rewardOptional.isEmpty()) {
-            return;
-        }
-
-        Reward reward = rewardOptional.get();
-
-        // Give the item
-        if (reward.config().givesDisplayItem()) {
-            reward.deliverTo(player);
-        }
-
-        // Execute commands
-        for (String command : reward.config().commands()) {
-            String parsed = PlaceholderAPI.setPlaceholders(player, command);
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), parsed);
-        }
-
-        // Play sounds
-        for (SoundConfiguration onRewardSound : config.onRewardSounds()) {
-            if (onRewardSound != null) {
-                player.playSound(
-                    player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
-            }
-        }
     }
 
     /**
