@@ -29,6 +29,9 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class KeyRejectionEffectsConfigutation {
+    @Comment("Toggle knockback effect.")
+    private boolean knockbackEnabled = true;
+
     @Comment("List any sounds to be played.")
     private List<SoundConfiguration> sounds = new ArrayList<>();
 
@@ -37,6 +40,15 @@ public class KeyRejectionEffectsConfigutation {
      */
     public KeyRejectionEffectsConfigutation() {
         sounds.add(new SoundConfiguration(Sound.ENTITY_VILLAGER_NO));
+    }
+
+    /**
+     * Get whether knockback is enabled.
+     *
+     * @return True if knockback enabled.
+     */
+    public boolean knockbackEnabled() {
+        return knockbackEnabled;
     }
 
     /**

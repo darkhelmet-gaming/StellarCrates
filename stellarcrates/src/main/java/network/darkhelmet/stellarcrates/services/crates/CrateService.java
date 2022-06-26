@@ -32,6 +32,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.stellarcrates.services.configuration.CrateConfiguration;
+import network.darkhelmet.stellarcrates.services.configuration.KeyRejectionEffectsConfigutation;
 import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.SoundConfiguration;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
@@ -213,11 +214,18 @@ public class CrateService {
      * @param player The player
      */
     private void playKeyRejectionEffects(CrateInstance crateInstance, Player player) {
+        KeyRejectionEffectsConfigutation keyRejectConfig =
+            configurationService.stellarCratesConfig().keyRejectionEffects();
+
         // Sounds
-        configurationService.stellarCratesConfig().keyRejectionEffects().sounds().forEach(soundConfiguration -> {
+        keyRejectConfig.sounds().forEach(soundConfiguration -> {
             player.playSound(crateInstance.location(),
                 soundConfiguration.sound(), soundConfiguration.volume(), soundConfiguration.pitch());
         });
+
+        if (keyRejectConfig.knockbackEnabled()) {
+            player.setVelocity(player.getLocation().getDirection().multiply(-1));
+        }
     }
 
     /**
