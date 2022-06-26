@@ -39,6 +39,7 @@ import network.darkhelmet.playcrates.injection.PlayCratesModule;
 import network.darkhelmet.playcrates.listeners.BlockPlaceListener;
 import network.darkhelmet.playcrates.listeners.PlayerInteractListener;
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
+import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
 
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +48,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public class PlayCrates extends JavaPlugin {
     /**
@@ -73,6 +75,11 @@ public class PlayCrates extends JavaPlugin {
      * The configuration service.
      */
     private ConfigurationService configurationService;
+
+    /**
+     * Cache the tick task used to tick crates.
+     */
+    private BukkitTask tickTask;
 
     /**
      * Get this instance.
@@ -138,6 +145,11 @@ public class PlayCrates extends JavaPlugin {
             commandManager.registerCommand(injector.getInstance(CrateCommand.class));
             commandManager.registerCommand(injector.getInstance(ImportCommand.class));
             commandManager.registerCommand(injector.getInstance(ReloadCommand.class));
+
+            // Run our "play" task that handles repeating tasks like playing particles, etc.
+            tickTask = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+                crateService.crates().values().forEach(Crate::tick);
+            }, 0, 4L);
         }
     }
 
@@ -192,5 +204,15 @@ public class PlayCrates extends JavaPlugin {
      */
     public void handleException(Exception e) {
         e.printStackTrace();
+    }
+
+    /**
+     * On disable, shut down tasks.
+     */
+    @Override
+    public void onDisable() {
+        super.onDisable();
+
+        tickTask.cancel();
     }
 }

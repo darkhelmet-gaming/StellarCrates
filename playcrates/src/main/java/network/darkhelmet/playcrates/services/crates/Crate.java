@@ -20,26 +20,25 @@
 
 package network.darkhelmet.playcrates.services.crates;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
 import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.api.services.holograms.CrateHologram;
-import network.darkhelmet.playcrates.services.configuration.CrateConfiguration;
-import network.darkhelmet.playcrates.services.configuration.HologramConfiguration;
-import network.darkhelmet.playcrates.services.configuration.KeyConfiguration;
-import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
-import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
+import network.darkhelmet.playcrates.services.configuration.*;
 import network.darkhelmet.playcrates.services.holograms.providers.DecentHologramsProvider;
 
+import network.darkhelmet.playcrates.utils.RandomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import xyz.xenondevs.particle.ParticleBuilder;
+import xyz.xenondevs.particle.ParticleEffect;
+import xyz.xenondevs.particle.PropertyType;
+import xyz.xenondevs.particle.data.color.RegularColor;
 
 public final class Crate {
     /**
@@ -66,6 +65,11 @@ public final class Crate {
     private final List<CrateHologram> holograms = new ArrayList<>();
 
     /**
+     * RNG
+     */
+    private Random random = new Random();
+
+    /**
      * Construct a new crate.
      *
      * @param config The crate configuration
@@ -79,6 +83,7 @@ public final class Crate {
             String msg = String.format("Placing crate `%s` at %s", config.identifier(), loc.toString());
             PlayCrates.getInstance().debug(msg);
             createHologram(loc.clone());
+            playParticles();
         });
     }
 
@@ -263,6 +268,65 @@ public final class Crate {
                     player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
             }
         }
+    }
+
+    /**
+     * Tick the crate. Plays particles or other running/repeating mechanics.
+     */
+    public void tick() {
+        playParticles();
+    }
+
+    /**
+     * Play particles. This executes every "tick".
+     */
+    private void playParticles() {
+        config.particles().forEach(particleConfiguration -> {
+            config.locations().forEach(loc -> {
+                // Start at the center of the block
+                Location location = loc.clone().add(0.5, 0.5, 0.5);
+                location.add(particleConfiguration.positionOffset());
+
+                double x = location.getX();
+                double y = location.getY();
+                double z = location.getZ();
+
+                // Range
+                double xr = particleConfiguration.particleRange().getX();
+                double yr = particleConfiguration.particleRange().getY();
+                double zr = particleConfiguration.particleRange().getZ();
+                if (xr + yr + zr != 0) {
+                    x = RandomUtil.randomInRange(x - xr, x + xr);
+                    y = RandomUtil.randomInRange(y - yr, y + yr);
+                    z = RandomUtil.randomInRange(z - zr, z + zr);
+                }
+                Location spawnLoc = new Location(loc.getWorld(), x, y, z);
+
+                ParticleEffect effect = particleConfiguration.effect();
+                ParticleBuilder builder = new ParticleBuilder(effect, spawnLoc);
+
+                // Colors
+                if (effect.hasProperty(PropertyType.COLORABLE)) {
+                    RegularColor color = null;
+
+                    if (particleConfiguration.colorMode().equals(ParticleColorMode.STATIC)) {
+                        color = particleConfiguration.color();
+                    } else {
+                        int r = random.nextInt(255);
+                        int b = random.nextInt(255);
+                        int g = random.nextInt(255);
+                        color = new RegularColor(r, g, b);
+                    }
+
+                    builder.setParticleData(color);
+                }
+
+                // Amount
+                builder.setAmount(particleConfiguration.amount());
+
+                builder.display();
+            });
+        });
     }
 
     /**

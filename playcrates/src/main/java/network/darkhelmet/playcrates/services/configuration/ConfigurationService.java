@@ -31,6 +31,7 @@ import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerialize
 import network.darkhelmet.playcrates.PlayCrates;
 import network.darkhelmet.playcrates.services.configuration.serializers.BlockLocationSerializerConfigurate;
 import network.darkhelmet.playcrates.services.configuration.serializers.LocaleSerializerConfigurate;
+import network.darkhelmet.playcrates.services.configuration.serializers.RegularColorSerializerConfigurate;
 import network.darkhelmet.playcrates.services.configuration.serializers.VectorSerializerConfigurate;
 
 import org.bukkit.Location;
@@ -39,6 +40,8 @@ import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
+
+import xyz.xenondevs.particle.data.color.RegularColor;
 
 public class ConfigurationService {
     /**
@@ -136,6 +139,7 @@ public class ConfigurationService {
                         .register(Locale.class, new LocaleSerializerConfigurate())
                         .register(Location.class, new BlockLocationSerializerConfigurate())
                         .register(Vector.class, new VectorSerializerConfigurate())
+                        .register(RegularColor.class, new RegularColorSerializerConfigurate())
                 );
             })
             .path(file)

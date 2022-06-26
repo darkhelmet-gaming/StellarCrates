@@ -48,6 +48,9 @@ public class CrateConfiguration {
     @Comment("Sounds to play when an award is given. Set to null for no sound.")
     private List<SoundConfiguration> onRewardSounds = new ArrayList<>();
 
+    @Comment("Particles play around crates.")
+    private List<ParticleConfiguration> particles = new ArrayList<>();
+
     @Comment("A list of rewards in this crate.")
     private List<RewardConfiguration> rewards = new ArrayList<>();
 
@@ -149,6 +152,15 @@ public class CrateConfiguration {
      */
     public List<SoundConfiguration> onRewardSounds() {
         return onRewardSounds;
+    }
+
+    /**
+     * Get the particle configurations.
+     *
+     * @return The particle configurations
+     */
+    public List<ParticleConfiguration> particles() {
+        return particles;
     }
 
     /**

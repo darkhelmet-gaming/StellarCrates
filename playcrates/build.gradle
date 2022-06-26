@@ -64,6 +64,7 @@ dependencies {
     implementation 'dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT'
     implementation 'dev.triumphteam:triumph-gui:3.1.2'
     implementation 'de.tr7zw:item-nbt-api-plugin:2.10.0'
+    implementation 'xyz.xenondevs:particle:1.8.1'
     implementation project(':playcrates-api')
 }
 
@@ -80,12 +81,12 @@ jar {
 }
 
 shadowJar {
-    relocate 'com.google', 'network.darkhelmet.playcrates.google'
+    relocate 'com.google.inject', 'network.darkhelmet.playcrates.google.inject'
     relocate 'net.kyori', 'network.darkhelmet.playcrates.kyori'
     relocate 'org.spongepowered', 'network.darkhelmet.playcrates.spongepowered'
     relocate 'de.tr7zw', 'network.darkhelmet.playcrates.tr7zw'
-    relocate 'dev.triumphteam.cmd', 'network.darkhelmet.playcrates.cmd'
-    relocate 'dev.triumphteam.gui', 'network.darkhelmet.playcrates.gui'
+    relocate 'dev.triumphteam', 'network.darkhelmet.playcrates.triumphteam'
+    relocate 'xyz.xenondevs', 'network.darkhelmet.playcrates.xenondevs'
 
     // Relocate transitive deps for now
     relocate 'javax', 'network.darkhelmet.playcrates.javax'
