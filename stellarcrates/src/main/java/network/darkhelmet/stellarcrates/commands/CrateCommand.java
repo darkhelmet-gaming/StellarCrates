@@ -245,17 +245,23 @@ public class CrateCommand extends BaseCommand {
      */
     @SubCommand("givekey")
     @Permission("stellarcrates.admin")
-    public void onGiveKey(final Player player,
-          @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+    public void onGiveKey(
+        final Player player,
+        @Suggestion("crates") final String crateId,
+        @Suggestion("players") final Player recipient,
+        final int quantity
+    ) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             messageService.error(player, new TranslationKey("error-invalid-crate"));
             return;
         }
 
-        player.getInventory().addItem(crateOptional.get().crateKey());
+        ItemStack itemStack = crateOptional.get().crateKey();
+        itemStack.setAmount(quantity);
+        recipient.getInventory().addItem(itemStack);
 
-        messageService.crateKeyGivenSelf(player);
+        messageService.crateKeyGivenSelf(recipient);
     }
 
     /**
