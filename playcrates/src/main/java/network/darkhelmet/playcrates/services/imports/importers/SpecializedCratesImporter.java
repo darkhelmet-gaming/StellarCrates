@@ -21,11 +21,13 @@
 package network.darkhelmet.playcrates.services.imports.importers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.PM2.customcrates.crates.PlacedCrate;
 
 import network.darkhelmet.playcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.playcrates.services.configuration.CrateItemConfiguration;
+import network.darkhelmet.playcrates.services.configuration.HologramConfiguration;
 import network.darkhelmet.playcrates.services.configuration.SoundConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
@@ -35,6 +37,7 @@ import network.darkhelmet.playcrates.services.imports.AbstractImporter;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 public class SpecializedCratesImporter extends AbstractImporter {
     /**
@@ -65,6 +68,13 @@ public class SpecializedCratesImporter extends AbstractImporter {
             // Key item
             ItemStack keyItem = scCrate.getSettings().getKeyItemHandler().getItem(1);
             crate.createKey(keyItem);
+
+            // Hologram
+            List<String> hologramLines = scCrate.getSettings().getHologram().getLines();
+            double y = scCrate.getSettings().getHologramOffset();
+            Vector positionOffset = new Vector(0, 1 + y, 0);
+            HologramConfiguration hologramConfiguration = new HologramConfiguration(hologramLines, positionOffset);
+            crate.config().hologram(hologramConfiguration);
 
             // Open sounds
             scCrate.getSettings().getSound().getSounds().forEach((key, value) -> {

@@ -39,6 +39,22 @@ public class HologramConfiguration {
     private Vector positionOffset = new Vector(0, 1, 0);
 
     /**
+     * Argument-less constructor, needed for deserialization.
+     */
+    public HologramConfiguration() {}
+
+    /**
+     * Construct a hologram configuration.
+     *
+     * @param lines The lines
+     * @param positionOffset The position offset
+     */
+    public HologramConfiguration(List<String> lines, Vector positionOffset) {
+        this.lines = lines;
+        this.positionOffset = positionOffset;
+    }
+
+    /**
      * Get the lines.
      *
      * @return The lines

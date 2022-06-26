@@ -91,9 +91,18 @@ public class CrateConfiguration {
     }
 
     /**
-     * Get the hologram config.
+     * Set the hologram configuration.
      *
-     * @return The hologram config
+     * @param hologram The hologram configuration
+     */
+    public void hologram(HologramConfiguration hologram) {
+        this.hologram = hologram;
+    }
+
+    /**
+     * Get the hologram configuration.
+     *
+     * @return The hologram configuration
      */
     public HologramConfiguration hologram() {
         return hologram;
