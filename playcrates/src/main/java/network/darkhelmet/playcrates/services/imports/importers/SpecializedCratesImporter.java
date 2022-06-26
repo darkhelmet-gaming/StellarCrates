@@ -63,7 +63,7 @@ public class SpecializedCratesImporter extends AbstractImporter {
 
             // Crate item
             ItemStack crateItem = scCrate.getSettings().getCrateItemHandler().getItem(1);
-            crate.config().crateItem(new CrateItemConfiguration(crateItem));
+            crate.config().crateItem(new CrateItemConfiguration(crate.config(), crateItem));
 
             // Key item
             ItemStack keyItem = scCrate.getSettings().getKeyItemHandler().getItem(1);

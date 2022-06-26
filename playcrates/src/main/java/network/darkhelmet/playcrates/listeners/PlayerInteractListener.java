@@ -100,6 +100,8 @@ public class PlayerInteractListener extends AbstractListener implements Listener
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Optional<Crate> crateOptional = crateService.crate(block.getLocation());
             crateOptional.ifPresent(crate -> {
+                event.setCancelled(true);
+
                 if (!crate.keyMatches(itemStack)) {
                     messageService.error(player, new TranslationKey("error-invalid-crate-key"));
                     return;
@@ -112,8 +114,6 @@ public class PlayerInteractListener extends AbstractListener implements Listener
 
                 // Open crate and reward player
                 crate.open(player);
-
-                event.setCancelled(true);
             });
         }
     }

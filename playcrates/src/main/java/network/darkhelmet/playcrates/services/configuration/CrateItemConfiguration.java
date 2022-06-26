@@ -20,9 +20,11 @@
 
 package network.darkhelmet.playcrates.services.configuration;
 
+import de.tr7zw.nbtapi.NBTContainer;
+import de.tr7zw.nbtapi.NBTItem;
+
 import network.darkhelmet.playcrates.PlayCrates;
 
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,8 +34,8 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 public class CrateItemConfiguration {
-    @Comment("The material.")
-    private Material material;
+    @Comment("NBT string")
+    private String nbtString;
 
     /**
      * Argument-less constructor, needed for deserialization.
@@ -43,34 +45,32 @@ public class CrateItemConfiguration {
     /**
      * Construct a new crate item configuration from an item stack.
      *
+     * @param crateConfiguration The crate configuration
      * @param itemStack The item stack
      */
-    public CrateItemConfiguration(ItemStack itemStack) {
-        this.material = itemStack.getType();
-    }
-
-    /**
-     * Create an item stack from the config.
-     *
-     * @param crateConfig The crate config
-     * @return The item stack
-     */
-    public ItemStack toItemStack(CrateConfiguration crateConfig) {
-        ItemStack itemStack = new ItemStack(material);
-
+    public CrateItemConfiguration(CrateConfiguration crateConfiguration, ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta != null) {
             // Set PDC
             NamespacedKey usesKey = new NamespacedKey(PlayCrates.getInstance(), "crateitem");
-            meta.getPersistentDataContainer().set(usesKey, PersistentDataType.STRING, crateConfig.identifier());
+            meta.getPersistentDataContainer().set(usesKey, PersistentDataType.STRING, crateConfiguration.identifier());
 
             // Set display name
-            meta.setDisplayName(crateConfig.title());
+            meta.setDisplayName(crateConfiguration.title());
 
             // Set meta
             itemStack.setItemMeta(meta);
         }
 
-        return itemStack;
+        nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
+    }
+
+    /**
+     * Create an item stack from the config.
+     *
+     * @return The item stack
+     */
+    public ItemStack toItemStack() {
+        return NBTItem.convertNBTtoItem(new NBTContainer(nbtString));
     }
 }
