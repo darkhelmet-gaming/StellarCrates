@@ -23,12 +23,20 @@ package network.darkhelmet.stellarcrates.services.gui;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.Reward;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class GuiService {
     /**
@@ -43,8 +51,35 @@ public class GuiService {
             .rows(3)
             .create();
 
+        LegacyComponentSerializer serializer = LegacyComponentSerializer.builder()
+            .hexColors().useUnusualXRepeatedCharacterHexFormat().build();
+
+        double weightsTotal = 0;
         for (Reward reward : crate.rewards()) {
-            gui.addItem(ItemBuilder.from(reward.itemStack()).asGuiItem());
+            weightsTotal += reward.config().weight();
+        }
+
+        for (Reward reward : crate.rewards()) {
+            double winChance = (reward.config().weight() / weightsTotal) * 100;
+            ItemStack itemStack = reward.toItemStack();
+
+            ItemMeta meta = itemStack.getItemMeta();
+            if (meta != null) {
+                List<String> lore = meta.getLore();
+                if (lore == null) {
+                    lore = new ArrayList<>();
+                }
+
+                Component text = Component.text("Win Chance: ", TextColor.fromCSSHexString("#aaf786"))
+                    .append(Component.text(String.format("%.2f%%", winChance), NamedTextColor.GOLD));
+
+                lore.add("");
+                lore.add(serializer.serialize(text));
+                meta.setLore(lore);
+                itemStack.setItemMeta(meta);
+            }
+
+            gui.addItem(ItemBuilder.from(itemStack).asGuiItem());
         }
 
         gui.setDefaultClickAction(event -> {

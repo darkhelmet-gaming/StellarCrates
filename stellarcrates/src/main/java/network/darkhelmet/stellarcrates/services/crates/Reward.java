@@ -26,11 +26,32 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public record Reward(RewardConfiguration config, ItemStack itemStack) {
+public final class Reward {
     /**
      * The default weight.
      */
     public static final double DEFAULT_WEIGHT = 100;
+
+    /**
+     * The reward configuration.
+     */
+    private final RewardConfiguration config;
+
+    /**
+     * The item stack.
+     */
+    private final ItemStack itemStack;
+
+    /**
+     * Construct a reward.
+     *
+     * @param config The reward configuration
+     * @param itemStack The item stack
+     */
+    public Reward(RewardConfiguration config, ItemStack itemStack) {
+        this.config = config;
+        this.itemStack = itemStack;
+    }
 
     /**
      * Deliver the reward contents to the player.
@@ -51,5 +72,23 @@ public record Reward(RewardConfiguration config, ItemStack itemStack) {
      */
     public static boolean isValidRewardItem(ItemStack itemStack) {
         return !itemStack.getType().equals(Material.AIR);
+    }
+
+    /**
+     * Get the reward configuration.
+     *
+     * @return The reward configuration
+     */
+    public RewardConfiguration config() {
+        return config;
+    }
+
+    /**
+     * Returns a new item stack.
+     *
+     * @return The item stack
+     */
+    public ItemStack toItemStack() {
+        return itemStack.clone();
     }
 }
