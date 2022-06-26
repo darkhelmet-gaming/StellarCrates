@@ -16,10 +16,16 @@ In development.
 - Robust configuration.
 - Import from SpecializedCrates 2.x.
 
+## Permissions
+
+- `stellarcrates.admin` - Allows all commands.
+
 ## Planned
 
+- Command structure revamp pending TriumphTeam support.
+- Command permission expansion pending TriumphTeam support.
 - Inventory animations.
-- Crate particles.
+- Crate particles/animations.
 
 ## Requirements
 
@@ -28,6 +34,14 @@ In development.
 - Player extension:
   - `/papi ecloud download Player`
   - `/papi reload`
+
+## Importing from SpecializedCrates 2.x
+
+- You must run both plugins on a 1.18 server once.
+- Use `/stellarcrates import` with SpecializedCrates 2.x active.
+- When completed, removed SpecializedCrates and use MC 1.19 as desired.
+
+Note: Please keep your SC2 configs as we'll import more data as features are added.
 
 [discord]: https://discord.gg/7FxZScH4EJ
 [dh]: https://www.spigotmc.org/resources/decent-holograms-1-8-1-19-papi-support-no-dependencies.96927/

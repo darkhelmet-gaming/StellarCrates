@@ -271,7 +271,7 @@ public class CrateCommand extends BaseCommand {
      * @param crateId The crate identifier
      */
     @SubCommand("open")
-    @Permission("stellarcrates.open")
+    @Permission("stellarcrates.admin")
     public void onOpen(final Player player,
            @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
@@ -298,7 +298,7 @@ public class CrateCommand extends BaseCommand {
      * @param crateId The crate identifier
      */
     @SubCommand("preview")
-    @Permission("stellarcrates.preview")
+    @Permission("stellarcrates.admin")
     public void onPreview(final Player player,
           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
@@ -317,7 +317,7 @@ public class CrateCommand extends BaseCommand {
      * @param crateId The crate identifier
      */
     @SubCommand("setkey")
-    @Permission("stellarcrates.preview")
+    @Permission("stellarcrates.admin")
     public void onSetKey(final Player player,
              @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
