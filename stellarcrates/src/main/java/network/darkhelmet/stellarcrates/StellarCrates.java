@@ -39,7 +39,7 @@ import network.darkhelmet.stellarcrates.injection.StellarCratesModule;
 import network.darkhelmet.stellarcrates.listeners.BlockPlaceListener;
 import network.darkhelmet.stellarcrates.listeners.PlayerInteractListener;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
-import network.darkhelmet.stellarcrates.services.crates.Crate;
+import network.darkhelmet.stellarcrates.services.crates.CrateInstance;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 
 import org.apache.logging.log4j.LogManager;
@@ -148,8 +148,10 @@ public class StellarCrates extends JavaPlugin {
 
             // Run our "play" task that handles repeating tasks like playing particles, etc.
             tickTask = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
-                crateService.crates().values().forEach(Crate::tick);
-            }, 0, 4L);
+                crateService.crates().values().forEach(crate -> {
+                    crate.crateInstances().values().forEach(CrateInstance::tick);
+                });
+            }, 0, 5L);
         }
     }
 

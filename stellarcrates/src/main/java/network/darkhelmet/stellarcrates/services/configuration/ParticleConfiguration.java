@@ -50,6 +50,9 @@ public class ParticleConfiguration {
     @Comment("The range of possible particle locations.")
     private Vector particleRange = new Vector(1, 1, 1);
 
+    @Comment("Set how close (in blocks) players need to be to see particles.")
+    private int visibilityRange = 8;
+
     /**
      * Get the amount.
      *
@@ -102,5 +105,14 @@ public class ParticleConfiguration {
      */
     public Vector particleRange() {
         return particleRange;
+    }
+
+    /**
+     * Get the visibility range.
+     *
+     * @return The visibility range
+     */
+    public int visibilityRange() {
+        return visibilityRange;
     }
 }

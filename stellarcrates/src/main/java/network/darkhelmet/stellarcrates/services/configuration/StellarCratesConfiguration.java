@@ -38,7 +38,7 @@ public class StellarCratesConfiguration {
         """)
     private Locale defaultLocale = Locale.US;
 
-    @Comment("The version of the serializer")
+    @Comment("The version of the serializer.")
     private short serializerVersion = StellarCrates.getInstance().serializerVersion();
 
     /**

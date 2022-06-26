@@ -26,7 +26,7 @@ public class RandomUtil {
     /**
      * RNG.
      */
-    protected static Random random = new Random();
+    public static final Random random = new Random();
 
     /**
      * Prevent instantiation.

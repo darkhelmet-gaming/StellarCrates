@@ -20,34 +20,24 @@
 
 package network.darkhelmet.stellarcrates.services.crates;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
 import network.darkhelmet.stellarcrates.StellarCrates;
-import network.darkhelmet.stellarcrates.api.services.holograms.CrateHologram;
 import network.darkhelmet.stellarcrates.services.configuration.CrateConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.HologramConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.KeyConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.ParticleColorMode;
 import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.SoundConfiguration;
-import network.darkhelmet.stellarcrates.services.holograms.providers.DecentHologramsProvider;
-import network.darkhelmet.stellarcrates.utils.RandomUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import xyz.xenondevs.particle.ParticleBuilder;
-import xyz.xenondevs.particle.ParticleEffect;
-import xyz.xenondevs.particle.PropertyType;
-import xyz.xenondevs.particle.data.color.RegularColor;
 
 public final class Crate {
     /**
@@ -61,22 +51,9 @@ public final class Crate {
     private final List<Reward> rewards;
 
     /**
-     * The hologram provider.
-     *
-     * <p>Note: we only support one hologram provider
-     * so for now, this is just hard-coded.</p>
+     * A map of crate instances.
      */
-    private final DecentHologramsProvider hologramProvider = new DecentHologramsProvider();
-
-    /**
-     * The holograms.
-     */
-    private final List<CrateHologram> holograms = new ArrayList<>();
-
-    /**
-     * RNG.
-     */
-    private final Random random = new Random();
+    private final Map<Location, CrateInstance> crateInstances = new HashMap<>();
 
     /**
      * Construct a new crate.
@@ -89,10 +66,10 @@ public final class Crate {
         this.rewards = rewards;
 
         config.locations().forEach(loc -> {
+            createCrateInstance(loc);
+
             String msg = String.format("Placing crate `%s` at %s", config.identifier(), loc.toString());
             StellarCrates.getInstance().debug(msg);
-            createHologram(loc.clone());
-            playParticles();
         });
     }
 
@@ -103,7 +80,8 @@ public final class Crate {
      */
     public void addLocation(Location location) {
         config.locations().add(location);
-        createHologram(location.clone());
+
+        createCrateInstance(location);
     }
 
     /**
@@ -134,31 +112,22 @@ public final class Crate {
     }
 
     /**
-     * Creates a hologram.
+     * Get a crate instance by location.
      *
-     * @param location The base location
+     * @param location The location
+     * @return The crate instance
      */
-    private void createHologram(Location location) {
-        HologramConfiguration hologramConfiguration = config.hologram();
-        if (hologramConfiguration == null) {
-            return;
-        }
+    public Optional<CrateInstance> crateInstance(Location location) {
+        return Optional.ofNullable(crateInstances.get(location));
+    }
 
-        List<String> lines = hologramConfiguration.lines();
-        if (lines.isEmpty()) {
-            lines.add(config.title());
-        }
-
-        // Center location inside block
-        location = location.add(0.5d, 0.5d, 0.5d);
-
-        // Apply offset
-        location = location.add(hologramConfiguration.positionOffset());
-
-        String identifier = String.format("%scrate%d%d%d",
-            config.identifier(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
-
-        holograms.add(hologramProvider.create(identifier, location, lines));
+    /**
+     * Get a map of crate instances.
+     *
+     * @return The map of crate instances
+     */
+    public Map<Location, CrateInstance> crateInstances() {
+        return crateInstances;
     }
 
     /**
@@ -191,6 +160,19 @@ public final class Crate {
         config.key(keyConfiguration);
 
         return keyConfiguration;
+    }
+
+    /**
+     * Crate a new crate instance at the given location.
+     *
+     * @param location The location
+     * @return The crate instance
+     */
+    public CrateInstance createCrateInstance(Location location) {
+        CrateInstance crateInstance = new CrateInstance(this, location);
+        crateInstances.put(location, crateInstance);
+
+        return crateInstance;
     }
 
     /**
@@ -243,7 +225,7 @@ public final class Crate {
      * Handle reloads.
      */
     public void onReload() {
-        holograms.forEach(CrateHologram::destroy);
+        crateInstances.values().forEach(CrateInstance::destroy);
     }
 
     /**
@@ -277,65 +259,6 @@ public final class Crate {
                     player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
             }
         }
-    }
-
-    /**
-     * Tick the crate. Plays particles or other running/repeating mechanics.
-     */
-    public void tick() {
-        playParticles();
-    }
-
-    /**
-     * Play particles. This executes every "tick".
-     */
-    private void playParticles() {
-        config.particles().forEach(particleConfiguration -> {
-            config.locations().forEach(loc -> {
-                // Start at the center of the block
-                Location location = loc.clone().add(0.5, 0.5, 0.5);
-                location.add(particleConfiguration.positionOffset());
-
-                double x = location.getX();
-                double y = location.getY();
-                double z = location.getZ();
-
-                // Range
-                double xr = particleConfiguration.particleRange().getX();
-                double yr = particleConfiguration.particleRange().getY();
-                double zr = particleConfiguration.particleRange().getZ();
-                if (xr + yr + zr != 0) {
-                    x = RandomUtil.randomInRange(x - xr, x + xr);
-                    y = RandomUtil.randomInRange(y - yr, y + yr);
-                    z = RandomUtil.randomInRange(z - zr, z + zr);
-                }
-                Location spawnLoc = new Location(loc.getWorld(), x, y, z);
-
-                ParticleEffect effect = particleConfiguration.effect();
-                ParticleBuilder builder = new ParticleBuilder(effect, spawnLoc);
-
-                // Colors
-                if (effect.hasProperty(PropertyType.COLORABLE)) {
-                    RegularColor color = null;
-
-                    if (particleConfiguration.colorMode().equals(ParticleColorMode.STATIC)) {
-                        color = particleConfiguration.color();
-                    } else {
-                        int r = random.nextInt(255);
-                        int b = random.nextInt(255);
-                        int g = random.nextInt(255);
-                        color = new RegularColor(r, g, b);
-                    }
-
-                    builder.setParticleData(color);
-                }
-
-                // Amount
-                builder.setAmount(particleConfiguration.amount());
-
-                builder.display();
-            });
-        });
     }
 
     /**
