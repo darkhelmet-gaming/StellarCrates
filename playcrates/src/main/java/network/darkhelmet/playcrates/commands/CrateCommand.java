@@ -37,6 +37,7 @@ import network.darkhelmet.playcrates.services.configuration.ConfigurationService
 import network.darkhelmet.playcrates.services.configuration.CrateItemConfiguration;
 import network.darkhelmet.playcrates.services.crates.Crate;
 import network.darkhelmet.playcrates.services.crates.CrateService;
+import network.darkhelmet.playcrates.services.crates.Reward;
 import network.darkhelmet.playcrates.services.gui.GuiService;
 import network.darkhelmet.playcrates.services.messages.MessageService;
 import network.darkhelmet.playcrates.services.translation.TranslationKey;
@@ -176,6 +177,12 @@ public class CrateCommand extends BaseCommand {
         }
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (!Reward.isValidRewardItem(itemStack)) {
+            messageService.error(player, new TranslationKey("error-invalid-reward-item"));
+            return;
+        }
+
         crateOptional.get().addReward(itemStack);
         configurationService.saveAll();
 

@@ -22,6 +22,7 @@ package network.darkhelmet.playcrates.services.crates;
 
 import network.darkhelmet.playcrates.services.configuration.RewardConfiguration;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,5 +36,15 @@ public record Reward(RewardConfiguration config, ItemStack itemStack) {
      */
     public void deliverTo(Player player) {
         player.getInventory().addItem(itemStack);
+    }
+
+    /**
+     * Check if an item stack is a valid reward.
+     *
+     * @param itemStack The item stack
+     * @return True if valid
+     */
+    public static boolean isValidRewardItem(ItemStack itemStack) {
+        return !itemStack.getType().equals(Material.AIR);
     }
 }
