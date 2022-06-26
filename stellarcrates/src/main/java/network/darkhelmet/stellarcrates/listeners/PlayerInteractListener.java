@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.stellarcrates.services.crates.Crate;
+import network.darkhelmet.stellarcrates.services.crates.CrateInstance;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.gui.GuiService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
@@ -93,12 +94,12 @@ public class PlayerInteractListener extends AbstractListener implements Listener
         }
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            Optional<Crate> crateOptional = crateService.crate(block.getLocation());
-            crateOptional.ifPresent(crate -> {
+            Optional<CrateInstance> crateInstanceOptional = crateService.crateInstance(block.getLocation());
+            crateInstanceOptional.ifPresent(crate -> {
                 event.setCancelled(true);
 
                 // Attempt to open the crate and reward player
-                crateService.openCrate(crate, player);
+                crateService.openCrate(crateInstanceOptional.get(), player);
             });
         }
     }

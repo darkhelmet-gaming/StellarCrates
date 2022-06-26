@@ -80,6 +80,15 @@ public class CrateInstance {
     }
 
     /**
+     * Get the crate.
+     *
+     * @return The crate
+     */
+    public Crate crate() {
+        return crate;
+    }
+
+    /**
      * Creates a hologram.
      */
     private void createHologram() {
@@ -112,6 +121,15 @@ public class CrateInstance {
     public void destroy() {
         holograms.forEach(CrateHologram::destroy);
         particleTaskIds.forEach(id -> TaskManager.getTaskManager().stopTask(id));
+    }
+
+    /**
+     * Get the instance location.
+     *
+     * @return The instance location
+     */
+    public Location location() {
+        return instanceLocation;
     }
 
     /**

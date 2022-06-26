@@ -194,7 +194,7 @@ public class StellarCrates extends JavaPlugin {
      * @param message String
      */
     public void debug(String message) {
-        if (configurationService.playCratesConfig().debug()) {
+        if (configurationService.stellarCratesConfig().debug()) {
             logger.info(message);
         }
     }

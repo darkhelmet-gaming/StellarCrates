@@ -76,7 +76,7 @@ public class ConfigurationService {
      *
      * @return The stellarcrates configuration
      */
-    public StellarCratesConfiguration playCratesConfig() {
+    public StellarCratesConfiguration stellarCratesConfig() {
         return playCratesConfiguration;
     }
 

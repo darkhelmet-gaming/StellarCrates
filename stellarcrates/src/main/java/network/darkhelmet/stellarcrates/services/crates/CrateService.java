@@ -114,6 +114,21 @@ public class CrateService {
     }
 
     /**
+     * Get a crate instance by location.
+     *
+     * @param location The location
+     * @return The crate, if any
+     */
+    public Optional<CrateInstance> crateInstance(Location location) {
+        Optional<Crate> crateOptional = crate(location);
+        if (crateOptional.isPresent()) {
+            return crateOptional.get().crateInstance(location);
+        }
+
+        return Optional.empty();
+    }
+
+    /**
      * Crate a new crate.
      *
      * @param identifier The identifier
@@ -138,11 +153,11 @@ public class CrateService {
     /**
      * Attempt to open a crate for the given player.
      *
-     * @param crate The crate
+     * @param crateInstance The crate instance
      * @param player The player
      */
-    public void openCrate(Crate crate, Player player) {
-        Optional<Reward> rewardOptional = crate.chooseWeightedRandomReward();
+    public void openCrate(CrateInstance crateInstance, Player player) {
+        Optional<Reward> rewardOptional = crateInstance.crate().chooseWeightedRandomReward();
         if (rewardOptional.isEmpty()) {
             return;
         }
@@ -150,8 +165,11 @@ public class CrateService {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
         // Match key
-        if (!crate.keyMatches(itemStack)) {
+        if (!crateInstance.crate().keyMatches(itemStack)) {
             messageService.error(player, new TranslationKey("error-invalid-crate-key"));
+
+            playKeyRejectionEffects(crateInstance, player);
+
             return;
         }
 
@@ -180,12 +198,26 @@ public class CrateService {
         }
 
         // Play sounds
-        for (SoundConfiguration onRewardSound : crate.config().onRewardSounds()) {
+        for (SoundConfiguration onRewardSound : crateInstance.crate().config().onRewardSounds()) {
             if (onRewardSound != null) {
                 player.playSound(
                     player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
             }
         }
+    }
+
+    /**
+     * Play key rejection effects.
+     *
+     * @param crateInstance The crate instance
+     * @param player The player
+     */
+    private void playKeyRejectionEffects(CrateInstance crateInstance, Player player) {
+        // Sounds
+        configurationService.stellarCratesConfig().keyRejectionEffects().sounds().forEach(soundConfiguration -> {
+            player.playSound(crateInstance.location(),
+                soundConfiguration.sound(), soundConfiguration.volume(), soundConfiguration.pitch());
+        });
     }
 
     /**

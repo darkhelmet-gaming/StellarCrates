@@ -265,25 +265,6 @@ public class CrateCommand extends BaseCommand {
     }
 
     /**
-     * Run the open command.
-     *
-     * @param player The player
-     * @param crateId The crate identifier
-     */
-    @SubCommand("open")
-    @Permission("stellarcrates.admin")
-    public void onOpen(final Player player,
-           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
-        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
-        if (crateOptional.isEmpty()) {
-            messageService.error(player, new TranslationKey("error-invalid-crate"));
-            return;
-        }
-
-        crateService.openCrate(crateOptional.get(), player);
-    }
-
-    /**
      * Run the preview command.
      *
      * @param player The player

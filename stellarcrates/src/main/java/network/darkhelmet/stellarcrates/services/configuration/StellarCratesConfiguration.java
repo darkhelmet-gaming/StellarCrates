@@ -38,6 +38,9 @@ public class StellarCratesConfiguration {
         """)
     private Locale defaultLocale = Locale.US;
 
+    @Comment("Effects to play when a crate key is used incorrectly.")
+    private KeyRejectionEffectsConfigutation keyRejectionEffects;
+
     @Comment("The version of the serializer.")
     private short serializerVersion = StellarCrates.getInstance().serializerVersion();
 
@@ -55,5 +58,14 @@ public class StellarCratesConfiguration {
      */
     public Locale defaultLocale() {
         return defaultLocale;
+    }
+
+    /**
+     * Get the key rejection effects.
+     *
+     * @return The key rejection effects
+     */
+    public KeyRejectionEffectsConfigutation keyRejectionEffects() {
+        return keyRejectionEffects;
     }
 }
