@@ -17,3 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package network.darkhelmet.stellarcrates.api.services.holograms;
+
+public interface CrateHologram {
+    /**
+     * Destroy the hologram. Useful for reloads.
+     */
+    void destroy();
+}

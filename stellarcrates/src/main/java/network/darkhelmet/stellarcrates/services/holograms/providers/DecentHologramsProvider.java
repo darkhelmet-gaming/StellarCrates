@@ -17,3 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package network.darkhelmet.stellarcrates.services.holograms.providers;
+
+import eu.decentsoftware.holograms.api.DHAPI;
+import eu.decentsoftware.holograms.api.holograms.Hologram;
+
+import java.util.List;
+
+import network.darkhelmet.stellarcrates.api.services.holograms.CrateHologram;
+import network.darkhelmet.stellarcrates.api.services.holograms.HologramProvider;
+
+import org.bukkit.Location;
+
+public class DecentHologramsProvider implements HologramProvider {
+    @Override
+    public CrateHologram create(String identifier, Location location, List<String> lines) {
+        Hologram hologram = DHAPI.createHologram(identifier, location, lines);
+        return new DecentHologram(hologram);
+    }
+}

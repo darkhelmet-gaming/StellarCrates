@@ -17,3 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package network.darkhelmet.stellarcrates.api.services.holograms;
+
+import java.util.List;
+
+import org.bukkit.Location;
+
+public interface HologramProvider {
+    /**
+     * Create the hologram.
+     *
+     * @param identifier String crate/hologram identifier
+     * @param location The location
+     * @param lines The lines
+     * @return The hologram
+     */
+    CrateHologram create(String identifier, Location location, List<String> lines);
+}

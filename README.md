@@ -1,4 +1,4 @@
-**PlayCrates**
+**StellarCrates**
 
 A crates plugin for Spigot/Paper/etc servers, by viveleroi.
 

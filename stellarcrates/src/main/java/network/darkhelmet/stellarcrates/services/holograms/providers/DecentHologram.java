@@ -17,3 +17,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package network.darkhelmet.stellarcrates.services.holograms.providers;
+
+import eu.decentsoftware.holograms.api.holograms.Hologram;
+
+import network.darkhelmet.stellarcrates.api.services.holograms.CrateHologram;
+
+public class DecentHologram implements CrateHologram {
+    /**
+     * The hologram.
+     */
+    private final Hologram hologram;
+
+    /**
+     * Construct a new hologram.
+     *
+     * @param hologram The hologram
+     */
+    public DecentHologram(Hologram hologram) {
+        this.hologram = hologram;
+    }
+
+    @Override
+    public void destroy() {
+        this.hologram.destroy();
+    }
+}

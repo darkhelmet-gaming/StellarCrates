@@ -17,3 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package network.darkhelmet.stellarcrates.services.translation;
+
+/**
+ * Simple string wrapper so we can differentiate these in placeholder resolvers.
+ */
+public record TranslationKey(String key) {
+}
