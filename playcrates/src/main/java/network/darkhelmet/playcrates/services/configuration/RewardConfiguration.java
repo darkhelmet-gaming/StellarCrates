@@ -50,7 +50,7 @@ public class RewardConfiguration {
             The weight to use in random calculations. Higher weights make the item more common.
             However, the final chance percentage is reliant on how many items are in the crate.
             """)
-    private short weight = 100;
+    private double weight = Reward.DEFAULT_WEIGHT;
 
     /**
      * Argument-less constructor, needed for deserialization.
@@ -61,9 +61,11 @@ public class RewardConfiguration {
      * Construct a new reward configuration from an item stack.
      *
      * @param itemStack The item stack
+     * @param weight The weight
      */
-    public RewardConfiguration(ItemStack itemStack) {
-        nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
+    public RewardConfiguration(ItemStack itemStack, double weight) {
+        this.nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
+        this.weight = weight;
     }
 
     /**
@@ -125,7 +127,7 @@ public class RewardConfiguration {
      *
      * @return The weight
      */
-    public short weight() {
+    public double weight() {
         return weight;
     }
 }

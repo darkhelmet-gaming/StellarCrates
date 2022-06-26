@@ -116,7 +116,7 @@ public class SpecializedCratesImporter extends AbstractImporter {
                     }
                 }
 
-                Reward reward = crate.addReward(rewardItem);
+                Reward reward = crate.addReward(rewardItem, scReward.getChance());
                 reward.config().givesDisplayItem(scReward.isGiveDisplayItem());
 
                 scReward.getCommands().forEach(scCommand -> {

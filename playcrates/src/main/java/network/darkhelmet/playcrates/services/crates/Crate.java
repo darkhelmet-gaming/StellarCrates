@@ -99,7 +99,18 @@ public final class Crate {
      * @return The reward
      */
     public Reward addReward(ItemStack itemStack) {
-        RewardConfiguration rewardConfiguration = new RewardConfiguration(itemStack);
+        return addReward(itemStack, Reward.DEFAULT_WEIGHT);
+    }
+
+    /**
+     * Add an itemstack as a reward.
+     *
+     * @param itemStack The item stack
+     * @param weight The weight
+     * @return The reward
+     */
+    public Reward addReward(ItemStack itemStack, double weight) {
+        RewardConfiguration rewardConfiguration = new RewardConfiguration(itemStack, weight);
         config.rewards().add(rewardConfiguration);
 
         Reward reward = rewardConfiguration.toReward();

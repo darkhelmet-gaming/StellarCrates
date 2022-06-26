@@ -28,6 +28,11 @@ import org.bukkit.inventory.ItemStack;
 
 public record Reward(RewardConfiguration config, ItemStack itemStack) {
     /**
+     * The default weight.
+     */
+    public static final double DEFAULT_WEIGHT = 100;
+
+    /**
      * Deliver the reward contents to the player.
      *
      * <p>If an item stack, delivers to their inventory.</p>
