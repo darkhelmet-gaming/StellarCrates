@@ -43,6 +43,7 @@ import network.darkhelmet.stellarcrates.services.messages.MessageService;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -239,20 +240,20 @@ public class CrateCommand extends BaseCommand {
     /**
      * Run the givekey command.
      *
-     * @param player The player
+     * @param sender The sender
      * @param crateId The crate identifier
      */
     @SubCommand("givekey")
     @Permission("stellarcrates.admin")
     public void onGiveKey(
-        final Player player,
+        final CommandSender sender,
         @Suggestion("crates") final String crateId,
         @Suggestion("players") final Player recipient,
         @dev.triumphteam.cmd.core.annotation.Optional Integer quantity
     ) {
-        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        Optional<Crate> crateOptional = crateService.crate(crateId);
         if (crateOptional.isEmpty()) {
-            messageService.errorInvalidCrate(player);
+            messageService.errorInvalidCrate(sender);
             return;
         }
 
