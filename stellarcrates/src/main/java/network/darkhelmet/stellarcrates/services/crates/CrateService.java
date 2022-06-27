@@ -204,6 +204,9 @@ public class CrateService {
                     player.getLocation(), onRewardSound.sound(), onRewardSound.volume(), onRewardSound.pitch());
             }
         }
+
+        // Message
+        messageService.rewardGivenSelf(player, reward);
     }
 
     /**

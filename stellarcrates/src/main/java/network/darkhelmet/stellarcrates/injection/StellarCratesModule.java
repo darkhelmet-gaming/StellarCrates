@@ -40,6 +40,7 @@ import network.darkhelmet.stellarcrates.StellarCrates;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
+import network.darkhelmet.stellarcrates.services.crates.Reward;
 import network.darkhelmet.stellarcrates.services.gui.GuiService;
 import network.darkhelmet.stellarcrates.services.imports.ImportsService;
 import network.darkhelmet.stellarcrates.services.messages.MessageRenderer;
@@ -47,6 +48,7 @@ import network.darkhelmet.stellarcrates.services.messages.MessageSender;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
 import network.darkhelmet.stellarcrates.services.messages.ReceiverResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.CratePlaceholderResolver;
+import network.darkhelmet.stellarcrates.services.messages.resolvers.RewardPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.StringPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.TranslatableStringPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
@@ -130,6 +132,7 @@ public class StellarCratesModule extends AbstractModule {
                 .weightedPlaceholderResolver(TranslationKey.class, translatableStringPlaceholderResolver, 0)
                 .weightedPlaceholderResolver(String.class, new StringPlaceholderResolver(), 0)
                 .weightedPlaceholderResolver(Crate.class, cratePlaceholderResolver, 0)
+                .weightedPlaceholderResolver(Reward.class, new RewardPlaceholderResolver(), 0)
                 .create(this.getClass().getClassLoader());
         } catch (UnscannableMethodException e) {
             e.printStackTrace();

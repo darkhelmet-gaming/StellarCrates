@@ -24,6 +24,7 @@ import net.kyori.moonshine.annotation.Message;
 import net.kyori.moonshine.annotation.Placeholder;
 
 import network.darkhelmet.stellarcrates.services.crates.Crate;
+import network.darkhelmet.stellarcrates.services.crates.Reward;
 
 import org.bukkit.command.CommandSender;
 
@@ -84,4 +85,7 @@ public interface MessageService {
 
     @Message("reward-added")
     void rewardAdded(CommandSender receiver, @Placeholder Crate crate);
+
+    @Message("reward-given-self")
+    void rewardGivenSelf(CommandSender receiver, @Placeholder Reward reward);
 }
