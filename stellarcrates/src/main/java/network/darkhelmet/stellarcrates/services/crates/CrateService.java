@@ -167,7 +167,7 @@ public class CrateService {
 
         // Match key
         if (!crateInstance.crate().keyMatches(itemStack)) {
-            messageService.error(player, new TranslationKey("error-invalid-crate-key"));
+            messageService.errorInvalidCrateKey(player, crateInstance.crate());
 
             playKeyRejectionEffects(crateInstance, player);
 

@@ -23,6 +23,7 @@ package network.darkhelmet.stellarcrates.services.messages;
 import net.kyori.moonshine.annotation.Message;
 import net.kyori.moonshine.annotation.Placeholder;
 
+import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
 
 import org.bukkit.command.CommandSender;
@@ -45,6 +46,9 @@ public interface MessageService {
 
     @Message("error")
     void error(CommandSender receiver, @Placeholder TranslationKey message);
+
+    @Message("error-invalid-crate-key")
+    void errorInvalidCrateKey(CommandSender receiver, @Placeholder Crate crate);
 
     @Message("import-complete")
     void importComplete(CommandSender receiver);
