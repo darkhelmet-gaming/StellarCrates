@@ -43,6 +43,6 @@ In development.
 
 Note: Please keep your SC2 configs as we'll import more data as features are added.
 
-[discord]: https://discord.gg/7FxZScH4EJ
+[discord]: https://discord.gg/Q6sHDfnMAc
 [dh]: https://www.spigotmc.org/resources/decent-holograms-1-8-1-19-papi-support-no-dependencies.96927/
 [papi]: https://www.spigotmc.org/resources/placeholderapi.6245/
