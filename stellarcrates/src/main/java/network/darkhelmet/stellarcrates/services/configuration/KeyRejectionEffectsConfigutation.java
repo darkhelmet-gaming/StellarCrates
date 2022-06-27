@@ -32,6 +32,9 @@ public class KeyRejectionEffectsConfigutation {
     @Comment("Toggle knockback effect.")
     private boolean knockbackEnabled = true;
 
+    @Comment("Adjust the knockback strength.")
+    private float knockbackMultiple = 0.5f;
+
     @Comment("List any sounds to be played.")
     private List<SoundConfiguration> sounds = new ArrayList<>();
 
@@ -49,6 +52,15 @@ public class KeyRejectionEffectsConfigutation {
      */
     public boolean knockbackEnabled() {
         return knockbackEnabled;
+    }
+
+    /**
+     * Get the knockback multiple.
+     *
+     * @return The knockback multiple
+     */
+    public float knockbackMultiple() {
+        return knockbackMultiple;
     }
 
     /**

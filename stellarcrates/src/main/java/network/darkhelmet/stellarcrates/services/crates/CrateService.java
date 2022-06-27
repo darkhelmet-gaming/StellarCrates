@@ -226,7 +226,7 @@ public class CrateService {
         });
 
         if (keyRejectConfig.knockbackEnabled()) {
-            player.setVelocity(player.getLocation().getDirection().multiply(-1));
+            player.setVelocity(player.getLocation().getDirection().multiply(-1 * keyRejectConfig.knockbackMultiple()));
         }
     }
 
