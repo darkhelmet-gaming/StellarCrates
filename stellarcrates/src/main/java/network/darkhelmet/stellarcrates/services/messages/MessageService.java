@@ -32,16 +32,16 @@ public interface MessageService {
     void about(CommandSender receiver, @Placeholder String version);
 
     @Message("crate-created")
-    void crateCreated(CommandSender receiver);
+    void crateCreated(CommandSender receiver, @Placeholder Crate crate);
 
     @Message("crate-given-self")
-    void crateGivenSelf(CommandSender receiver);
+    void crateGivenSelf(CommandSender receiver, @Placeholder Crate crate);
 
     @Message("crate-key-created")
-    void crateKeyCreated(CommandSender receiver);
+    void crateKeyCreated(CommandSender receiver, @Placeholder Crate crate);
 
     @Message("crate-key-given-self")
-    void crateKeyGivenSelf(CommandSender receiver);
+    void crateKeyGivenSelf(CommandSender receiver, @Placeholder Crate crate);
 
     @Message("error-crate-exists")
     void errorCrateExists(CommandSender receiver);
@@ -74,7 +74,7 @@ public interface MessageService {
     void importComplete(CommandSender receiver);
 
     @Message("location-added")
-    void locationAdded(CommandSender receiver);
+    void locationAdded(CommandSender receiver, @Placeholder Crate crate);
 
     @Message("reloaded-config")
     void reloadedConfig(CommandSender receiver);
@@ -83,5 +83,5 @@ public interface MessageService {
     void reloadedLocales(CommandSender receiver);
 
     @Message("reward-added")
-    void rewardAdded(CommandSender receiver);
+    void rewardAdded(CommandSender receiver, @Placeholder Crate crate);
 }

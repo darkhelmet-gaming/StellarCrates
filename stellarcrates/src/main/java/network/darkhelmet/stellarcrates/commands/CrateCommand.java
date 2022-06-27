@@ -156,7 +156,7 @@ public class CrateCommand extends BaseCommand {
         // Save
         configurationService.saveAll();
 
-        messageService.crateCreated(player);
+        messageService.crateCreated(player, crate);
     }
 
     /**
@@ -185,7 +185,7 @@ public class CrateCommand extends BaseCommand {
         crateOptional.get().addReward(itemStack);
         configurationService.saveAll();
 
-        messageService.rewardAdded(player);
+        messageService.rewardAdded(player, crateOptional.get());
     }
 
     /**
@@ -212,7 +212,7 @@ public class CrateCommand extends BaseCommand {
         crateOptional.get().addLocation(block.getLocation());
         configurationService.saveAll();
 
-        messageService.locationAdded(player);
+        messageService.locationAdded(player, crateOptional.get());
     }
 
     /**
@@ -233,7 +233,7 @@ public class CrateCommand extends BaseCommand {
 
         player.getInventory().addItem(crateOptional.get().crateItem());
 
-        messageService.crateGivenSelf(player);
+        messageService.crateGivenSelf(player, crateOptional.get());
     }
 
     /**
@@ -260,7 +260,7 @@ public class CrateCommand extends BaseCommand {
         itemStack.setAmount(quantity);
         recipient.getInventory().addItem(itemStack);
 
-        messageService.crateKeyGivenSelf(recipient);
+        messageService.crateKeyGivenSelf(recipient, crateOptional.get());
     }
 
     /**
@@ -302,6 +302,6 @@ public class CrateCommand extends BaseCommand {
         crateOptional.get().createKey(itemStack);
         configurationService.saveAll();
 
-        messageService.crateKeyCreated(player);
+        messageService.crateKeyCreated(player, crateOptional.get());
     }
 }
