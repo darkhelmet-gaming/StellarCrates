@@ -56,7 +56,9 @@ public class RewardPlaceholderResolver implements IPlaceholderResolver<CommandSe
             title = Component.text(meta.getDisplayName());
         }
 
-        return Map.of(placeholderName + "_title",
-            Either.left(ConclusionValue.conclusionValue(title)));
+        Component amount = Component.text(itemStack.getAmount());
+
+        return Map.of(placeholderName + "_title", Either.left(ConclusionValue.conclusionValue(title)),
+            placeholderName + "_amount", Either.left(ConclusionValue.conclusionValue(amount)));
     }
 }
