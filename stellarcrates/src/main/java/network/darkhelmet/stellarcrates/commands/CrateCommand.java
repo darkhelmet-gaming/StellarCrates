@@ -248,13 +248,15 @@ public class CrateCommand extends BaseCommand {
         final Player player,
         @Suggestion("crates") final String crateId,
         @Suggestion("players") final Player recipient,
-        final int quantity
+        @dev.triumphteam.cmd.core.annotation.Optional Integer quantity
     ) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrate(player);
             return;
         }
+
+        quantity = quantity == null ? 1 : quantity;
 
         ItemStack itemStack = crateOptional.get().crateKey();
         itemStack.setAmount(quantity);
