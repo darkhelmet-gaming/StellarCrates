@@ -49,7 +49,7 @@ public class RewardPlaceholderResolver implements IPlaceholderResolver<CommandSe
         final @Nullable Object[] parameters
     ) {
         ItemStack itemStack = value.config().toItemStack();
-        Component title = Component.text(itemStack.getType().name().toLowerCase());
+        Component title = Component.text(itemStack.getType().name().toLowerCase().replace("_", " "));
 
         ItemMeta meta = itemStack.getItemMeta();
         if (meta != null && !meta.getDisplayName().isEmpty()) {
