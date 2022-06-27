@@ -23,9 +23,8 @@ package network.darkhelmet.stellarcrates.services.configuration;
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
-import network.darkhelmet.stellarcrates.StellarCrates;
+import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
 
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -52,8 +51,8 @@ public class CrateItemConfiguration {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta != null) {
             // Set PDC
-            NamespacedKey usesKey = new NamespacedKey(StellarCrates.getInstance(), "crateitem");
-            meta.getPersistentDataContainer().set(usesKey, PersistentDataType.STRING, crateConfiguration.identifier());
+            meta.getPersistentDataContainer().set(NamespacedKeys.CRATE_ITEM,
+                    PersistentDataType.STRING, crateConfiguration.identifier());
 
             // Set display name
             meta.setDisplayName(crateConfiguration.title());

@@ -30,7 +30,9 @@ import network.darkhelmet.stellarcrates.services.crates.CrateInstance;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.gui.GuiService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
+import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +41,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 public class PlayerInteractListener extends AbstractListener implements Listener {
     /**
@@ -94,12 +100,24 @@ public class PlayerInteractListener extends AbstractListener implements Listener
         }
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            // Check if holding a crate key and always cancel
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
+            if (!itemStack.getType().equals(Material.AIR)) {
+                ItemMeta meta = itemStack.getItemMeta();
+                if (meta != null) {
+                    PersistentDataContainer pdc = meta.getPersistentDataContainer();
+                    if (pdc.has(NamespacedKeys.CRATE_KEY, PersistentDataType.STRING)) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+
+            // Attempt to open the crate and reward player
             Optional<CrateInstance> crateInstanceOptional = crateService.crateInstance(block.getLocation());
             crateInstanceOptional.ifPresent(crate -> {
-                event.setCancelled(true);
-
-                // Attempt to open the crate and reward player
                 crateService.openCrate(crateInstanceOptional.get(), player);
+
+                event.setCancelled(true);
             });
         }
     }

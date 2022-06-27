@@ -24,15 +24,14 @@ import com.google.inject.Inject;
 
 import java.util.Optional;
 
-import network.darkhelmet.stellarcrates.StellarCrates;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
 import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
+import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -78,10 +77,9 @@ public class BlockPlaceListener extends AbstractListener implements Listener {
             return;
         }
 
-        NamespacedKey pdcKey = new NamespacedKey(StellarCrates.getInstance(), "crateitem");
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        if (pdc.has(pdcKey, PersistentDataType.STRING)) {
-            String crateId = pdc.get(pdcKey, PersistentDataType.STRING);
+        if (pdc.has(NamespacedKeys.CRATE_ITEM, PersistentDataType.STRING)) {
+            String crateId = pdc.get(NamespacedKeys.CRATE_ITEM, PersistentDataType.STRING);
 
             Optional<Crate> crateOptional = crateService.crate(crateId);
             if (crateOptional.isEmpty()) {
