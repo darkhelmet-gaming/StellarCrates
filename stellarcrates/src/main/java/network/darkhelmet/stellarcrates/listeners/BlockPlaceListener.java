@@ -28,7 +28,6 @@ import network.darkhelmet.stellarcrates.services.configuration.ConfigurationServ
 import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
-import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
 import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
 
 import org.bukkit.Material;
@@ -83,7 +82,7 @@ public class BlockPlaceListener extends AbstractListener implements Listener {
 
             Optional<Crate> crateOptional = crateService.crate(crateId);
             if (crateOptional.isEmpty()) {
-                messageService.error(player, new TranslationKey("error-invalid-crate"));
+                messageService.errorInvalidCrate(player);
                 return;
             }
 

@@ -40,7 +40,6 @@ import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.crates.Reward;
 import network.darkhelmet.stellarcrates.services.gui.GuiService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
-import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -136,7 +135,7 @@ public class CrateCommand extends BaseCommand {
     @Permission("stellarcrates.admin")
     public void onCreate(final Player player, String crateId, @Join(" ") String title) {
         if (crateService.crate(crateId).isPresent()) {
-            messageService.error(player, new TranslationKey("error-crate-exists"));
+            messageService.errorCrateExists(player);
             return;
         }
 
@@ -147,7 +146,7 @@ public class CrateCommand extends BaseCommand {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (!itemStack.getType().equals(Material.AIR)) {
             if (!Crate.isValidCrateItem(itemStack)) {
-                messageService.error(player, new TranslationKey("error-invalid-crate-item"));
+                messageService.errorInvalidCrateItem(player);
                 return;
             }
 
@@ -172,14 +171,14 @@ public class CrateCommand extends BaseCommand {
             @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
-            messageService.error(player, new TranslationKey("error-invalid-crate"));
+            messageService.errorInvalidCrate(player);
             return;
         }
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
         if (!Reward.isValidRewardItem(itemStack)) {
-            messageService.error(player, new TranslationKey("error-invalid-reward-item"));
+            messageService.errorInvalidRewardItem(player);
             return;
         }
 
@@ -200,13 +199,13 @@ public class CrateCommand extends BaseCommand {
     public void onAddLocation(final Player player, final String crateId) {
         Block block = player.getTargetBlock(transparent, 5);
         if (block.getType().equals(Material.AIR)) {
-            messageService.error(player, new TranslationKey("error-invalid-crate-block"));
+            messageService.errorInvalidCrateBlock(player);
             return;
         }
 
         Optional<Crate> crateOptional = crateService.crate(crateId);
         if (crateOptional.isEmpty()) {
-            messageService.error(player, new TranslationKey("error-invalid-crate-id"));
+            messageService.errorInvalidCrateId(player);
             return;
         }
 
@@ -228,7 +227,7 @@ public class CrateCommand extends BaseCommand {
           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
-            messageService.error(player, new TranslationKey("error-invalid-crate"));
+            messageService.errorInvalidCrate(player);
             return;
         }
 
@@ -253,7 +252,7 @@ public class CrateCommand extends BaseCommand {
     ) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
-            messageService.error(player, new TranslationKey("error-invalid-crate"));
+            messageService.errorInvalidCrate(player);
             return;
         }
 
@@ -276,7 +275,7 @@ public class CrateCommand extends BaseCommand {
           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
-            messageService.error(player, new TranslationKey("error-invalid-crate"));
+            messageService.errorInvalidCrate(player);
             return;
         }
 
@@ -295,7 +294,7 @@ public class CrateCommand extends BaseCommand {
              @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
         Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
-            messageService.error(player, new TranslationKey("error-invalid-crate"));
+            messageService.errorInvalidCrate(player);
             return;
         }
 

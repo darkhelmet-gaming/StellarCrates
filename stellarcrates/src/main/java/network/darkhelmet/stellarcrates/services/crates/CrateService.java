@@ -36,7 +36,6 @@ import network.darkhelmet.stellarcrates.services.configuration.KeyRejectionEffec
 import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.SoundConfiguration;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
-import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
 import network.darkhelmet.stellarcrates.utils.InventoryUtil;
 
 import org.bukkit.Bukkit;
@@ -176,7 +175,7 @@ public class CrateService {
 
         // Ensure inventory has room
         if (InventoryUtil.isInventoryFull(player.getInventory())) {
-            messageService.error(player, new TranslationKey("error-inventory-full"));
+            messageService.errorInventoryFull(player);
             return;
         }
 

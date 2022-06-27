@@ -24,7 +24,6 @@ import net.kyori.moonshine.annotation.Message;
 import net.kyori.moonshine.annotation.Placeholder;
 
 import network.darkhelmet.stellarcrates.services.crates.Crate;
-import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
 
 import org.bukkit.command.CommandSender;
 
@@ -44,11 +43,32 @@ public interface MessageService {
     @Message("crate-key-given-self")
     void crateKeyGivenSelf(CommandSender receiver);
 
-    @Message("error")
-    void error(CommandSender receiver, @Placeholder TranslationKey message);
+    @Message("error-crate-exists")
+    void errorCrateExists(CommandSender receiver);
+
+    @Message("error-invalid-crate")
+    void errorInvalidCrate(CommandSender receiver);
+
+    @Message("error-invalid-crate-block")
+    void errorInvalidCrateBlock(CommandSender receiver);
+
+    @Message("error-invalid-crate-id")
+    void errorInvalidCrateId(CommandSender receiver);
+
+    @Message("error-invalid-crate-item")
+    void errorInvalidCrateItem(CommandSender receiver);
 
     @Message("error-invalid-crate-key")
     void errorInvalidCrateKey(CommandSender receiver, @Placeholder Crate crate);
+
+    @Message("error-invalid-reward-item")
+    void errorInvalidRewardItem(CommandSender receiver);
+
+    @Message("error-inventory-full")
+    void errorInventoryFull(CommandSender receiver);
+
+    @Message("error-reload-locale")
+    void errorReloadLocale(CommandSender receiver);
 
     @Message("import-complete")
     void importComplete(CommandSender receiver);

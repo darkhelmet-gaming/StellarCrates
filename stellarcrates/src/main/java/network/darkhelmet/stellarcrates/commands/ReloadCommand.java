@@ -32,7 +32,6 @@ import java.io.IOException;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
-import network.darkhelmet.stellarcrates.services.translation.TranslationKey;
 import network.darkhelmet.stellarcrates.services.translation.TranslationService;
 
 import org.bukkit.command.CommandSender;
@@ -107,7 +106,7 @@ public class ReloadCommand extends BaseCommand {
 
             messageService.reloadedLocales(sender);
         } catch (IOException e) {
-            messageService.error(sender, new TranslationKey("reload-locale-error"));
+            messageService.errorReloadLocale(sender);
             e.printStackTrace();
         }
     }
