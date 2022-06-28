@@ -25,13 +25,13 @@ import java.util.List;
 
 import me.PM2.customcrates.crates.PlacedCrate;
 
+import network.darkhelmet.stellarcrates.api.services.configuration.CrateItemConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.HologramConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.SoundConfiguration;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
+import network.darkhelmet.stellarcrates.api.services.crates.IReward;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
-import network.darkhelmet.stellarcrates.services.configuration.CrateItemConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.HologramConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.SoundConfiguration;
-import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
-import network.darkhelmet.stellarcrates.services.crates.Reward;
 import network.darkhelmet.stellarcrates.services.imports.AbstractImporter;
 
 import org.bukkit.Sound;
@@ -59,7 +59,7 @@ public class SpecializedCratesImporter extends AbstractImporter {
             String title = scCrate.getDisplayName();
 
             // Create the crate
-            Crate crate = crateService.createCrate(identifier, title);
+            ICrate crate = crateService.createCrate(identifier, title);
 
             // Crate item
             ItemStack crateItem = scCrate.getSettings().getCrateItemHandler().getItem(1);
@@ -67,7 +67,7 @@ public class SpecializedCratesImporter extends AbstractImporter {
 
             // Key item
             ItemStack keyItem = scCrate.getSettings().getKeyItemHandler().getItem(1);
-            crate.createKey(keyItem);
+            crate.crateKey(keyItem);
 
             // Hologram
             List<String> hologramLines = scCrate.getSettings().getHologram().getLines();
@@ -116,7 +116,7 @@ public class SpecializedCratesImporter extends AbstractImporter {
                     }
                 }
 
-                Reward reward = crate.addReward(rewardItem, scReward.getChance());
+                IReward reward = crate.addReward(rewardItem, scReward.getChance());
                 reward.config().givesDisplayItem(scReward.isGiveDisplayItem());
 
                 scReward.getCommands().forEach(scCommand -> {

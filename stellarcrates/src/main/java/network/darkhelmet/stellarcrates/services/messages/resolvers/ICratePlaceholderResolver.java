@@ -32,14 +32,14 @@ import net.kyori.moonshine.placeholder.ContinuanceValue;
 import net.kyori.moonshine.placeholder.IPlaceholderResolver;
 import net.kyori.moonshine.util.Either;
 
-import network.darkhelmet.stellarcrates.services.crates.Crate;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
 import network.darkhelmet.stellarcrates.services.translation.TranslationService;
 
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CratePlaceholderResolver implements IPlaceholderResolver<CommandSender, Crate, Component> {
+public class ICratePlaceholderResolver implements IPlaceholderResolver<CommandSender, ICrate, Component> {
     /**
      * The translation service.
      */
@@ -51,14 +51,14 @@ public class CratePlaceholderResolver implements IPlaceholderResolver<CommandSen
      * @param translationService The translation service
      */
     @Inject
-    public CratePlaceholderResolver(TranslationService translationService) {
+    public ICratePlaceholderResolver(TranslationService translationService) {
         this.translationService = translationService;
     }
 
     @Override
     public @NonNull Map<String, Either<ConclusionValue<? extends Component>, ContinuanceValue<?>>> resolve(
         final String placeholderName,
-        final Crate value,
+        final ICrate value,
         final CommandSender receiver,
         final Type owner,
         final Method method,

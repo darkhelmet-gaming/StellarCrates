@@ -18,16 +18,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.stellarcrates.services.configuration;
+package network.darkhelmet.stellarcrates.api.services.configuration;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
-import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
-
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -48,19 +44,6 @@ public class CrateItemConfiguration {
      * @param itemStack The item stack
      */
     public CrateItemConfiguration(CrateConfiguration crateConfiguration, ItemStack itemStack) {
-        ItemMeta meta = itemStack.getItemMeta();
-        if (meta != null) {
-            // Set PDC
-            meta.getPersistentDataContainer().set(NamespacedKeys.CRATE_ITEM,
-                    PersistentDataType.STRING, crateConfiguration.identifier());
-
-            // Set display name
-            meta.setDisplayName(crateConfiguration.title());
-
-            // Set meta
-            itemStack.setItemMeta(meta);
-        }
-
         nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
     }
 

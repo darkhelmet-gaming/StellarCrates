@@ -28,9 +28,9 @@ import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import network.darkhelmet.stellarcrates.api.IStellarCrates;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrateService;
 import network.darkhelmet.stellarcrates.commands.AboutCommand;
 import network.darkhelmet.stellarcrates.commands.CrateCommand;
 import network.darkhelmet.stellarcrates.commands.ImportCommand;
@@ -50,7 +50,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-public class StellarCrates extends JavaPlugin {
+public class StellarCrates extends JavaPlugin implements IStellarCrates {
     /**
      * Cache static instance.
      */
@@ -111,11 +111,10 @@ public class StellarCrates extends JavaPlugin {
         String pluginVersion = this.getDescription().getVersion();
         logger.info("Initializing {} {} by viveleroi", pluginName, pluginVersion);
 
-        serializerVersion = mcVersion();
-        logger.info("Serializer version: {}", serializerVersion);
-
         // Load the configuration service (and files)
         configurationService = injector.getInstance(ConfigurationService.class);
+
+        logger.info("Serializer version: {}", configurationService.stellarCratesConfig().serializerVersion());
 
         CrateService crateService = injector.getInstance(CrateService.class);
 
@@ -149,10 +148,17 @@ public class StellarCrates extends JavaPlugin {
             // Run our "play" task that handles repeating tasks like playing particles, etc.
             tickTask = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
                 crateService.crates().values().forEach(crate -> {
-                    crate.crateInstances().values().forEach(CrateInstance::tick);
+                    crate.crateInstances().values().forEach(crateInstance -> {
+                        ((CrateInstance) crateInstance).tick();
+                    });
                 });
             }, 0, 5L);
         }
+    }
+
+    @Override
+    public ICrateService crateService() {
+        return injector.getInstance(CrateService.class);
     }
 
     /**
@@ -162,30 +168,6 @@ public class StellarCrates extends JavaPlugin {
         Bukkit.getPluginManager().disablePlugin(StellarCrates.getInstance());
 
         logger.error("StellarCrates has to disable due to a fatal error.");
-    }
-
-    /**
-     * Parses the mc version as a short. Fed to nbt serializers.
-     *
-     * @return The mc version as a number
-     */
-    protected Short mcVersion() {
-        Pattern pattern = Pattern.compile("([0-9]+\\.[0-9]+)");
-        Matcher matcher = pattern.matcher(Bukkit.getVersion());
-        if (matcher.find()) {
-            return Short.parseShort(matcher.group(1).replace(".", ""));
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the serializer version.
-     *
-     * @return The version
-     */
-    public short serializerVersion() {
-        return serializerVersion;
     }
 
     /**

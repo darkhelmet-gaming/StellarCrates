@@ -18,57 +18,57 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.stellarcrates.services.configuration;
+package network.darkhelmet.stellarcrates.api.services.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.util.Vector;
+import org.bukkit.Sound;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
-public class HologramConfiguration {
-    @Comment("Set lines of text.")
-    private List<String> lines = new ArrayList<>();
+public class KeyRejectionEffectsConfigutation {
+    @Comment("Toggle knockback effect.")
+    private boolean knockbackEnabled = true;
 
-    @Comment("""
-            Hologram positions default to the center of the crate's block space.
-            Use this offset to shift its location.
-            """)
-    private Vector positionOffset = new Vector(0, 1, 0);
+    @Comment("Adjust the knockback strength.")
+    private float knockbackMultiple = 0.5f;
 
-    /**
-     * Argument-less constructor, needed for deserialization.
-     */
-    public HologramConfiguration() {}
+    @Comment("List any sounds to be played.")
+    private List<SoundConfiguration> sounds = new ArrayList<>();
 
     /**
-     * Construct a hologram configuration.
-     *
-     * @param lines The lines
-     * @param positionOffset The position offset
+     * Construct the key rejection configuration.
      */
-    public HologramConfiguration(List<String> lines, Vector positionOffset) {
-        this.lines = lines;
-        this.positionOffset = positionOffset;
+    public KeyRejectionEffectsConfigutation() {
+        sounds.add(new SoundConfiguration(Sound.ENTITY_VILLAGER_NO));
     }
 
     /**
-     * Get the lines.
+     * Get whether knockback is enabled.
      *
-     * @return The lines
+     * @return True if knockback enabled.
      */
-    public List<String> lines() {
-        return lines;
+    public boolean knockbackEnabled() {
+        return knockbackEnabled;
     }
 
     /**
-     * Get the position offset.
+     * Get the knockback multiple.
      *
-     * @return The position offset
+     * @return The knockback multiple
      */
-    public Vector positionOffset() {
-        return positionOffset;
+    public float knockbackMultiple() {
+        return knockbackMultiple;
+    }
+
+    /**
+     * Get sounds.
+     *
+     * @return The sounds
+     */
+    public List<SoundConfiguration> sounds() {
+        return sounds;
     }
 }

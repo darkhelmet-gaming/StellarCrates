@@ -29,6 +29,8 @@ import java.util.Locale;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 
 import network.darkhelmet.stellarcrates.StellarCrates;
+import network.darkhelmet.stellarcrates.api.services.configuration.CratesConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.StellarCratesConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.serializers.BlockLocationSerializerConfigurate;
 import network.darkhelmet.stellarcrates.services.configuration.serializers.LocaleSerializerConfigurate;
 import network.darkhelmet.stellarcrates.services.configuration.serializers.RegularColorSerializerConfigurate;

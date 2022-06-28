@@ -23,10 +23,11 @@ package network.darkhelmet.stellarcrates.services.crates;
 import java.util.ArrayList;
 import java.util.List;
 
+import network.darkhelmet.stellarcrates.api.services.configuration.HologramConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.ParticleColorMode;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrateInstance;
 import network.darkhelmet.stellarcrates.api.services.holograms.CrateHologram;
 import network.darkhelmet.stellarcrates.api.services.holograms.HologramProvider;
-import network.darkhelmet.stellarcrates.services.configuration.HologramConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.ParticleColorMode;
 import network.darkhelmet.stellarcrates.services.holograms.providers.DecentHologramsProvider;
 import network.darkhelmet.stellarcrates.utils.RandomUtil;
 
@@ -38,7 +39,7 @@ import xyz.xenondevs.particle.PropertyType;
 import xyz.xenondevs.particle.data.color.RegularColor;
 import xyz.xenondevs.particle.task.TaskManager;
 
-public class CrateInstance {
+public class CrateInstance implements ICrateInstance {
     /**
      * The crate.
      */
@@ -79,11 +80,7 @@ public class CrateInstance {
         createHologram();
     }
 
-    /**
-     * Get the crate.
-     *
-     * @return The crate
-     */
+    @Override
     public Crate crate() {
         return crate;
     }
@@ -115,21 +112,15 @@ public class CrateInstance {
         holograms.add(hologramProvider.create(identifier, hologramLocation, lines));
     }
 
-    /**
-     * Destroy this instance. Deletes holograms, stops particles.
-     */
-    public void destroy() {
-        holograms.forEach(CrateHologram::destroy);
-        particleTaskIds.forEach(id -> TaskManager.getTaskManager().stopTask(id));
-    }
-
-    /**
-     * Get the instance location.
-     *
-     * @return The instance location
-     */
+    @Override
     public Location location() {
         return instanceLocation;
+    }
+
+    @Override
+    public void unload() {
+        holograms.forEach(CrateHologram::destroy);
+        particleTaskIds.forEach(id -> TaskManager.getTaskManager().stopTask(id));
     }
 
     /**

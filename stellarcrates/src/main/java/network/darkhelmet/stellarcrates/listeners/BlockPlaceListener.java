@@ -24,8 +24,8 @@ import com.google.inject.Inject;
 
 import java.util.Optional;
 
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
-import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
 import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
@@ -80,7 +80,7 @@ public class BlockPlaceListener extends AbstractListener implements Listener {
         if (pdc.has(NamespacedKeys.CRATE_ITEM, PersistentDataType.STRING)) {
             String crateId = pdc.get(NamespacedKeys.CRATE_ITEM, PersistentDataType.STRING);
 
-            Optional<Crate> crateOptional = crateService.crate(crateId);
+            Optional<ICrate> crateOptional = crateService.crate(crateId);
             if (crateOptional.isEmpty()) {
                 messageService.errorInvalidCrate(player);
                 return;

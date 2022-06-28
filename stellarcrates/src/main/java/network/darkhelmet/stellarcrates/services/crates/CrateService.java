@@ -22,29 +22,32 @@ package network.darkhelmet.stellarcrates.services.crates;
 
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
+import network.darkhelmet.stellarcrates.api.services.configuration.CrateConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.KeyRejectionEffectsConfigutation;
+import network.darkhelmet.stellarcrates.api.services.configuration.SoundConfiguration;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrateInstance;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrateService;
+import network.darkhelmet.stellarcrates.api.services.crates.IReward;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
-import network.darkhelmet.stellarcrates.services.configuration.CrateConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.KeyRejectionEffectsConfigutation;
-import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.SoundConfiguration;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
 import network.darkhelmet.stellarcrates.utils.InventoryUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class CrateService {
+public class CrateService implements ICrateService {
     /**
      * The configuration service.
      */
@@ -58,7 +61,7 @@ public class CrateService {
     /**
      * Cache of crates.
      */
-    private final Map<String, Crate> crates = new HashMap<>();
+    private final Map<String, ICrate> crates = new HashMap<>();
 
     /**
      * Construct the crate service.
@@ -81,96 +84,60 @@ public class CrateService {
      *
      * @param crateConfiguration The crate configuration
      */
-    public Crate addCrate(CrateConfiguration crateConfiguration) {
-        List<Reward> rewards = new ArrayList<>();
-        for (RewardConfiguration rewardConfiguration : crateConfiguration.rewards()) {
-            rewards.add(rewardConfiguration.toReward());
-        }
-
-        Crate crate = new Crate(crateConfiguration, rewards);
+    private Crate addCrate(CrateConfiguration crateConfiguration) {
+        Crate crate = new Crate(crateConfiguration);
         crates.put(crateConfiguration.identifier(), crate);
 
         return crate;
     }
 
-    /**
-     * Get a crate by identifier.
-     *
-     * @param identifier The crate identifier
-     * @return The crate, if any
-     */
-    public Optional<Crate> crate(String identifier) {
+    @Override
+    public Optional<ICrate> crate(String identifier) {
         return Optional.ofNullable(crates.get(identifier));
     }
 
-    /**
-     * Get a crate by location.
-     *
-     * @param location The location
-     * @return The crate, if any
-     */
-    public Optional<Crate> crate(Location location) {
-        return crates.values().stream().filter(c -> c.hasLocation(location)).findFirst();
-    }
-
-    /**
-     * Get a crate instance by location.
-     *
-     * @param location The location
-     * @return The crate, if any
-     */
-    public Optional<CrateInstance> crateInstance(Location location) {
-        Optional<Crate> crateOptional = crate(location);
-        if (crateOptional.isPresent()) {
-            return crateOptional.get().crateInstance(location);
+    @Override
+    public Optional<ICrateInstance> crateInstance(Location location) {
+        for (ICrate crate : crates().values()) {
+            return crate.crateInstance(location);
         }
 
         return Optional.empty();
     }
 
-    /**
-     * Crate a new crate.
-     *
-     * @param identifier The identifier
-     * @param title The title
-     * @return The crate
-     */
-    public Crate createCrate(String identifier, String title) {
+    @Override
+    public Map<String, ICrate> crates() {
+        return crates;
+    }
+
+    @Override
+    public ICrate createCrate(String identifier, String title) {
+        ItemStack defaultKey = new ItemStack(Material.TRIPWIRE_HOOK);
+        ItemMeta meta = defaultKey.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(title + " Key");
+            defaultKey.setItemMeta(meta);
+        }
+
         // Create the crate and register it
-        CrateConfiguration crateConfig = new CrateConfiguration(identifier, title);
+        CrateConfiguration crateConfig = new CrateConfiguration(identifier, title, defaultKey);
         configurationService.cratesConfiguration().crates().add(crateConfig);
 
         return addCrate(crateConfig);
     }
 
-    /**
-     * Get all loaded crates.
-     */
-    public Map<String, Crate> crates() {
-        return crates;
-    }
-
-    /**
-     * Delete a crate.
-     *
-     * @param crate The crate
-     */
-    public void delete(Crate crate) {
-        crate.destroy();
+    @Override
+    public void delete(ICrate crate) {
+        crate.unloadInstances();
 
         crates.remove(crate.config().identifier());
 
         configurationService.cratesConfiguration().crates().remove(crate.config());
     }
 
-    /**
-     * Attempt to open a crate for the given player.
-     *
-     * @param crateInstance The crate instance
-     * @param player The player
-     */
-    public void openCrate(CrateInstance crateInstance, Player player) {
-        Optional<Reward> rewardOptional = crateInstance.crate().chooseWeightedRandomReward();
+    @Override
+    public void openCrate(ICrateInstance crateInstance, Player player) {
+        Optional<IReward> rewardOptional = crateInstance.crate().randomReward();
         if (rewardOptional.isEmpty()) {
             return;
         }
@@ -197,11 +164,11 @@ public class CrateService {
             itemStack.setAmount(itemStack.getAmount() - 1);
         }
 
-        Reward reward = rewardOptional.get();
+        IReward reward = rewardOptional.get();
 
         // Give the reward item
         if (reward.config().givesDisplayItem()) {
-            reward.deliverTo(player);
+            reward.deliverTo(player.getInventory());
         }
 
         // Execute commands
@@ -228,7 +195,7 @@ public class CrateService {
      * @param crateInstance The crate instance
      * @param player The player
      */
-    private void playKeyRejectionEffects(CrateInstance crateInstance, Player player) {
+    private void playKeyRejectionEffects(ICrateInstance crateInstance, Player player) {
         KeyRejectionEffectsConfigutation keyRejectConfig =
             configurationService.stellarCratesConfig().keyRejectionEffects();
 
@@ -247,7 +214,7 @@ public class CrateService {
      * Reloads all crate items from their configs.
      */
     public void reload() {
-        crates.values().forEach(Crate::destroy);
+        crates.values().forEach(ICrate::unloadInstances);
 
         crates.clear();
 

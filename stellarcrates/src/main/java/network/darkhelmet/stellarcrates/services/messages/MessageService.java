@@ -23,8 +23,8 @@ package network.darkhelmet.stellarcrates.services.messages;
 import net.kyori.moonshine.annotation.Message;
 import net.kyori.moonshine.annotation.Placeholder;
 
-import network.darkhelmet.stellarcrates.services.crates.Crate;
-import network.darkhelmet.stellarcrates.services.crates.Reward;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
+import network.darkhelmet.stellarcrates.api.services.crates.IReward;
 
 import org.bukkit.command.CommandSender;
 
@@ -33,25 +33,25 @@ public interface MessageService {
     void about(CommandSender receiver, @Placeholder String version);
 
     @Message("crate-created")
-    void crateCreated(CommandSender receiver, @Placeholder Crate crate);
+    void crateCreated(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("crate-deleted")
-    void crateDeleted(CommandSender receiver, @Placeholder Crate crate);
+    void crateDeleted(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("crate-given-self")
-    void crateGivenSelf(CommandSender receiver, @Placeholder Crate crate);
+    void crateGivenSelf(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("crate-key-created")
-    void crateKeyCreated(CommandSender receiver, @Placeholder Crate crate);
+    void crateKeyCreated(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("crate-key-given-self")
-    void crateKeyGivenSelf(CommandSender receiver, @Placeholder Crate crate);
+    void crateKeyGivenSelf(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("error-crate-exists")
     void errorCrateExists(CommandSender receiver);
 
     @Message("error-crate-full")
-    void errorCrateFull(CommandSender receiver, @Placeholder Crate crate);
+    void errorCrateFull(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("error-invalid-crate")
     void errorInvalidCrate(CommandSender receiver);
@@ -66,7 +66,7 @@ public interface MessageService {
     void errorInvalidCrateItem(CommandSender receiver);
 
     @Message("error-invalid-crate-key")
-    void errorInvalidCrateKey(CommandSender receiver, @Placeholder Crate crate);
+    void errorInvalidCrateKey(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("error-invalid-reward-item")
     void errorInvalidRewardItem(CommandSender receiver);
@@ -81,7 +81,7 @@ public interface MessageService {
     void importComplete(CommandSender receiver);
 
     @Message("location-added")
-    void locationAdded(CommandSender receiver, @Placeholder Crate crate);
+    void locationAdded(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("reloaded-config")
     void reloadedConfig(CommandSender receiver);
@@ -90,8 +90,8 @@ public interface MessageService {
     void reloadedLocales(CommandSender receiver);
 
     @Message("reward-added")
-    void rewardAdded(CommandSender receiver, @Placeholder Crate crate);
+    void rewardAdded(CommandSender receiver, @Placeholder ICrate crate);
 
     @Message("reward-given-self")
-    void rewardGivenSelf(CommandSender receiver, @Placeholder Reward reward);
+    void rewardGivenSelf(CommandSender receiver, @Placeholder IReward reward);
 }

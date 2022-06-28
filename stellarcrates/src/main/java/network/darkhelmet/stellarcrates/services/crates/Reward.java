@@ -20,13 +20,14 @@
 
 package network.darkhelmet.stellarcrates.services.crates;
 
-import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.RewardConfiguration;
+import network.darkhelmet.stellarcrates.api.services.crates.IReward;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public final class Reward {
+public final class Reward implements IReward {
     /**
      * The reward configuration.
      */
@@ -48,25 +49,9 @@ public final class Reward {
         this.itemStack = itemStack;
     }
 
-    /**
-     * Deliver the reward contents to the player.
-     *
-     * <p>If an item stack, delivers to their inventory.</p>
-     *
-     * @param player The player
-     */
-    public void deliverTo(Player player) {
-        player.getInventory().addItem(itemStack);
-    }
-
-    /**
-     * Check if an item stack is a valid reward.
-     *
-     * @param itemStack The item stack
-     * @return True if valid
-     */
-    public static boolean isValidRewardItem(ItemStack itemStack) {
-        return !itemStack.getType().equals(Material.AIR);
+    @Override
+    public void deliverTo(Inventory inventory) {
+        inventory.addItem(itemStack);
     }
 
     /**
@@ -78,12 +63,18 @@ public final class Reward {
         return config;
     }
 
-    /**
-     * Returns a new item stack.
-     *
-     * @return The item stack
-     */
+    @Override
     public ItemStack toItemStack() {
         return itemStack.clone();
+    }
+
+    /**
+     * Check if an item stack is a valid reward.
+     *
+     * @param itemStack The item stack
+     * @return True if valid
+     */
+    public static boolean isValidRewardItem(ItemStack itemStack) {
+        return !itemStack.getType().equals(Material.AIR);
     }
 }

@@ -18,15 +18,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.stellarcrates.services.configuration;
+package network.darkhelmet.stellarcrates.api.services.configuration;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import network.darkhelmet.stellarcrates.services.crates.Reward;
 
 import org.bukkit.inventory.ItemStack;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -78,15 +76,6 @@ public class RewardConfiguration {
     }
 
     /**
-     * Create a Reward object from this config.
-     *
-     * @return The reward
-     */
-    public Reward toReward() {
-        return new Reward(this, toItemStack());
-    }
-
-    /**
      * Get the commands.
      *
      * @return The commands
@@ -111,15 +100,6 @@ public class RewardConfiguration {
      */
     public void givesDisplayItem(boolean givesDisplayItem) {
         this.givesDisplayItem = givesDisplayItem;
-    }
-
-    /**
-     * Get the NBT string.
-     *
-     * @return The NBT string
-     */
-    public String nbtString() {
-        return nbtString;
     }
 
     /**

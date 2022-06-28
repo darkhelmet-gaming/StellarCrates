@@ -18,12 +18,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.stellarcrates.services.configuration;
+package network.darkhelmet.stellarcrates.api.services.configuration;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import network.darkhelmet.stellarcrates.StellarCrates;
-
+import org.bukkit.Bukkit;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -45,7 +46,14 @@ public class StellarCratesConfiguration {
     private KeyRejectionEffectsConfigutation keyRejectionEffects;
 
     @Comment("The version of the serializer.")
-    private short serializerVersion = StellarCrates.getInstance().serializerVersion();
+    private short serializerVersion;
+
+    /**
+     * Argument-less constructor, needed for deserialization.
+     */
+    public StellarCratesConfiguration() {
+        this.serializerVersion = mcVersion();
+    }
 
     /**
      * Get the debug setting.
@@ -79,5 +87,29 @@ public class StellarCratesConfiguration {
      */
     public KeyRejectionEffectsConfigutation keyRejectionEffects() {
         return keyRejectionEffects;
+    }
+
+    /**
+     * Get the serializer version.
+     *
+     * @return The serializer version
+     */
+    public short serializerVersion() {
+        return serializerVersion;
+    }
+
+    /**
+     * Parses the mc version as a short. Fed to nbt serializers.
+     *
+     * @return The mc version as a number
+     */
+    protected Short mcVersion() {
+        Pattern pattern = Pattern.compile("([0-9]+\\.[0-9]+)");
+        Matcher matcher = pattern.matcher(Bukkit.getVersion());
+        if (matcher.find()) {
+            return Short.parseShort(matcher.group(1).replace(".", ""));
+        }
+
+        return null;
     }
 }

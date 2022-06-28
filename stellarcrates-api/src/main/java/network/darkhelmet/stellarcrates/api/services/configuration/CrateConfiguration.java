@@ -18,17 +18,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.stellarcrates.services.configuration;
+package network.darkhelmet.stellarcrates.api.services.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -77,20 +75,12 @@ public class CrateConfiguration {
      * @param identifier The identifier
      * @param title The title
      */
-    public CrateConfiguration(String identifier, String title) {
+    public CrateConfiguration(String identifier, String title, ItemStack defaultKey) {
         this();
 
         this.identifier = identifier;
         this.title = title;
-
-        ItemStack defaultKey = new ItemStack(Material.TRIPWIRE_HOOK);
-        ItemMeta meta = defaultKey.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(title + " Key");
-            defaultKey.setItemMeta(meta);
-        }
-
-        this.key = new KeyConfiguration(identifier, defaultKey);
+        this.key = new KeyConfiguration(defaultKey);
     }
 
     /**

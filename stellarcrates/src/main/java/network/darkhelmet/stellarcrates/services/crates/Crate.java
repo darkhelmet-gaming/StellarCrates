@@ -20,6 +20,7 @@
 
 package network.darkhelmet.stellarcrates.services.crates;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,20 @@ import java.util.Objects;
 import java.util.Optional;
 
 import network.darkhelmet.stellarcrates.StellarCrates;
-import network.darkhelmet.stellarcrates.services.configuration.CrateConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.KeyConfiguration;
-import network.darkhelmet.stellarcrates.services.configuration.RewardConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.CrateConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.KeyConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.RewardConfiguration;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrateInstance;
+import network.darkhelmet.stellarcrates.api.services.crates.IReward;
+import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
-public final class Crate {
+public final class Crate implements ICrate {
     /**
      * The crate configuration.
      */
@@ -43,22 +50,24 @@ public final class Crate {
     /**
      * The rewards.
      */
-    private final List<Reward> rewards;
+    private final List<IReward> rewards = new ArrayList<>();
 
     /**
      * A map of crate instances.
      */
-    private final Map<Location, CrateInstance> crateInstances = new HashMap<>();
+    private final Map<Location, ICrateInstance> crateInstances = new HashMap<>();
 
     /**
      * Construct a new crate.
      *
      * @param config The crate configuration
-     * @param rewards The rewards
      */
-    public Crate(CrateConfiguration config, List<Reward> rewards) {
+    public Crate(CrateConfiguration config) {
         this.config = config;
-        this.rewards = rewards;
+
+        config.rewards().forEach(rewardConfiguration -> {
+            addReward(rewardConfiguration.toItemStack(), rewardConfiguration.weight());
+        });
 
         config.locations().forEach(loc -> {
             createCrateInstance(loc);
@@ -68,83 +77,78 @@ public final class Crate {
         });
     }
 
-    /**
-     * Add a location.
-     *
-     * @param location The location
-     */
-    public void addLocation(Location location) {
+    @Override
+    public ICrateInstance addLocation(Location location) {
         config.locations().add(location);
 
-        createCrateInstance(location);
+        return createCrateInstance(location);
     }
 
-    /**
-     * Add an itemstack as a reward.
-     *
-     * @param itemStack The item stack
-     * @param weight The weight
-     * @return The reward
-     */
-    public Reward addReward(ItemStack itemStack, double weight) {
+    @Override
+    public IReward addReward(ItemStack itemStack, double weight) {
         RewardConfiguration rewardConfiguration = new RewardConfiguration(itemStack, weight);
         config.rewards().add(rewardConfiguration);
 
-        Reward reward = rewardConfiguration.toReward();
+        IReward reward = new Reward(rewardConfiguration, rewardConfiguration.toItemStack());
         rewards.add(reward);
 
         return reward;
     }
 
-    /**
-     * Get a crate instance by location.
-     *
-     * @param location The location
-     * @return The crate instance
-     */
-    public Optional<CrateInstance> crateInstance(Location location) {
+    @Override
+    public CrateConfiguration config() {
+        return config;
+    }
+
+    @Override
+    public Optional<ICrateInstance> crateInstance(Location location) {
         return Optional.ofNullable(crateInstances.get(location));
     }
 
-    /**
-     * Get a map of crate instances.
-     *
-     * @return The map of crate instances
-     */
-    public Map<Location, CrateInstance> crateInstances() {
+    @Override
+    public Map<Location, ICrateInstance> crateInstances() {
         return crateInstances;
     }
 
-    /**
-     * Get the crate item.
-     *
-     * @return The crate item
-     */
+    @Override
     public ItemStack crateItem() {
         return config.crateItem().toItemStack();
     }
 
-    /**
-     * Get the crate key.
-     *
-     * @return The crate key
-     */
+    @Override
+    public ItemStack crateItem(ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta != null) {
+            // Set PDC
+            meta.getPersistentDataContainer().set(NamespacedKeys.CRATE_ITEM,
+                PersistentDataType.STRING, config.identifier());
+
+            // Set display name
+            meta.setDisplayName(config.title());
+
+            // Set meta
+            itemStack.setItemMeta(meta);
+        }
+
+        return itemStack;
+    }
+
+    @Override
     public ItemStack crateKey() {
         return config.key().toItemStack();
     }
 
-    /**
-     * Crate a new key configuration for this crate.
-     *
-     * @param itemStack The item stack
-     * @return The key configuration
-     */
-    public KeyConfiguration createKey(ItemStack itemStack) {
-        KeyConfiguration keyConfiguration = new KeyConfiguration(config.identifier(), itemStack);
+    @Override
+    public ItemStack crateKey(ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.getPersistentDataContainer().set(NamespacedKeys.CRATE_KEY, PersistentDataType.STRING, config.identifier());
+        itemStack.setItemMeta(meta);
+
+        KeyConfiguration keyConfiguration = new KeyConfiguration(itemStack);
 
         config.key(keyConfiguration);
 
-        return keyConfiguration;
+        return itemStack;
     }
 
     /**
@@ -153,45 +157,31 @@ public final class Crate {
      * @param location The location
      * @return The crate instance
      */
-    public CrateInstance createCrateInstance(Location location) {
-        CrateInstance crateInstance = new CrateInstance(this, location);
+    private ICrateInstance createCrateInstance(Location location) {
+        ICrateInstance crateInstance = new CrateInstance(this, location);
         crateInstances.put(location, crateInstance);
 
         return crateInstance;
     }
 
-    /**
-     * Check if crate instance exists a given location.
-     *
-     * @param location The location
-     * @return True if crate instance exists at location
-     */
-    public boolean hasLocation(Location location) {
-        return config.locations().contains(location);
+    @Override
+    public boolean isFull() {
+        return rewards().size() >= config.inventoryRows() * 9;
     }
 
-    /**
-     * Check an item stack against a crate key.
-     *
-     * @param itemStack The item stack
-     * @return True if key matches
-     */
+    @Override
     public boolean keyMatches(ItemStack itemStack) {
         return config.key() == null || config.key().toItemStack().isSimilar(itemStack);
     }
 
-    /**
-     * Choose a random weighted reward.
-     *
-     * @return The reward
-     */
-    public Optional<Reward> chooseWeightedRandomReward() {
+    @Override
+    public Optional<IReward> randomReward() {
         if (rewards.isEmpty()) {
             return Optional.empty();
         }
 
         double totalWeight = 0.0;
-        for (Reward reward : rewards) {
+        for (IReward reward : rewards) {
             totalWeight += reward.config().weight();
         }
 
@@ -206,38 +196,14 @@ public final class Crate {
         return Optional.of(rewards.get(idx));
     }
 
-    /**
-     * Tear down all crate instances.
-     */
-    public void destroy() {
-        crateInstances.values().forEach(CrateInstance::destroy);
-    }
-
-    /**
-     * Get the crate configuration.
-     *
-     * @return The crate configuration
-     */
-    public CrateConfiguration config() {
-        return config;
-    }
-
-    /**
-     * Check whether the reward slots are full.
-     *
-     * @return True if reward count less than inventory size
-     */
-    public boolean isFull() {
-        return rewards().size() >= config.inventoryRows() * 9;
-    }
-
-    /**
-     * Get the rewards.
-     *
-     * @return The rewards
-     */
-    public List<Reward> rewards() {
+    @Override
+    public List<IReward> rewards() {
         return rewards;
+    }
+
+    @Override
+    public void unloadInstances() {
+        crateInstances.values().forEach(ICrateInstance::unload);
     }
 
     /**

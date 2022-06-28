@@ -33,8 +33,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrateInstance;
 import network.darkhelmet.stellarcrates.services.configuration.ConfigurationService;
-import network.darkhelmet.stellarcrates.services.configuration.CrateItemConfiguration;
 import network.darkhelmet.stellarcrates.services.crates.Crate;
 import network.darkhelmet.stellarcrates.services.crates.CrateService;
 import network.darkhelmet.stellarcrates.services.crates.Reward;
@@ -106,19 +107,19 @@ public class CrateCommand extends BaseCommand {
      * @param crateId The identifier
      * @return The crate, if any
      */
-    private Optional<Crate> crateFromIdOrTarget(Player player, String crateId) {
-        Crate crate = null;
+    private Optional<ICrate> crateFromIdOrTarget(Player player, String crateId) {
+        ICrate crate = null;
 
         if (crateId != null) {
-            Optional<Crate> crateOptional = crateService.crate(crateId);
+            Optional<ICrate> crateOptional = crateService.crate(crateId);
             if (crateOptional.isPresent()) {
                 crate = crateOptional.get();
             }
         } else {
             Block block = player.getTargetBlock(transparent, 5);
-            Optional<Crate> crateOptional = crateService.crate(block.getLocation());
+            Optional<ICrateInstance> crateOptional = crateService.crateInstance(block.getLocation());
             if (crateOptional.isPresent()) {
-                crate = crateOptional.get();
+                crate = crateOptional.get().crate();
             }
         }
 
@@ -141,7 +142,7 @@ public class CrateCommand extends BaseCommand {
         }
 
         // Create the crate
-        Crate crate = crateService.createCrate(crateId, title);
+        ICrate crate = crateService.createCrate(crateId, title);
 
         // Set the crate item
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -151,7 +152,7 @@ public class CrateCommand extends BaseCommand {
                 return;
             }
 
-            crate.config().crateItem(new CrateItemConfiguration(crate.config(), itemStack));
+            crate.crateItem(itemStack);
         }
 
         // Save
@@ -170,13 +171,13 @@ public class CrateCommand extends BaseCommand {
     @Permission("stellarcrates.admin")
     public void onAddReward(final Player player,
             @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
-        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        Optional<ICrate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrate(player);
             return;
         }
 
-        Crate crate = crateOptional.get();
+        ICrate crate = crateOptional.get();
         if (crate.isFull()) {
             messageService.errorCrateFull(player, crate);
             return;
@@ -210,7 +211,7 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        Optional<Crate> crateOptional = crateService.crate(crateId);
+        Optional<ICrate> crateOptional = crateService.crate(crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrateId(player);
             return;
@@ -232,13 +233,13 @@ public class CrateCommand extends BaseCommand {
     @Permission("stellarcrates.admin")
     public void onDelete(final Player player,
          @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
-        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        Optional<ICrate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrate(player);
             return;
         }
 
-        Crate crate = crateOptional.get();
+        ICrate crate = crateOptional.get();
 
         messageService.crateDeleted(player, crate);
         crateService.delete(crate);
@@ -255,7 +256,7 @@ public class CrateCommand extends BaseCommand {
     @Permission("stellarcrates.admin")
     public void onGiveCrate(final Player player,
           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
-        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        Optional<ICrate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrate(player);
             return;
@@ -280,7 +281,7 @@ public class CrateCommand extends BaseCommand {
         @Suggestion("players") final Player recipient,
         @dev.triumphteam.cmd.core.annotation.Optional Integer quantity
     ) {
-        Optional<Crate> crateOptional = crateService.crate(crateId);
+        Optional<ICrate> crateOptional = crateService.crate(crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrate(sender);
             return;
@@ -305,13 +306,13 @@ public class CrateCommand extends BaseCommand {
     @Permission("stellarcrates.admin")
     public void onPreview(final Player player,
           @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
-        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        Optional<ICrate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrate(player);
             return;
         }
 
-        guiService.open(crateOptional.get(), player);
+        guiService.open((Crate) crateOptional.get(), player);
     }
 
     /**
@@ -324,14 +325,14 @@ public class CrateCommand extends BaseCommand {
     @Permission("stellarcrates.admin")
     public void onSetKey(final Player player,
              @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
-        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        Optional<ICrate> crateOptional = crateFromIdOrTarget(player, crateId);
         if (crateOptional.isEmpty()) {
             messageService.errorInvalidCrate(player);
             return;
         }
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        crateOptional.get().createKey(itemStack);
+        crateOptional.get().crateKey(itemStack);
         configurationService.saveAll();
 
         messageService.crateKeyCreated(player, crateOptional.get());

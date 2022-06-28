@@ -47,7 +47,7 @@ import network.darkhelmet.stellarcrates.services.messages.MessageRenderer;
 import network.darkhelmet.stellarcrates.services.messages.MessageSender;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
 import network.darkhelmet.stellarcrates.services.messages.ReceiverResolver;
-import network.darkhelmet.stellarcrates.services.messages.resolvers.CratePlaceholderResolver;
+import network.darkhelmet.stellarcrates.services.messages.resolvers.ICratePlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.RewardPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.StringPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.TranslatableStringPlaceholderResolver;
@@ -118,7 +118,7 @@ public class StellarCratesModule extends AbstractModule {
             TranslationService translationService,
             MessageRenderer messageRenderer,
             MessageSender messageSender,
-            CratePlaceholderResolver cratePlaceholderResolver,
+            ICratePlaceholderResolver cratePlaceholderResolver,
             TranslatableStringPlaceholderResolver translatableStringPlaceholderResolver) {
         try {
             return Moonshine.<MessageService, CommandSender>builder(
@@ -162,7 +162,7 @@ public class StellarCratesModule extends AbstractModule {
         // Service - Messages
         bind(MessageRenderer.class).in(Singleton.class);
         bind(MessageSender.class).in(Singleton.class);
-        bind(CratePlaceholderResolver.class).in(Singleton.class);
+        bind(ICratePlaceholderResolver.class).in(Singleton.class);
         bind(TranslatableStringPlaceholderResolver.class).in(Singleton.class);
 
         // Service - Translation

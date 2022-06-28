@@ -31,8 +31,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-import network.darkhelmet.stellarcrates.services.crates.Crate;
-import network.darkhelmet.stellarcrates.services.crates.Reward;
+import network.darkhelmet.stellarcrates.api.services.crates.ICrate;
+import network.darkhelmet.stellarcrates.api.services.crates.IReward;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -45,7 +45,7 @@ public class GuiService {
      * @param crate The crate
      * @param player The player
      */
-    public void open(Crate crate, Player player) {
+    public void open(ICrate crate, Player player) {
         int rows = crate.config().inventoryRows();
         if (rows <= 0 || rows > 6) {
             rows = 3;
@@ -60,11 +60,11 @@ public class GuiService {
             .hexColors().useUnusualXRepeatedCharacterHexFormat().build();
 
         double weightsTotal = 0;
-        for (Reward reward : crate.rewards()) {
+        for (IReward reward : crate.rewards()) {
             weightsTotal += reward.config().weight();
         }
 
-        for (Reward reward : crate.rewards()) {
+        for (IReward reward : crate.rewards()) {
             double winChance = (reward.config().weight() / weightsTotal) * 100;
             ItemStack itemStack = reward.toItemStack();
 

@@ -18,8 +18,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.stellarcrates.services.configuration;
+package network.darkhelmet.stellarcrates.api;
 
-public enum ParticleColorMode {
-    RANDOM, STATIC
+import network.darkhelmet.stellarcrates.api.services.crates.ICrateService;
+
+public interface IStellarCrates {
+    /**
+     * Get the crate service.
+     *
+     * @return The crate service
+     */
+    ICrateService crateService();
 }

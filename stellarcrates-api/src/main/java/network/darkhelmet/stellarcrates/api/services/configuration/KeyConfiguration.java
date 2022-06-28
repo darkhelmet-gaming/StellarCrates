@@ -18,16 +18,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package network.darkhelmet.stellarcrates.services.configuration;
+package network.darkhelmet.stellarcrates.api.services.configuration;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
 
-import network.darkhelmet.stellarcrates.utils.NamespacedKeys;
-
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -44,15 +40,9 @@ public class KeyConfiguration {
     /**
      * Construct a new key configuration from an item stack.
      *
-     * @param identifier The identifier
      * @param itemStack The item stack
      */
-    public KeyConfiguration(String identifier, ItemStack itemStack) {
-        ItemMeta meta = itemStack.getItemMeta();
-
-        meta.getPersistentDataContainer().set(NamespacedKeys.CRATE_KEY, PersistentDataType.STRING, identifier);
-        itemStack.setItemMeta(meta);
-
+    public KeyConfiguration(ItemStack itemStack) {
         nbtString = NBTItem.convertItemtoNBT(itemStack).toString();
     }
 

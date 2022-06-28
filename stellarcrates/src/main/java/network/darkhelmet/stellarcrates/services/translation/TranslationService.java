@@ -46,7 +46,7 @@ import java.util.stream.Stream;
 import net.kyori.adventure.translation.Translator;
 import net.kyori.moonshine.message.IMessageSource;
 
-import network.darkhelmet.stellarcrates.services.configuration.StellarCratesConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.StellarCratesConfiguration;
 
 import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
