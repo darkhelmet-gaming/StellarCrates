@@ -24,7 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -74,8 +78,19 @@ public class CrateConfiguration {
      * @param title The title
      */
     public CrateConfiguration(String identifier, String title) {
+        this();
+
         this.identifier = identifier;
         this.title = title;
+
+        ItemStack defaultKey = new ItemStack(Material.TRIPWIRE_HOOK);
+        ItemMeta meta = defaultKey.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(title + " Key");
+            defaultKey.setItemMeta(meta);
+        }
+
+        this.key = new KeyConfiguration(identifier, defaultKey);
     }
 
     /**
