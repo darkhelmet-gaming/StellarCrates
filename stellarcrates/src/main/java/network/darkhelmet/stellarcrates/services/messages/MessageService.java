@@ -44,6 +44,9 @@ public interface MessageService {
     @Message("crate-key-given-self")
     void crateKeyGivenSelf(CommandSender receiver, @Placeholder Crate crate);
 
+    @Message("crate-deleted")
+    void crateDeleted(CommandSender receiver, @Placeholder Crate crate);
+
     @Message("error-crate-exists")
     void errorCrateExists(CommandSender receiver);
 

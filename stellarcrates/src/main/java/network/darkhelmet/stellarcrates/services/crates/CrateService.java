@@ -151,6 +151,19 @@ public class CrateService {
     }
 
     /**
+     * Delete a crate.
+     *
+     * @param crate The crate
+     */
+    public void delete(Crate crate) {
+        crate.destroy();
+
+        crates.remove(crate.config().identifier());
+
+        configurationService.cratesConfiguration().crates().remove(crate.config());
+    }
+
+    /**
      * Attempt to open a crate for the given player.
      *
      * @param crateInstance The crate instance
@@ -234,7 +247,7 @@ public class CrateService {
      * Reloads all crate items from their configs.
      */
     public void reload() {
-        crates.values().forEach(Crate::onReload);
+        crates.values().forEach(Crate::destroy);
 
         crates.clear();
 

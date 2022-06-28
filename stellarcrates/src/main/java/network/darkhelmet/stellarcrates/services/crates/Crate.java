@@ -207,9 +207,9 @@ public final class Crate {
     }
 
     /**
-     * Handle reloads.
+     * Tear down all crate instances.
      */
-    public void onReload() {
+    public void destroy() {
         crateInstances.values().forEach(CrateInstance::destroy);
     }
 

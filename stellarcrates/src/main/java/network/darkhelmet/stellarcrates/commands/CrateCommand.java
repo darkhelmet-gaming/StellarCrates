@@ -217,6 +217,29 @@ public class CrateCommand extends BaseCommand {
     }
 
     /**
+     * Run the delete command.
+     *
+     * @param player The player
+     * @param crateId The crate identifier
+     */
+    @SubCommand("deletecrate")
+    @Permission("stellarcrates.admin")
+    public void onDelete(final Player player,
+         @dev.triumphteam.cmd.core.annotation.Optional @Suggestion("crates") final String crateId) {
+        Optional<Crate> crateOptional = crateFromIdOrTarget(player, crateId);
+        if (crateOptional.isEmpty()) {
+            messageService.errorInvalidCrate(player);
+            return;
+        }
+
+        Crate crate = crateOptional.get();
+
+        messageService.crateDeleted(player, crate);
+        crateService.delete(crate);
+        configurationService.saveAll();
+    }
+
+    /**
      * Run the givecrate command.
      *
      * @param player The player

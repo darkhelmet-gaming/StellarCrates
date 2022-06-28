@@ -22,11 +22,11 @@ package network.darkhelmet.stellarcrates.services.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -206,5 +206,24 @@ public class CrateConfiguration {
      */
     public String title() {
         return title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CrateConfiguration that = (CrateConfiguration) o;
+
+        return Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return identifier != null ? identifier.hashCode() : 0;
     }
 }
