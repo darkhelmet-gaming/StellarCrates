@@ -38,6 +38,9 @@ public class StellarCratesConfiguration {
         """)
     private Locale defaultLocale = Locale.US;
 
+    @Comment("The default weight used for rewards.")
+    private double defaultWeight = 100;
+
     @Comment("Effects to play when a crate key is used incorrectly.")
     private KeyRejectionEffectsConfigutation keyRejectionEffects;
 
@@ -58,6 +61,15 @@ public class StellarCratesConfiguration {
      */
     public Locale defaultLocale() {
         return defaultLocale;
+    }
+
+    /**
+     * Get the default weight.
+     *
+     * @return The default weight.
+     */
+    public double defaultWeight() {
+        return defaultWeight;
     }
 
     /**

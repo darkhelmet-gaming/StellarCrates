@@ -50,7 +50,7 @@ public class RewardConfiguration {
             The weight to use in random calculations. Higher weights make the item more common.
             However, the final chance percentage is reliant on how many items are in the crate.
             """)
-    private double weight = Reward.DEFAULT_WEIGHT;
+    private double weight;
 
     /**
      * Argument-less constructor, needed for deserialization.

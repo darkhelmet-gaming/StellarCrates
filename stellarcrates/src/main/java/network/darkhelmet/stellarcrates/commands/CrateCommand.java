@@ -183,7 +183,7 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        crateOptional.get().addReward(itemStack);
+        crateOptional.get().addReward(itemStack, configurationService.stellarCratesConfig().defaultWeight());
         configurationService.saveAll();
 
         messageService.rewardAdded(player, crateOptional.get());

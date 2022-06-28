@@ -28,11 +28,6 @@ import org.bukkit.inventory.ItemStack;
 
 public final class Reward {
     /**
-     * The default weight.
-     */
-    public static final double DEFAULT_WEIGHT = 100;
-
-    /**
      * The reward configuration.
      */
     private final RewardConfiguration config;

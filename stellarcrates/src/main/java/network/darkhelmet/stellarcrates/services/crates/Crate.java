@@ -83,16 +83,6 @@ public final class Crate {
      * Add an itemstack as a reward.
      *
      * @param itemStack The item stack
-     * @return The reward
-     */
-    public Reward addReward(ItemStack itemStack) {
-        return addReward(itemStack, Reward.DEFAULT_WEIGHT);
-    }
-
-    /**
-     * Add an itemstack as a reward.
-     *
-     * @param itemStack The item stack
      * @param weight The weight
      * @return The reward
      */
