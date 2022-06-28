@@ -223,6 +223,15 @@ public final class Crate {
     }
 
     /**
+     * Check whether the reward slots are full.
+     *
+     * @return True if reward count less than inventory size
+     */
+    public boolean isFull() {
+        return rewards().size() >= config.inventoryRows() * 9;
+    }
+
+    /**
      * Get the rewards.
      *
      * @return The rewards

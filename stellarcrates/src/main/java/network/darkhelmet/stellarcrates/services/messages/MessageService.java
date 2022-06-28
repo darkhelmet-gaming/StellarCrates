@@ -35,6 +35,9 @@ public interface MessageService {
     @Message("crate-created")
     void crateCreated(CommandSender receiver, @Placeholder Crate crate);
 
+    @Message("crate-deleted")
+    void crateDeleted(CommandSender receiver, @Placeholder Crate crate);
+
     @Message("crate-given-self")
     void crateGivenSelf(CommandSender receiver, @Placeholder Crate crate);
 
@@ -44,11 +47,11 @@ public interface MessageService {
     @Message("crate-key-given-self")
     void crateKeyGivenSelf(CommandSender receiver, @Placeholder Crate crate);
 
-    @Message("crate-deleted")
-    void crateDeleted(CommandSender receiver, @Placeholder Crate crate);
-
     @Message("error-crate-exists")
     void errorCrateExists(CommandSender receiver);
+
+    @Message("error-crate-full")
+    void errorCrateFull(CommandSender receiver, @Placeholder Crate crate);
 
     @Message("error-invalid-crate")
     void errorInvalidCrate(CommandSender receiver);

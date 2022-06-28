@@ -176,6 +176,12 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
+        Crate crate = crateOptional.get();
+        if (crate.isFull()) {
+            messageService.errorCrateFull(player, crate);
+            return;
+        }
+
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
         if (!Reward.isValidRewardItem(itemStack)) {
@@ -183,10 +189,10 @@ public class CrateCommand extends BaseCommand {
             return;
         }
 
-        crateOptional.get().addReward(itemStack, configurationService.stellarCratesConfig().defaultWeight());
+        crate.addReward(itemStack, configurationService.stellarCratesConfig().defaultWeight());
         configurationService.saveAll();
 
-        messageService.rewardAdded(player, crateOptional.get());
+        messageService.rewardAdded(player, crate);
     }
 
     /**
