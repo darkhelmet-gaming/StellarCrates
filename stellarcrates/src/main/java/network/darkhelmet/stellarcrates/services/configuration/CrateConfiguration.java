@@ -39,6 +39,9 @@ public class CrateConfiguration {
     @Comment("An identifier is a one-word name for a crate, to be used in commands etc.")
     private String identifier;
 
+    @Comment("Set the number of inventory rows in this crate's GUI.")
+    private int inventoryRows = 3;
+
     @Comment("The crate key configuration.")
     private KeyConfiguration key;
 
@@ -118,6 +121,15 @@ public class CrateConfiguration {
      */
     public String identifier() {
         return identifier;
+    }
+
+    /**
+     * Get the number of inventory rows.
+     *
+     * @return The number of inventory rows.
+     */
+    public int inventoryRows() {
+        return inventoryRows;
     }
 
     /**

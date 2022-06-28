@@ -46,9 +46,14 @@ public class GuiService {
      * @param player The player
      */
     public void open(Crate crate, Player player) {
+        int rows = crate.config().inventoryRows();
+        if (rows <= 0 || rows > 6) {
+            rows = 3;
+        }
+
         Gui gui = Gui.gui()
             .title(Component.text(crate.config().title()))
-            .rows(3)
+            .rows(rows)
             .create();
 
         LegacyComponentSerializer serializer = LegacyComponentSerializer.builder()
