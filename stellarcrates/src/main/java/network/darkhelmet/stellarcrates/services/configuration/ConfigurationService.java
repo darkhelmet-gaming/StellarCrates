@@ -54,7 +54,7 @@ public class ConfigurationService {
     /**
      * The primary plugin configuration.
      */
-    private StellarCratesConfiguration playCratesConfiguration;
+    private StellarCratesConfiguration stellarCratesConfiguration;
 
     /**
      * The crates configuration.
@@ -79,7 +79,7 @@ public class ConfigurationService {
      * @return The stellarcrates configuration
      */
     public StellarCratesConfiguration stellarCratesConfig() {
-        return playCratesConfiguration;
+        return stellarCratesConfiguration;
     }
 
     /**
@@ -96,7 +96,7 @@ public class ConfigurationService {
      */
     public void loadConfigurations() {
         File configFile = new File(dataPath.toFile(), "stellarcrates.conf");
-        playCratesConfiguration = getOrWriteConfiguration(StellarCratesConfiguration.class, configFile);
+        stellarCratesConfiguration = getOrWriteConfiguration(StellarCratesConfiguration.class, configFile);
 
         File cratesConfigFile = new File(dataPath.toFile(), "crates.conf");
         cratesConfiguration = getOrWriteConfiguration(CratesConfiguration.class, cratesConfigFile);
@@ -114,8 +114,8 @@ public class ConfigurationService {
      */
     public void saveAll(boolean emitCrateComments) {
         File configFile = new File(dataPath.toFile(), "stellarcrates.conf");
-        playCratesConfiguration = getOrWriteConfiguration(
-            StellarCratesConfiguration.class, configFile, playCratesConfiguration, true);
+        stellarCratesConfiguration = getOrWriteConfiguration(
+            StellarCratesConfiguration.class, configFile, stellarCratesConfiguration, true);
 
         File cratesConfigFile = new File(dataPath.toFile(), "crates.conf");
         cratesConfiguration = getOrWriteConfiguration(
