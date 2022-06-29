@@ -24,12 +24,14 @@ import com.google.inject.Inject;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 
 import network.darkhelmet.stellarcrates.StellarCrates;
-import network.darkhelmet.stellarcrates.api.services.configuration.CratesConfiguration;
+import network.darkhelmet.stellarcrates.api.services.configuration.CrateConfiguration;
 import network.darkhelmet.stellarcrates.api.services.configuration.StellarCratesConfiguration;
 import network.darkhelmet.stellarcrates.services.configuration.serializers.BlockLocationSerializerConfigurate;
 import network.darkhelmet.stellarcrates.services.configuration.serializers.LocaleSerializerConfigurate;
@@ -57,9 +59,9 @@ public class ConfigurationService {
     private StellarCratesConfiguration stellarCratesConfiguration;
 
     /**
-     * The crates configuration.
+     * Crate configurations.
      */
-    private CratesConfiguration cratesConfiguration;
+    private List<CrateConfiguration> crateConfigurations = new ArrayList<>();
 
     /**
      * Construct the configuration service.
@@ -83,12 +85,12 @@ public class ConfigurationService {
     }
 
     /**
-     * Get the rewards configuration.
+     * Get the crate configurations.
      *
-     * @return The rewards configuration
+     * @return The crate configurations
      */
-    public CratesConfiguration cratesConfiguration() {
-        return cratesConfiguration;
+    public List<CrateConfiguration> cratesConfiguration() {
+        return crateConfigurations;
     }
 
     /**
@@ -98,8 +100,15 @@ public class ConfigurationService {
         File configFile = new File(dataPath.toFile(), "stellarcrates.conf");
         stellarCratesConfiguration = getOrWriteConfiguration(StellarCratesConfiguration.class, configFile);
 
-        File cratesConfigFile = new File(dataPath.toFile(), "crates.conf");
-        cratesConfiguration = getOrWriteConfiguration(CratesConfiguration.class, cratesConfigFile);
+        File cratesConfigDir = new File(dataPath.toFile(), "crates");
+        if (!cratesConfigDir.exists()) {
+            cratesConfigDir.mkdirs();
+        }
+
+        for (File crateFile : cratesConfigDir.listFiles()) {
+            CrateConfiguration crateConfiguration = getOrWriteConfiguration(CrateConfiguration.class, crateFile);
+            crateConfigurations.add(crateConfiguration);
+        }
     }
 
     /**
@@ -117,9 +126,11 @@ public class ConfigurationService {
         stellarCratesConfiguration = getOrWriteConfiguration(
             StellarCratesConfiguration.class, configFile, stellarCratesConfiguration, true);
 
-        File cratesConfigFile = new File(dataPath.toFile(), "crates.conf");
-        cratesConfiguration = getOrWriteConfiguration(
-            CratesConfiguration.class, cratesConfigFile, cratesConfiguration, emitCrateComments);
+        for (CrateConfiguration crateConfiguration : crateConfigurations) {
+            String fileName = String.format("crates/%s.conf", crateConfiguration.identifier());
+            File crateConfigFile = new File(dataPath.toFile(), fileName);
+            getOrWriteConfiguration(CrateConfiguration.class, crateConfigFile, crateConfiguration, emitCrateComments);
+        }
     }
 
     /**
