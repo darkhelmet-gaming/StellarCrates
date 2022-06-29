@@ -121,7 +121,7 @@ public class CrateService implements ICrateService {
 
         // Create the crate and register it
         CrateConfiguration crateConfig = new CrateConfiguration(identifier, title, defaultKey);
-        configurationService.cratesConfiguration().add(crateConfig);
+        configurationService.crateConfigurations().add(crateConfig);
 
         return addCrate(crateConfig);
     }
@@ -132,7 +132,7 @@ public class CrateService implements ICrateService {
 
         crates.remove(crate.config().identifier());
 
-        configurationService.cratesConfiguration().remove(crate.config());
+        configurationService.crateConfigurations().remove(crate.config());
     }
 
     @Override
@@ -218,7 +218,7 @@ public class CrateService implements ICrateService {
 
         crates.clear();
 
-        for (CrateConfiguration crateConfiguration : configurationService.cratesConfiguration()) {
+        for (CrateConfiguration crateConfiguration : configurationService.crateConfigurations()) {
             addCrate(crateConfiguration);
         }
     }

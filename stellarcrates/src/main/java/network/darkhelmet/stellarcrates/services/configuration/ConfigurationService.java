@@ -89,7 +89,7 @@ public class ConfigurationService {
      *
      * @return The crate configurations
      */
-    public List<CrateConfiguration> cratesConfiguration() {
+    public List<CrateConfiguration> crateConfigurations() {
         return crateConfigurations;
     }
 
