@@ -197,6 +197,8 @@ public class StellarCrates extends JavaPlugin implements IStellarCrates {
     public void onDisable() {
         super.onDisable();
 
-        tickTask.cancel();
+        if (tickTask != null) {
+            tickTask.cancel();
+        }
     }
 }

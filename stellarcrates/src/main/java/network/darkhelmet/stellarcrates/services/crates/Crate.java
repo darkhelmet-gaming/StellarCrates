@@ -66,7 +66,7 @@ public final class Crate implements ICrate {
         this.config = config;
 
         config.rewards().forEach(rewardConfiguration -> {
-            addReward(rewardConfiguration.toItemStack(), rewardConfiguration.weight());
+            rewards.add(new Reward(rewardConfiguration, rewardConfiguration.toItemStack()));
         });
 
         config.locations().forEach(loc -> {
