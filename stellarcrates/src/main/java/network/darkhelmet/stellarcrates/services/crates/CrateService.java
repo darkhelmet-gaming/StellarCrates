@@ -99,7 +99,10 @@ public class CrateService implements ICrateService {
     @Override
     public Optional<ICrateInstance> crateInstance(Location location) {
         for (ICrate crate : crates().values()) {
-            return crate.crateInstance(location);
+            Optional<ICrateInstance> crateInstance = crate.crateInstance(location);
+            if (crateInstance.isPresent()) {
+                return crateInstance;
+            }
         }
 
         return Optional.empty();
