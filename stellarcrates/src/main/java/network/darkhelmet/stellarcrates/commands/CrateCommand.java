@@ -291,7 +291,9 @@ public class CrateCommand extends BaseCommand {
 
         ItemStack itemStack = crateOptional.get().crateKey();
         itemStack.setAmount(quantity);
-        recipient.getInventory().addItem(itemStack);
+        recipient.getInventory().addItem(itemStack).values().forEach(drop -> {
+            recipient.getWorld().dropItemNaturally(recipient.getLocation(), itemStack);
+        });
 
         messageService.crateKeyGivenSelf(recipient, crateOptional.get());
     }
