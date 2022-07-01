@@ -295,7 +295,7 @@ public class CrateCommand extends BaseCommand {
             recipient.getWorld().dropItemNaturally(recipient.getLocation(), itemStack);
         });
 
-        messageService.crateKeyGivenSelf(recipient, crateOptional.get());
+        messageService.crateKeyGivenSelf(recipient, crateOptional.get(), quantity);
     }
 
     /**

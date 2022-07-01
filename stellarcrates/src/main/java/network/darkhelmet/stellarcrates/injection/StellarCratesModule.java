@@ -48,6 +48,7 @@ import network.darkhelmet.stellarcrates.services.messages.MessageSender;
 import network.darkhelmet.stellarcrates.services.messages.MessageService;
 import network.darkhelmet.stellarcrates.services.messages.ReceiverResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.ICratePlaceholderResolver;
+import network.darkhelmet.stellarcrates.services.messages.resolvers.IntegerPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.RewardPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.StringPlaceholderResolver;
 import network.darkhelmet.stellarcrates.services.messages.resolvers.TranslatableStringPlaceholderResolver;
@@ -131,6 +132,7 @@ public class StellarCratesModule extends AbstractModule {
                     new StandardSupertypeThenInterfaceSupertypeStrategy(false)))
                 .weightedPlaceholderResolver(TranslationKey.class, translatableStringPlaceholderResolver, 0)
                 .weightedPlaceholderResolver(String.class, new StringPlaceholderResolver(), 0)
+                .weightedPlaceholderResolver(Integer.class, new IntegerPlaceholderResolver(), 0)
                 .weightedPlaceholderResolver(Crate.class, cratePlaceholderResolver, 0)
                 .weightedPlaceholderResolver(Reward.class, new RewardPlaceholderResolver(), 0)
                 .create(this.getClass().getClassLoader());
