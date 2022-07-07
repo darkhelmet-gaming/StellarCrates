@@ -48,7 +48,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-@Command(value = "stellarcrates", alias = {"sc", "crates"})
+@Command(value = "stellarcrates", alias = {"crates"})
 public class CrateCommand extends BaseCommand {
     /**
      * The message service.

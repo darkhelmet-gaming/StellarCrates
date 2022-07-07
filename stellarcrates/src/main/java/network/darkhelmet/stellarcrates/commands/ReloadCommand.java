@@ -36,7 +36,7 @@ import network.darkhelmet.stellarcrates.services.translation.TranslationService;
 
 import org.bukkit.command.CommandSender;
 
-@Command(value = "stellarcrates", alias = {"sc", "crates"})
+@Command(value = "stellarcrates", alias = {"crates"})
 public class ReloadCommand extends BaseCommand {
     /**
      * The crate service.

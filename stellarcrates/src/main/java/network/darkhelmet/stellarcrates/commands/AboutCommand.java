@@ -32,7 +32,7 @@ import network.darkhelmet.stellarcrates.services.messages.MessageService;
 
 import org.bukkit.command.CommandSender;
 
-@Command(value = "stellarcrates", alias = {"sc", "crates"})
+@Command(value = "stellarcrates", alias = {"crates"})
 public class AboutCommand extends BaseCommand {
     /**
      * The message service.
