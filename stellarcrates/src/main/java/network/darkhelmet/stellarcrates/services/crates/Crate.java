@@ -204,6 +204,7 @@ public final class Crate implements ICrate {
     @Override
     public void unloadInstances() {
         crateInstances.values().forEach(ICrateInstance::unload);
+        crateInstances.clear();
     }
 
     /**

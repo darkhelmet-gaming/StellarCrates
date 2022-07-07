@@ -20,6 +20,7 @@
 
 package network.darkhelmet.stellarcrates.services.holograms.providers;
 
+import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
 
 import network.darkhelmet.stellarcrates.api.services.holograms.CrateHologram;
@@ -41,6 +42,7 @@ public class DecentHologram implements CrateHologram {
 
     @Override
     public void destroy() {
+        DHAPI.removeHologram(this.hologram.getName());
         this.hologram.destroy();
     }
 }

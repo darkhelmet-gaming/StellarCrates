@@ -105,7 +105,7 @@ public class CrateInstance implements ICrateInstance {
         // Apply offset
         location = location.add(hologramConfiguration.positionOffset());
 
-        String identifier = String.format("%scrate%d%d%d",
+        String identifier = String.format("%scrate_x%d_y%d_z%d",
             crate.config().identifier(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
         final Location hologramLocation = location;
@@ -120,7 +120,9 @@ public class CrateInstance implements ICrateInstance {
     @Override
     public void unload() {
         holograms.forEach(CrateHologram::destroy);
+        holograms.clear();
         particleTaskIds.forEach(id -> TaskManager.getTaskManager().stopTask(id));
+        particleTaskIds.clear();
     }
 
     /**
