@@ -44,5 +44,6 @@ public class DecentHologram implements CrateHologram {
     public void destroy() {
         DHAPI.removeHologram(this.hologram.getName());
         this.hologram.destroy();
+        this.hologram.delete();
     }
 }

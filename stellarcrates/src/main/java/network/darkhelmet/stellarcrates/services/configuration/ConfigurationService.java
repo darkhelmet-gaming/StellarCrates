@@ -61,7 +61,7 @@ public class ConfigurationService {
     /**
      * Crate configurations.
      */
-    private List<CrateConfiguration> crateConfigurations = new ArrayList<>();
+    private final List<CrateConfiguration> crateConfigurations = new ArrayList<>();
 
     /**
      * Construct the configuration service.
@@ -105,6 +105,7 @@ public class ConfigurationService {
             cratesConfigDir.mkdirs();
         }
 
+        crateConfigurations.clear();
         for (File crateFile : cratesConfigDir.listFiles()) {
             CrateConfiguration crateConfiguration = getOrWriteConfiguration(CrateConfiguration.class, crateFile);
             crateConfigurations.add(crateConfiguration);
