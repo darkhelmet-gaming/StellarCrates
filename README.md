@@ -4,7 +4,7 @@ A crates plugin for Spigot/Paper/etc servers, by viveleroi.
 
 In development.
 
-[Discord](discord)
+[Discord][discord]
 
 ## Features
 
