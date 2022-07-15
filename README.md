@@ -4,7 +4,8 @@ A crates plugin for Spigot/Paper/etc servers, by viveleroi.
 
 In development.
 
-[Discord][discord]
+- [Discord][discord]
+- [Dev Builds][ci]
 
 ## Features
 
@@ -61,3 +62,4 @@ Be sure to add `depend: [StellarCrates]` in your plugin.yml.
 [discord]: https://discord.gg/Q6sHDfnMAc
 [dh]: https://www.spigotmc.org/resources/decent-holograms-1-8-1-19-papi-support-no-dependencies.96927/
 [papi]: https://www.spigotmc.org/resources/placeholderapi.6245/
+[ci]: https://ci.darkhelmet.network/job/StellarCrates/
