@@ -98,6 +98,14 @@ public interface ICrate {
     ItemStack crateKey(ItemStack itemStack);
 
     /**
+     * Delete a crate location.
+     *
+     * @param location The location
+     * @return True if location removed
+     */
+    boolean deleteLocation(Location location);
+
+    /**
      * Check whether the reward slots are full.
      *
      * @return True if reward count less than inventory size

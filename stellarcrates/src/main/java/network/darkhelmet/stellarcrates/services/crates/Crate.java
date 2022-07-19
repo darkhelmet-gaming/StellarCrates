@@ -165,6 +165,19 @@ public final class Crate implements ICrate {
     }
 
     @Override
+    public boolean deleteLocation(Location location) {
+        Optional<ICrateInstance> crateInstanceOptional = crateInstance(location);
+        if (crateInstanceOptional.isPresent()) {
+            crateInstanceOptional.get().unload();
+
+            crateInstances().remove(location);
+            config().locations().remove(location);
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isFull() {
         return rewards().size() >= config.inventoryRows() * 9;
     }

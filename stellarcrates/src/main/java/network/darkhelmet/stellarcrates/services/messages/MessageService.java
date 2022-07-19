@@ -83,6 +83,9 @@ public interface MessageService {
     @Message("location-added")
     void locationAdded(CommandSender receiver, @Placeholder ICrate crate);
 
+    @Message("location-deleted")
+    void locationDeleted(CommandSender receiver, @Placeholder ICrate crate);
+
     @Message("reloaded-config")
     void reloadedConfig(CommandSender receiver);
 

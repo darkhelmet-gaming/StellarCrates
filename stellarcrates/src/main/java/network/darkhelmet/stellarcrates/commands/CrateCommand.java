@@ -247,6 +247,33 @@ public class CrateCommand extends BaseCommand {
     }
 
     /**
+     * Run the deleteloc command.
+     *
+     * @param player The player
+     * @param crateId The crate identifier
+     */
+    @SubCommand("deleteloc")
+    @Permission("stellarcrates.admin")
+    public void onDeleteLocation(final Player player, final String crateId) {
+        Block block = player.getTargetBlock(transparent, 5);
+        if (block.getType().equals(Material.AIR)) {
+            messageService.errorInvalidCrateBlock(player);
+            return;
+        }
+
+        Optional<ICrate> crateOptional = crateService.crate(crateId);
+        if (crateOptional.isEmpty()) {
+            messageService.errorInvalidCrateId(player);
+            return;
+        }
+
+        crateOptional.get().deleteLocation(block.getLocation());
+        configurationService.saveAll();
+
+        messageService.locationDeleted(player, crateOptional.get());
+    }
+
+    /**
      * Run the givecrate command.
      *
      * @param player The player
